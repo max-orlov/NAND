@@ -3,5 +3,10 @@ CHIP ShiftRight{
      OUT out[16];
      
     PARTS:
-	And16(a=in,b=in,out[1..14]=out[0..13],out[15]=out[14], out[15]=out[15]);
+	//And16(a=in,b=in,out[1..14]=out[0..13],out[15]=out[14], out[15]=out[15]);
+	
+	// get sign.
+	And16(a=in,b=true,out[15]=sign,out[0..14]=not_relevant);
+	// append the sign to the 2 left-most bits.
+	And16(a[0..13]=in[1..14],a[14]=sign,a[15]=sign, b=true, out=out)
 }

@@ -3,5 +3,69 @@ CHIP Mul{
     OUT out[16];
 
     PARTS:
-		
+    // create a zero 16-bit field.
+    And16(a=a, b=false, out=zero16);
+
+    Mux16(a=zero16, b=b, sel=a[0], out=result1);
+    ShiftLeft(in=b, out=shiftb1);
+
+	Mux16(a=zero16, b=shiftb1, sel=a[1], out=d2);
+	Add16(a=result1, b=d2, out=result2);
+	ShiftLeft(in=shiftb1, out=shiftb2);
+
+	Mux16(a=zero16, b=shiftb2, sel=a[2], out=d3);
+	Add16(a=result2, b=d3, out=result3);
+	ShiftLeft(in=shiftb2, out=shiftb3);
+
+	Mux16(a=zero16, b=shiftb3, sel=a[3], out=d4);
+	Add16(a=result3, b=d4, out=result4);
+	ShiftLeft(in=shiftb3, out=shiftb4);
+
+	Mux16(a=zero16, b=shiftb4, sel=a[4], out=d5);
+	Add16(a=result4, b=d5, out=result5);
+	ShiftLeft(in=shiftb4, out=shiftb5);
+
+	Mux16(a=zero16, b=shiftb5, sel=a[5], out=d6);
+	Add16(a=result5, b=d6, out=result6);
+	ShiftLeft(in=shiftb5, out=shiftb6);
+
+	Mux16(a=zero16, b=shiftb6, sel=a[6], out=d7);
+	Add16(a=result6, b=d7, out=result7);
+	ShiftLeft(in=shiftb6, out=shiftb7);
+
+	Mux16(a=zero16, b=shiftb7, sel=a[7], out=d8);
+	Add16(a=result7, b=d8, out=result8);
+	ShiftLeft(in=shiftb7, out=shiftb8);
+
+	Mux16(a=zero16, b=shiftb8, sel=a[8], out=d9);
+	Add16(a=result8, b=d9, out=result9);
+	ShiftLeft(in=shiftb8, out=shiftb9);
+
+	Mux16(a=zero16, b=shiftb9, sel=a[9], out=d10);
+	Add16(a=result9, b=d10, out=result10);
+	ShiftLeft(in=shiftb9, out=shiftb10);
+
+	Mux16(a=zero16, b=shiftb10, sel=a[10], out=d11);
+	Add16(a=result10, b=d11, out=result11);
+	ShiftLeft(in=shiftb10, out=shiftb11);
+
+	Mux16(a=zero16, b=shiftb11, sel=a[11], out=d12);
+	Add16(a=result11, b=d12, out=result12);
+	ShiftLeft(in=shiftb11, out=shiftb12);
+
+	Mux16(a=zero16, b=shiftb12, sel=a[12], out=d13);
+	Add16(a=result12, b=d13, out=result13);
+	ShiftLeft(in=shiftb12, out=shiftb13);
+
+	Mux16(a=zero16, b=shiftb13, sel=a[13], out=d14);
+	Add16(a=result13, b=d14, out=result14);
+	ShiftLeft(in=shiftb13, out=shiftb14);
+
+	Mux16(a=zero16, b=shiftb14, sel=a[14], out=d15);
+	Add16(a=result14, b=d15, out=result15);
+	ShiftLeft(in=shiftb14, out=shiftb15);
+
+	Mux16(a=zero16, b=shiftb15, sel=a[15], out=d16);
+	Add16(a=result15, b=d16, out=out);
+
 }

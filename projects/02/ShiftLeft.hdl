@@ -3,6 +3,9 @@ CHIP ShiftLeft{
      OUT out[16];
      
     PARTS:
-	And16(a=in,b=in,out[0..13]=out[1..14], out[15]=out[15]);
-	Not(in=true,out=out[0]);
+	//And16(a=in,b=in,out[0..13]=out[1..14], out[15]=out[15]);
+	//Not(in=true,out=out[0]);
+	
+	// we simply add the IN with itself to get 2*IN.
+	Add16(a=in, b=in, out=out)
 }
