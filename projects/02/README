@@ -1,0 +1,22 @@
+jonnydman, maxorlov
+===============================================================================
+Jonny Gulayev, ID 304028749, georgy.gulayev@mail.huji.ac.il
+Maxim Orlov, ID 314363227, maxim.orlov@mail.huji.ac.il
+===============================================================================
+
+                           Project X - An HDL File
+                           ----------------------- 
+  
+Submitted Files
+---------------
+README 			- This file.
+Add16.dhl		-	Add16 chip.
+ALU.dhl			-	ALU chip.
+FullAdder.dhl	-	Fulladder chip.
+HalfAdder.dhl	-	HalfAdder chip.
+Inc16			-	Increment 16 chip.
+Mul.dhl			-	Multiplication chip.
+ShiftLeft.dhl	-	Multiplication by 2 chip.
+ShiftRight.dhl	-	Division by 2 chip.
+Remarks
+-------

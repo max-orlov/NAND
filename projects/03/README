@@ -1,0 +1,22 @@
+jonnydman, maxorlov
+===============================================================================
+Jonny Gulayev, ID 304028749, georgy.gulayev@mail.huji.ac.il
+Maxim Orlov, ID 314363227, maxim.orlov@mail.huji.ac.il
+===============================================================================
+
+                           Project X - An HDL File
+                           ----------------------- 
+  
+Submitted Files
+---------------
+README 			- This file.
+Bit.hdl			-	Bit chip.
+PC.hdl			-	PC chip.
+RAM8.hdl		-	RAM8 chip.
+RAM64.hdl		-	RAM64 chip.
+Register.hdl	-	Register chip.
+RAM4K.hdl		-	RAM4K chip.
+RAM16K.dhl		-	RAM16K chip.
+RAM512.dhl		-	RAM512 chip.
+Remarks
+-------

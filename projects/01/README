@@ -1,0 +1,30 @@
+jonnydman, maxorlov
+===============================================================================
+Jonny Gulayev, ID 304028749, georgy.gulayev@mail.huji.ac.il
+Maxim Orlov, ID 314363227, maxim.orlov@mail.huji.ac.il
+===============================================================================
+
+                           Project X - An HDL File
+                           ----------------------- 
+  
+Submitted Files
+---------------
+README 			- This file.
+And.dhl			- 	And chip.
+And16.dhl		-	And16bit chip.
+DMux.dhl		-	DMux chip.
+DMux4Way.dhl	-	DMux4Way chip.
+DMux8Way.dhl	- 	Dmux8Way chip.
+Mux.dhl			-	Mux chip.
+Mux4Way16.dhl	-	Mux4Way16 chip.
+Mux8Way16.dhl	- 	Mux8Way16 chip.
+Mux16.dhl		- 	Mux16 chip.
+Not.dhl			-	Not chip.
+Not16.dhl		- 	Not16 chip.
+Or.dhl			-	Or chip.
+Or8Way.dhl		-	Or8Way chip.
+Or16.dhl		-	Or16 chip.
+Xor.dhl			-	Xor chip.
+	
+Remarks
+-------
