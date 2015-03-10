@@ -1,7 +1,7 @@
 // This file is part of www.nand2tetris.org
 // and the book "The Elements of Computing Systems"
 // by Nisan and Schocken, MIT Press.
-// File name: projects/03/b/RAM4K.hdl
+// File name: projects/03/b/ram5124K.hdl
 
 /**
  * Memory of 4K registers, each 16 bit-wide. Out holds the value
@@ -15,5 +15,16 @@ CHIP RAM4K {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+    DMux8Way(in=load, sel=address[0..2], a=isRam5120, b=isRam5121, c=isRam5122, d=isRam5123, e=isRam5124, f=isRam5125, g=isRam5126, h=isRam5127);
+	
+    RAM512(in=in, load=isRam5120, address=address[3..11], out=ram5120);
+    RAM512(in=in, load=isRam5121, address=address[3..11], out=ram5121);
+    RAM512(in=in, load=isRam5122, address=address[3..11], out=ram5122);
+    RAM512(in=in, load=isRam5123, address=address[3..11], out=ram5123);
+    RAM512(in=in, load=isRam5124, address=address[3..11], out=ram5124);
+    RAM512(in=in, load=isRam5125, address=address[3..11], out=ram5125);
+    RAM512(in=in, load=isRam5126, address=address[3..11], out=ram5126);
+    RAM512(in=in, load=isRam5127, address=address[3..11], out=ram5127);
+	
+	Mux8Way16(a=ram5120, b=ram5121, c=ram5122, d=ram5123, e=ram5124,f=ram5125,g=ram5126, h=ram5127, sel=address[0..2], out=out);
 }
