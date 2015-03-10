@@ -45,3 +45,6 @@ projects/03/a/Bit.out
 *.out
 *.dat
 *.dat
+*.dat
+*.dat
+tools/bin/Hardware Simulator.dat
