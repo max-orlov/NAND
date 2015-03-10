@@ -16,5 +16,14 @@ CHIP PC {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+	Inc16(in=out1, out=incOut);
+	// choose the correct result according to the flags.
+	Mux16(a=out1, b=incOut, sel=inc, out=muxOut);
+	Mux16(a=muxOut, b=in, sel=load, out=muxOut1);
+	Mux16(a=muxOut1, b=false, sel=reset, out=regIn);
+	//check if load is needed
+	Or(a=inc, b=load, out=isPartLoad);
+	Or(a=isPartLoad, b=reset, out=isLoad);
+	
+	Register(in=regIn, load=isLoad, out=out, out=out1);
 }
