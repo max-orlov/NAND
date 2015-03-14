@@ -13,7 +13,7 @@ M=0
 @SWITCH
 M=0
 (LOOP)
-	@24576		//Listen to keyboard
+	@KBD		//Listen to keyboard
 	D=M
 	@WHITEN
 	D; JEQ
@@ -44,8 +44,17 @@ M=0
 		D=A
 		@i
 		A=D+M
+		D=A
 		M=0
+		@CONTINUE 
+		0; JMP
 	(CONTINUE)
+		@i
+		D=A
+		@8192
+		D=D-A
+		@CLEAR_COUNT
+		D; JEQ
 		@i
 		M=M+1
 		@LOOP
