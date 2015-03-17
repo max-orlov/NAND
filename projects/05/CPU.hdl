@@ -39,7 +39,6 @@ CHIP CPU {
         pc[15];          // address of next instruction
 
     PARTS:
-<<<<<<< HEAD
     // choose register A or memory according to the bit 'a' in the given instruction.
 	Mux16(a=regAOut, b=inM, sel=instruction[12], out=AorM);
 	
@@ -85,31 +84,5 @@ CHIP CPU {
 	And(a=dontJump, b=isCInst, out=tempInc);
 	Or(a=tempInc, b=isAInst, out=inc);
 	
-	PC(in=regAOut, load=jump, inc=inc, reset=reset, out[0..14]=pc, out[15]=false);
-=======
-	//Get the A bit
-	And(a=instruction[12],b=true,out=A);
-	
-	//Get the C bits
-	And(a=instruction[11],b=true,out=C[5]);
-	And(a=instruction[10],b=true,out=C[4]);
-	And(a=instruction[9],b=true,out=C[3]);
-	And(a=instruction[8],b=true,out=C[2]);
-	And(a=instruction[7],b=true,out=C[1]);
-	And(a=instruction[6],b=true,out=C[0]);
-	
-	//Get the D bits
-	And(a=instruction[5], b=true, out=D[2]);
-	And(a=instruction[4], b=true, out=D[1]);
-	And(a=instruction[3], b=true, out=D[0]);
-	//Get the J bits
-	And(a=instruction[2], b=true, out=J[2]);
-	And(a=instruction[1], b=true, out=J[1]);
-	And(a=instruction[0], b=true, out=J[0]);
-	
-	
-	And(a=instruction[15], b=true, out=isCinstruction);
-	
->>>>>>> a081fa5f5b700e7cf0c26aac38d477a70ecb3c1a
-	
+	PC(in=regAOut, load=jump, inc=inc, reset=reset, out[0..14]=pc, out[15]=false);	
 }
