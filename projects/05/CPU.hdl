@@ -39,5 +39,51 @@ CHIP CPU {
         pc[15];          // address of next instruction
 
     PARTS:
-    // Put your code here:
+    // choose register A or memory according to the bit 'a' in the given instruction.
+	Mux16(a=regAOut, b=inM, sel=instruction[12], out=AorM);
+	
+	// run ALU on the formatted instruction (c1-c6)
+	ALU(x=regDOut, y=AorM,
+		zx=instruction[11],		// c1
+		nx=instruction[10],		// c2
+        zy=instruction[9],		// c3
+        ny=instruction[8],		// c4
+        f=instruction[7],		// c5
+        no=instruction[6],		// c6
+		out=aluOut, out=outM, zr=zrOut, ng=ngOut);
+		
+	And(a=instruction[15], b=true, out=isCInst);		// check if the instruction is of type C-instruction.
+	Not(in=isCInst, out=isAInst);						// check if the instruction is of type A-instruction.
+	
+	And(a=instruction[3], b=true, out=updateM);			// check if 'd3' bit is on (write to memory).
+	And(a=instruction[4], b=isCInst, out=updateD);		// check if 'd2' bit is on (write to register D) and the instruction is of type C-instruction..
+	Or(a=instruction[5], b=isAInst, out=updateA);		// check if 'd1' bit is on (write to register A) or the instruction is of type A-instruction.
+	
+	And(a=updateM,b=isCInst, out=writeM);				// the value of writeM is a combination of the C-instruction and the updateM indication.
+	
+	DRegister(in=aluOut, load=updateD, out=regDOut);	// set register D according to ALU if updateD indicates so.
+	
+	Mux16(a=aluOut, b=instruction, sel=isAInst, out=regAIn);	// choose ALU output or the given instruction according to the instruction type.
+	ARegister(in=regAIn, load=updateA, out=regAOut,		// set register A according to MUX output if updateA indicates so and
+		out[0..14]=addressM, out[15]=false);			// set the address of the memory to the address which was output from register A.
+	
+	// we check if jump is required (according to j1-j3 and ALU's response).	
+	And(a=instruction[1], b=zrOut, out=zeroSatisfied);		// check if JZ is on and ALU output indicates zero.
+	And(a=instruction[2], b=ngOut, out=negSatisfied);		// check if JL is on and ALU output indicates negative.
+	Or(a=zrOut, b=ngOut, out=isZeroNeg);					// combine for getting <=0.
+	Not(in=isZeroNeg, out=posFilled);
+	And(a=instruction[0], b=posFilled, out=posSatisfied);	// check if JG is on and ALU output indicates positive.
+	
+	Or(a=zeroSatisfied, b=negSatisfied, out=tempJump);		// if one of the conditions above is satisfied -> jump is valid.
+	Or(a=tempJump, b=posSatisfied, out=shouldJump);
+	And(a=shouldJump, b=isCInst, out=jump);					// only if this is a C-instruction and jump is satisfied -> jump.
+	
+	// we check if inc is required (if this is a C-instruction and jump is not satisfied,
+	// 								or if this is a A-instruction).
+	Not(in=jump, out=dontJump);
+	And(a=dontJump, b=isCInst, out=tempInc);
+	Or(a=tempInc, b=isAInst, out=inc);
+	
+	PC(in=regAOut, load=jump, inc=inc, reset=reset, out[0..14]=pc, out[15]=false);
+	
 }
