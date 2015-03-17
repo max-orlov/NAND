@@ -24,5 +24,5 @@ CHIP Computer {
         outM=inDataMem, writeM=loadDataMem, addressM=addressDataMem, pc=inInstMem);
     Memory(in=inDataMem, load=loadDataMem, address=addressDataMem,
         out=outDataMem);
-    ROM32(address=inInstMem, out=outInstMem);
+    ROM32K(address=inInstMem, out=outInstMem);
 }
