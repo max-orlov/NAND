@@ -51,3 +51,4 @@ tools/bin/Hardware Simulator.dat
 *.dat
 *.out
 *.dat
+*.hdl
