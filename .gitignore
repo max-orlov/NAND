@@ -44,3 +44,14 @@ Temporary Items
 projects/03/a/Bit.out
 *.out
 *.dat
+<<<<<<< HEAD
+=======
+*.dat
+*.dat
+*.dat
+tools/bin/Hardware Simulator.dat
+*.dat
+*.out
+*.dat
+*.hdl
+>>>>>>> a081fa5f5b700e7cf0c26aac38d477a70ecb3c1a
