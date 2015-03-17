@@ -18,14 +18,34 @@
  * Access to address>0x6000 is invalid. Access to any address in 
  * the range 0x4000-0x5FFF results in accessing the screen memory 
  * map. Access to address 0x6000 results in accessing the keyboard 
- * memory map. The behavior in these addresses is described in the 
+ * memory map. The behaviour in these addresses is described in the 
  * Screen and Keyboard chip specifications given in the book.
  */
 
 CHIP Memory {
-    IN in[16], load, address[15];
-    OUT out[16];
+    IN  in[16],				// What to write
+		load,				// Write-enable bit
+		address[15];		// Where to write
+    OUT out[16];			// Memory value at the given address
 
     PARTS:
-    // Put your code here:
+
+		//Check if we should write to RAM
+		Not(in=address[14], out=isRam);		
+		And(a=isRam, b=load, out=ramSel);
+		//Get RAM (post update)
+		RAM16K(in=in, load=ramSel, address=address[0..13], out=ramOut);
+		
+		//Check is we should write to Screen
+		Not(in=address[13], out=isNotRam);
+		And(a=address[14], b=isNotRam, out=isScreen);
+		And(a=isScreen, b=load, out=screenSel);
+		//Get screen (post update)
+		Screen(in=in, load=screenSel, address=address[0..12],out=scrOut);
+		
+		//Get Keyboard
+		Keyboard(out=keyOut);
+	
+		//Retrieve the right IO according to the first 2 bits
+		Mux4Way16(a=ramOut, b=ramOut, c=scrOut, d=keyOut, sel=address[13..14], out=out);
 }
