@@ -1,0 +1,11 @@
+CHIP ShiftLeft{
+     IN in[16];
+     OUT out[16];
+     
+    PARTS:
+	// get sign.
+	And16(a=in,b=true,out[15]=sign, out[0..14]=notRelevant);
+	
+	// append the sign to the 2 left-most bits.
+	And16(a[1..14]=in[0..13],a[15]=sign, a[0]=false, b=true, out=out);
+}
