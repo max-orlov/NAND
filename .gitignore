@@ -45,3 +45,4 @@ projects/03/a/Bit.out
 *.out
 *.dat
 *.dat
+projects/06/compiler_impl/.idea/*
