@@ -46,3 +46,4 @@ projects/03/a/Bit.out
 *.dat
 *.dat
 projects/06/compiler_impl/.idea/*
+projects/06/compiler_impl/__pycache__/*
