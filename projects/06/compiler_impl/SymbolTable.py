@@ -1,26 +1,53 @@
-# this is the symbols table of the compiler.
-
 class SymbolTable:
-    # this is the ctor which initializes an empty table.
+    """
+    this is the symbols table of the compiler.
+    """
+
     def __init__(self):
+        """
+        this is the ctor which initializes an empty table.
+        """
         self._table = {}
 
-    ###
-    #  adds a new entry with 'symbol' key and 'address' value to the table.
-    #  Note: it is assumed the symbol does not exist.
-    ###
+        # predefined symbols:
+        # adds R0 - R15.
+        for i in range(16):
+            self.addEntry("R" + str(i), i)
+        # SP, LCL, ARG, THIS, THAT, SCREEN, KBD
+        self.addEntry("SP", 0)
+        self.addEntry("LCL", 1)
+        self.addEntry("ARG", 2)
+        self.addEntry("THIS", 3)
+        self.addEntry("THAT", 4)
+        self.addEntry("SCREEN", 16384)
+        self.addEntry("KBD", 24576)
+
     def addEntry(self, symbol, address):
+        """
+        adds a new entry with 'symbol' key and 'address' value to the table.
+        Note: it is assumed the symbol does not exist.
+
+        :param symbol: the key.
+        :param address: the value.
+        :return: None.
+        """
         self._table[symbol] = address
 
-    ###
-    #  checks if a given symbol is already in the table.
-    ###
     def contains(self, symbol):
+        """
+        checks if a given symbol is already in the table.
+
+        :param symbol: the key.
+        :return: True if the symbol is already in the table, False otherwise
+        """
         return symbol in self._table.keys()
 
-    ###
-    #  returns the address of a given symbol.
-    #  Note: it is assumed the symbol is at the table.
-    ###
     def getAddress(self, symbol):
+        """
+        returns the address of a given symbol.
+        Note: it is assumed the symbol is at the table.
+
+        :param symbol: the key.
+        :return: the address of the symbol.
+        """
         return self._table[symbol]
