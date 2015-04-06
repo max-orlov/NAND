@@ -1,7 +1,12 @@
-# this class handles parsing HACK mnemonics into C-instructions binary codes.
-
 class Code:
+    """
+    this class handles parsing HACK mnemonics into C-instructions binary codes.
+    """
+
     def dest(self, mnemonic):
+        """
+        returns the string representation of the destination bits.
+        """
         if mnemonic == "null":
             return "000"
         if mnemonic == "M":
@@ -20,6 +25,9 @@ class Code:
             return "111"
 
     def comp(self, mnemonic):
+        """
+        returns the string representation of the comp bits.
+        """
         if mnemonic == "0":
             return "0101010"
         if mnemonic == "1":
@@ -78,6 +86,9 @@ class Code:
             return "1010101"
 
     def jump(self, mnemonic):
+        """
+        returns the string representation of the jump bits.
+        """
         if mnemonic == "null":
             return "000"
         if mnemonic == "JGT":
