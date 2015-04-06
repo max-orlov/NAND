@@ -62,7 +62,7 @@ class Main:
                 hackLine += self._code.jump(jump)
 
             hackFileContent += hackLine + "\n"
-        print(hackFileContent)
+        # print(hackFileContent)
         outFilename = filename[: filename.find(".")] + ".hack"
         outFile = open(outFilename, "w")
         outFile.write(hackFileContent)

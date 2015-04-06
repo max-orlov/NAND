@@ -31,7 +31,7 @@ class Parser:
                 index, line = next(self._fileLinesIter)
 
             self._currentLine = line
-            print(index, line)
+            # print(index, line)
             return True
         except StopIteration:
             self._file.close()
