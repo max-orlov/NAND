@@ -1,9 +1,11 @@
 from enum import Enum
 
+
 class CommandType(Enum):
     A_COMMAND = 1
     C_COMMAND = 2
     L_COMMAND = 3
+
 
 class Parser:
     """
@@ -15,22 +17,23 @@ class Parser:
         initializes the needed parameters.
         """
         self._file = open(filename)
-        self._fileLines = self._file.readlines()
-        self._fileLinesIter = enumerate(self._fileLines)
-        self._currentCommand = ''
+        self._file_lines = self._file.readlines()
+        self._file_lines_iter = enumerate(self._file_lines)
+        self._current_command = ''
+        self._current_line = ''
 
-    def hasMoreCommands(self):
+    def has_more_commands(self):
         """
         checks if there are more valid commands in the file (comments and empty lines are not valid).
 
         :return: True if there are more commands, False otherwise.
         """
         try:
-            index, line = next(self._fileLinesIter)
+            index, line = next(self._file_lines_iter)
             while line.strip().startswith("//") or len(line.strip()) == 0:
-                index, line = next(self._fileLinesIter)
+                index, line = next(self._file_lines_iter)
 
-            self._currentLine = line
+            self._current_line = line
             # print(index, line)
             return True
         except StopIteration:
@@ -43,30 +46,32 @@ class Parser:
 
         :return: None.
         """
-        self._currentCommand = self._currentLine[:self._currentLine.find("//")].strip()
+        self._current_command = self._current_line[:self._current_line.find("//")].strip()
 
-    def commandType(self):
+    def command_type(self):
         """
         returns the type of the current command from the CommandType enum.
 
         :return: the command type.
         """
-        if "=" in self._currentCommand or ";" in self._currentCommand:
+        if "=" in self._current_command or ";" in self._current_command:
             return CommandType.C_COMMAND
-        elif self.isLabel():
+        elif self.is_label():
             return CommandType.L_COMMAND
-        elif self._currentCommand.startswith("@"):
-            if self._currentCommand[1:].isdecimal():    # TODO: check if negative numbers allowed - if so find another method
-                return CommandType.A_COMMAND
-            else:
-                return CommandType.L_COMMAND
+        elif self._current_command.startswith("@"):
+            # TODO: check if negative numbers allowed - if so find another method
+            return CommandType.A_COMMAND if self._current_command[1:].isdecimal() else CommandType.L_COMMAND
 
-    def isLabel(self):
+    def is_label(self):
         """
         checks if the current command is a label, aka of type '(...)'.
         :return: True if the command is a label
         """
-        return self._currentCommand.strip().startswith("(") and self._currentCommand.strip().endswith(")")
+        if "(" in self._current_command and ")" in self._current_command:
+            _left_par_index = self._current_command.index("(")
+            _right_par_index = self._current_command.index(")", _left_par_index)
+            return 0 <= _left_par_index < _right_par_index
+        return False
 
     def symbol(self):
         """
@@ -75,9 +80,9 @@ class Parser:
 
         :return: the symbol or decimal number.
         """
-        if self._currentCommand.startswith("@"):
-            return self._currentCommand[1:]
-        return self._currentCommand[1: self._currentCommand.find(")")]
+        if self._current_command.startswith("@"):
+            return self._current_command[1:]
+        return self._current_command[1: self._current_command.find(")")]
 
     def dest(self):
         """
@@ -86,8 +91,8 @@ class Parser:
 
         :return: 'dest' part.
         """
-        if "=" in self._currentCommand:
-            return self._currentCommand[: self._currentCommand.find("=")].strip()
+        if "=" in self._current_command:
+            return self._current_command[: self._current_command.find("=")].strip()
         else:
             return "null"
 
@@ -98,13 +103,13 @@ class Parser:
 
         :return: 'comp' part.
         """
-        if ";" in self._currentCommand:
-            end = self._currentLine.find(";")
+        if ";" in self._current_command:
+            end = self._current_line.find(";")
         else:
-            end = len(self._currentCommand)
-        if "=" in self._currentCommand:
-            return self._currentCommand[self._currentCommand.find("=") + 1: end].strip()
-        return self._currentCommand[: self._currentCommand.find(";")].strip()
+            end = len(self._current_command)
+        if "=" in self._current_command:
+            return self._current_command[self._current_command.find("=") + 1: end].strip()
+        return self._current_command[: self._current_command.find(";")].strip()
 
     def jump(self):
         """
@@ -113,7 +118,5 @@ class Parser:
 
         :return: 'jump' part.
         """
-        if ";" in self._currentCommand:
-            return self._currentCommand[self._currentCommand.find(";") + 1:].strip()
-        else:
-            return "null"
+        return self._current_command[self._current_command.find(";") + 1:].strip() if ";" in self._current_command else \
+            "null"
