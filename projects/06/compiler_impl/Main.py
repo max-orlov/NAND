@@ -33,7 +33,8 @@ class Main:
         self._parser = Parser(filename)
         while self._parser.has_more_commands():
             self._parser.advance()
-            self._current_command_num += self._parser.command_type() != CommandType.L_COMMAND
+            is_l_type = self._parser.command_type() != CommandType.L_COMMAND
+            self._current_command_num += is_l_type or (not is_l_type and not self._parser.is_label())
             if self._parser.command_type() == CommandType.L_COMMAND and self._parser.is_label():
                     self._symbol_table.addEntry(self._parser.symbol(), self._current_command_num)
 
@@ -42,7 +43,6 @@ class Main:
         hack_file_content = ""
         while self._parser.has_more_commands():
             self._parser.advance()
-
             return_value = {
                 CommandType.C_COMMAND: lambda: self._assemble_c_command(),
                 CommandType.A_COMMAND: lambda: self._assemble_a_command(),
