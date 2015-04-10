@@ -2,8 +2,8 @@ import sys
 from Parser import Parser, CommandType
 from SymbolTable import SymbolTable
 from Code import jump, dest, comp
-from os import listdir, path, walk
-from os.path import isfile, join, isdir
+from os import path, walk
+from os.path import isdir
 import fnmatch
 
 
