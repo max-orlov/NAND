@@ -3,13 +3,13 @@ from Parser import Parser, CommandType
 from SymbolTable import SymbolTable
 from Code import jump, dest, comp
 from os import path, walk
-from os.path import isdir
-import fnmatch
-
+from os.path import join, isdir
+from fnmatch import filter
 
 
 def _write_to_file(filename, content):
     out_file_name = filename[: -len(".asm")] + ".hack"
+    print("Writing .Hack to {}".format(out_file_name))
     out_file = open(out_file_name, "w")
     out_file.write(content)
     out_file.close()
@@ -37,10 +37,10 @@ class Main:
         self._parser = Parser(filename)
         while self._parser.has_more_commands():
             self._parser.advance()
-            is_l_type = self._parser.command_type() != CommandType.L_COMMAND
-            self._current_command_num += is_l_type or (not is_l_type and not self._parser.is_label())
-            if self._parser.command_type() == CommandType.L_COMMAND and self._parser.is_label():
-                    self._symbol_table.addEntry(self._parser.symbol(), self._current_command_num)
+            condition = self._parser.command_type() == CommandType.L_COMMAND and self._parser.is_label()
+            self._current_command_num += not condition
+            if condition:
+                    self._symbol_table.add_entry(self._parser.symbol(), self._current_command_num)
 
         """second pass."""
         self._parser = Parser(filename)
@@ -57,14 +57,13 @@ class Main:
 
         _write_to_file(filename, hack_file_content)
 
-
     def _assemble_a_command(self):
         """
         Translates the A-instruction into machine language.
         :return: the translated value of the command
         """
         hack_line = "{0:b}".format(int(self._parser.symbol()))
-        return hack_line.rjust(16, '0')
+        return hack_line.rjust(16, "0")
 
     def _assemble_l_command(self):
         """
@@ -74,12 +73,10 @@ class Main:
         if self._parser.is_label():
             return
         if not self._symbol_table.contains(self._parser.symbol()):
-            self._symbol_table.addEntry(self._parser.symbol(), self._current_symbol_num)
+            self._symbol_table.add_entry(self._parser.symbol(), self._current_symbol_num)
             self._current_symbol_num += 1
-        hack_line = "{0:b}".format(self._symbol_table.getAddress(self._parser.symbol()))
-        while len(hack_line) < 16:
-            hack_line = "0" + hack_line
-        return hack_line
+        hack_line = "{0:b}".format(self._symbol_table.get_address(self._parser.symbol()))
+        return hack_line.rjust(16, "0")
 
     def _assemble_c_command(self):
         """
@@ -97,18 +94,17 @@ class Main:
         return hack_line
 
 if __name__ == '__main__':
-    main = Main()
     files = []
     for arg_path in sys.argv:
         if isdir(arg_path):
-            files.extend([path.join(r, f) for r, d, fs in walk(arg_path) for f in fnmatch.filter(fs, "*.asm")])
+            files.extend([join(r, f) for r, d, fs in walk(arg_path) for f in filter(fs, "*.asm")])
         elif path.splitext(arg_path)[1] == ".asm":
             files.extend([arg_path])
         else:
             continue
 
     for file_runner in files:
+        main = Main()
         print("Processing the following file: {}".format(file_runner))
         main.parse_file(file_runner)
         print("Done processing {}\n~~~~~~~~~~~~~~".format(file_runner))
-
