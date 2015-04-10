@@ -2,6 +2,9 @@ import sys
 from Parser import Parser, CommandType
 from SymbolTable import SymbolTable
 from Code import jump, dest, comp
+from os import listdir, path
+from os.path import isfile, join, isdir
+
 
 
 def _write_to_file(filename, content):
@@ -94,5 +97,18 @@ class Main:
 
 if __name__ == '__main__':
     main = Main()
-    # TODO: go over all files.
-    main.parse_file(sys.argv[1])
+
+    for arg_path in sys.argv:
+
+        if isdir(arg_path):
+            all_files = [join(arg_path, f) for f in listdir(arg_path) if isfile(join(arg_path, f))]
+            files = [f for f in all_files if path.splitext(f)[1] == ".asm"]
+        elif path.splitext(arg_path)[1] == ".asm":
+            files = [arg_path]
+        else:
+            continue
+
+        for file_runner in files:
+            print("Processing the following file: {}".format(file_runner))
+            main.parse_file(file_runner)
+            print("Done processing {}\n~~~~~~~~~~~~~~".format(file_runner))
