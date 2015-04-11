@@ -2,8 +2,8 @@ import sys
 from Parser import Parser, CommandType
 from SymbolTable import SymbolTable
 from Code import jump, dest, comp
-from os import path, walk
-from os.path import join, isdir
+from os import path, walk, getcwd
+from os.path import join, isdir, isabs, abspath
 from fnmatch import filter
 
 
@@ -95,7 +95,8 @@ class Main:
 
 if __name__ == '__main__':
     files = []
-    for arg_path in sys.argv:
+    for arg_path in sys.argv[1:]:
+        arg_path = arg_path if isabs(arg_path) else abspath(path.join(getcwd(), arg_path))
         if isdir(arg_path):
             files.extend([join(r, f) for r, d, fs in walk(arg_path) for f in filter(fs, "*.asm")])
         elif path.splitext(arg_path)[1] == ".asm":
