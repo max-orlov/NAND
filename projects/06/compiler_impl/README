@@ -4,19 +4,16 @@ Jonny Gulayev, ID 304028749, georgy.gulayev@mail.huji.ac.il
 Maxim Orlov, ID 314363227, maxim.orlov@mail.huji.ac.il
 ===============================================================================
 
-                           Project 5 - An HDL File
+                           Project 6 - Assembler
                            ----------------------- 
   
 Submitted Files
 ---------------
 README 			- This file.
-Memory.hdl		-	Memory chip.
-CPU.hdl			-	CPU chip.
-Compuer.hdl		-	Computer chip.
-ExtendAlu.hdl	-	ExtendAlu chip.
-CpuMul.hdl		-	CpuMul chip.
-Mul.hdl			-	Mul chip.
-ShiftLeft.dhl	-	ShiftLeft chip.
-ShiftRight.dhl	-	ShiftRight chip.
+Code.py         - Contains the binary representation for any mnemonic command.
+Main.py         - The engine behind translating any mnemonic code to binary.
+Parser.py       - Handles parsing the given mnemonic set of commands into binary.
+SymbolTable.py  - Used to store the different symbols saved and used throughout the program.
+
 Remarks
 -------
