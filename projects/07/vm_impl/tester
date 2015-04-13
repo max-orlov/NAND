@@ -1,0 +1,5 @@
+push local 0
+pop argument 1
+call foo 3
+eq
+return
