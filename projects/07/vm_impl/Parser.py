@@ -1,5 +1,5 @@
 __author__ = 'maxorlov'
-from VMCommands import get_c_command, VMCommands
+from VMCommandTypes import get_c_command, VMCommandTypes
 
 
 class Parser:
@@ -22,8 +22,10 @@ class Parser:
         # Creating file iterator with indexes
         self._file_content = []
         for index, line in enumerate(self._in_stream):
-            if len(line[line.index("//"):].strip()) != '':
+            if "//" in line and len(line[line.index("//"):].strip()) != '':
                 self._file_content.append(line[line.index("//"):].strip())
+            else:
+                self._file_content.append(line.strip())
 
     def has_more_command(self):
         """
@@ -43,7 +45,7 @@ class Parser:
         """
         if self.has_more_command():
             self._current_line_index += 1
-            self._current_command = self._current_command[:self._current_command.find("//")].strip()
+            self._current_command = self._file_content[self._current_line_index]
 
     def command_type(self):
         """
@@ -62,9 +64,9 @@ class Parser:
         :rtype: str
         :return:
         """
-        if self.command_type() == VMCommands.C_ARITHMETIC:
+        if self.command_type() == VMCommandTypes.C_ARITHMETIC:
             return self._current_command.split(' ')[0]
-        elif self.command_type() != VMCommands.C_RETURN:
+        elif self.command_type() != VMCommandTypes.C_RETURN:
             return self._current_command.split(' ')[1]
         else:
             return None
@@ -77,7 +79,7 @@ class Parser:
         :rtype: int
         :return:
         """
-        if self.command_type() in [VMCommands.C_PUSH, VMCommands.C_POP, VMCommands.C_FUNCTION, VMCommands.C_CALL]:
+        if self.command_type() in [VMCommandTypes.C_PUSH, VMCommandTypes.C_POP, VMCommandTypes.C_FUNCTION, VMCommandTypes.C_CALL]:
             return int(self._current_command.split(' ')[2])
         else:
             return None
