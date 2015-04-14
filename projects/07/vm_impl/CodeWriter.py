@@ -31,7 +31,7 @@ class CodeWriter:
         :param command: translates the command to assembly.
         :return: None
         """
-        #TODO Translation is has to be done here
+        # TODO Translation is has to be done here
         self._out_stream.write(command)
 
     def write_push_pop(self, command, segment, index):
@@ -43,7 +43,7 @@ class CodeWriter:
         :param index: a non negative integer
         :return:
         """
-        #TODO Translation has to be done here
+        # TODO Translation has to be done here
         pass
 
     def close(self):
