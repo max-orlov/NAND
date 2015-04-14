@@ -1,7 +1,9 @@
 __author__ = 'maxorlov'
 from Parser import Parser
+import sys
+
 if __name__ == '__main__':
-    par = Parser('/media/maxorlov/UUI/NAND/projects/07/vm_impl/tester')
+    par = Parser(sys.argv[1:])
     while par.has_more_command():
         # print(par._current_line_index)
         par.advance()
