@@ -31,15 +31,15 @@ class CodeWriter:
         :param command: translates the command to assembly.
         :return: None
         """
-        pass
+        self._out_stream.write(command)
 
     def write_push_pop(self, command, segment, index):
         """
         Writes the assembly code that is the translation of the given command, where command is either C_PUSH or C_POP.
 
         :param command: specifies the command type (push or pop)
-        :param segment:
-        :param index:
+        :param segment: the type of the variable (static, argument, local, constant, this/that, pointer, temp)
+        :param index: a non negative integer
         :return:
         """
         pass
@@ -50,4 +50,4 @@ class CodeWriter:
 
         :return:
         """
-        pass
+        self._out_stream.close()
