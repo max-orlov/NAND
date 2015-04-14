@@ -20,7 +20,10 @@ class Parser:
 
         self._in_stream = open(input_stream)
         # Creating file iterator with indexes
-        self._file_content = [line for index, line in enumerate(self._in_stream)]
+        self._file_content = []
+        for index, line in enumerate(self._in_stream):
+            if len(line[line.index("//"):].strip()) != '':
+                self._file_content.append(line[line.index("//"):].strip())
 
     def has_more_command(self):
         """
@@ -40,7 +43,7 @@ class Parser:
         """
         if self.has_more_command():
             self._current_line_index += 1
-            self._current_command = self._file_content[self._current_line_index]
+            self._current_command = self._current_command[:self._current_command.find("//")].strip()
 
     def command_type(self):
         """
