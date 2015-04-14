@@ -42,7 +42,6 @@ class Parser:
             self._current_line_index += 1
             self._current_command = self._file_content[self._current_line_index]
 
-
     def command_type(self):
         """
         Returns the type of the current VM command. C_ARITHMETIC is returned for all the arithmetic commands.
@@ -60,14 +59,10 @@ class Parser:
         :rtype: str
         :return:
         """
-        if ' ' in self._current_command:
-            command_args = self._current_command.split(' ')
-            if self.command_type() == VMCommands.C_ARITHMETIC:
-                return command_args[0]
-            elif self.command_type() != VMCommands.C_RETURN:
-                return command_args[1]
-            else:
-                return None
+        if self.command_type() == VMCommands.C_ARITHMETIC:
+            return self._current_command.split(' ')[0]
+        elif self.command_type() != VMCommands.C_RETURN:
+            return self._current_command.split(' ')[1]
         else:
             return None
 
@@ -79,8 +74,7 @@ class Parser:
         :rtype: int
         :return:
         """
-        command_args = self._current_command.split(' ')
         if self.command_type() in [VMCommands.C_PUSH, VMCommands.C_POP, VMCommands.C_FUNCTION, VMCommands.C_CALL]:
-            return int(command_args[2])
+            return int(self._current_command.split(' ')[2])
         else:
             return None
