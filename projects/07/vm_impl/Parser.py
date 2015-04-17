@@ -27,6 +27,8 @@ class Parser:
             elif "//" not in line and len(line.strip()) > 0:
                 self._file_content.append(line.strip())
 
+    def get_id(self):
+        return self._current_line_index
 
     def has_more_command(self):
         """

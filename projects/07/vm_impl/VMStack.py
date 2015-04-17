@@ -14,13 +14,7 @@ class VMStack:
         :return: A string representation of the push command.
         """
         # Pushing the new value
-        assembly_command = "@0" + "\n" + "A=M" + "\n"
-        assembly_command += "M=D" + "\n"
-
-        # Updating the SP
-        assembly_command += "@0" + "\n" + "M=M+1" + "\n"
-
-        return assembly_command
+        return "\n".join(["@0", "A=M", "M=D", "@0", "M=M+1"]) + "\n"
 
     def pop(self):
         """
@@ -29,9 +23,4 @@ class VMStack:
         :return: A string representation of the pop command.
         """
         # Updating the SP
-        assembly_command = "@0" + "\n" + "M=M-1" + "\n"
-
-        # Getting the value
-        assembly_command += "A=M" + "\n"
-
-        return assembly_command
+        return "\n".join(["@0", "M=M-1", "A=M"]) + "\n"
