@@ -106,9 +106,11 @@ class CodeWriter:
         assembly_command = ""
         if command is VMCommandTypes.C_PUSH:
             # Parsing
-            assembly_command += "@{}".format(index if self._is_segment_const() else get_segment_type(segment).value) + "\n"
+            assembly_command += "@{}".format(
+                index if self._is_segment_const() else get_segment_type(segment).value) + "\n"
             if self._is_segment_const() is False:
-                assembly_command += ("" if get_segment_type(segment) is VMSegmentTypes.TEMP else "A=M") + "\n"
+                assembly_command += ("" if get_segment_type(segment) is VMSegmentTypes.TEMP or get_segment_type(
+                    segment) is VMSegmentTypes.STATIC else "A=M") + "\n"
                 for i in range(0, index):
                     assembly_command += "A=A+1" + "\n"
             assembly_command += "D={}".format("A" if self._is_segment_const() else "M") + "\n"
@@ -118,7 +120,8 @@ class CodeWriter:
             assembly_command += self._SP_stack.pop() + "\n"
             assembly_command += "D=M" + "\n"
             assembly_command += "@{}".format(get_segment_type(segment).value) + "\n"
-            assembly_command += ("" if get_segment_type(segment) is VMSegmentTypes.TEMP else "A=M") + "\n"
+            assembly_command += ("" if get_segment_type(segment) is VMSegmentTypes.TEMP or get_segment_type(
+                segment) is VMSegmentTypes.STATIC else "A=M") + "\n"
             for i in range(0, index):
                 assembly_command += "A=A+1" + "\n"
             assembly_command += "M=D" + "\n"

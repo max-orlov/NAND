@@ -3,11 +3,11 @@ from enum import Enum
 
 
 class VMSegmentTypes(Enum):
-    SP = 0                   #==0
-    LOCAL = 1                #==1
-    ARGUMENT = 2             #==2
-    THIS = 3                 #==3
-    THAT = 4                 #==4
+    SP = "SP"                   #==0
+    LOCAL = "LCL"                #==1
+    ARGUMENT = "ARG"             #==2
+    THIS = "THIS"                 #==3
+    THAT = "THAT"                 #==4
     TEMP = 5                 #<=12
     GENERAL_PURPOSE = 13      #<=15
     STATIC = 16               #<=255
