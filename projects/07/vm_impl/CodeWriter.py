@@ -60,16 +60,14 @@ class CodeWriter:
         self._out_stream.write(assembly_command)
 
     def _handle_arithmetic_add(self):
-        exp, seg = self._prog_stack.pop()
-        assembly_command = exp + "D={}".format(
-            "A" if self._is_segment_const() else "M") + "\n"
+        exp = self._prog_stack.pop()
+        assembly_command = exp + "D=M" + "\n"
 
-        exp, seg = self._prog_stack.pop()
-        assembly_command += exp + "D=M+{}".format(
-            "A" if self._is_segment_const() else "D") + "\n"
+        exp = self._prog_stack.pop()
+        assembly_command += exp + "D=M+D" + "\n"
 
         # Updating the value
-        assembly_command += self._prog_stack.push(VMSegmentTypes.CONSTANT)
+        assembly_command += self._prog_stack.push()
 
         return assembly_command
 
@@ -137,7 +135,7 @@ class CodeWriter:
             assembly_command += "D={}".format("A" if self._is_segment_const() else "M") + "\n"
 
             # Updating values By know D should hold the new value
-            assembly_command += self._prog_stack.push(get_segment_type(self._parser.arg1()))
+            assembly_command += self._prog_stack.push()
 
         else:  # C_POP case
             exp, seg = self._prog_stack.pop()
