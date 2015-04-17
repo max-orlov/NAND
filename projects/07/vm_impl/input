@@ -1,4 +1,4 @@
-push local 0
 push constant 1
-push static 3
-pop static 3
+push constant 2
+add
+pop static 0

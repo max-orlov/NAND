@@ -1,7 +1,8 @@
 __author__ = 'maxorlov'
 from Parser import Parser
-from VMCommandTypes import VMCommandTypes, VMCommandsArithmeticTypes
-from VMSegment import VMSegment, VMSegmentTypes, get_segment_type
+from VMCommandTypes import VMCommandTypes, VMCommandsArithmeticTypes, c_arithmetic_dictionary
+from VMSegment import VMSegmentTypes, get_segment_type
+from VMStack import VMStack, SP
 
 
 class CodeWriter:
@@ -17,7 +18,7 @@ class CodeWriter:
         :return: None
         """
         self._out_stream = open(output_stream, "w")
-        self._segments = VMSegment()
+        self._prog_stack = VMStack()
         self._parser = None
 
     def set_file_name(self, file_name):
@@ -31,7 +32,7 @@ class CodeWriter:
         while self._parser.has_more_command():
             self._parser.advance()
             {
-                VMCommandTypes.C_ARITHMETIC: lambda: self.write_arithmetic(self._parser.command_type()),
+                VMCommandTypes.C_ARITHMETIC: lambda: self.write_arithmetic(self._parser.arg1()),
                 VMCommandTypes.C_PUSH: lambda: self.write_push_pop(VMCommandTypes.C_PUSH, self._parser.arg1(),
                                                                    self._parser.arg2()),
                 VMCommandTypes.C_POP: lambda: self.write_push_pop(VMCommandTypes.C_POP, self._parser.arg1(),
@@ -51,21 +52,53 @@ class CodeWriter:
             VMCommandsArithmeticTypes.EQ: lambda: self._handle_arithmetic_eq(),
             VMCommandsArithmeticTypes.GT: lambda: self._handle_arithmetic_gt(),
             VMCommandsArithmeticTypes.LT: lambda: self._handle_arithmetic_lt(),
-            VMCommandsArithmeticTypes.NEG: lambda: self._handle_arithmetic_neq(),
+            VMCommandsArithmeticTypes.NEG: lambda: self._handle_arithmetic_neg(),
             VMCommandsArithmeticTypes.NOT: lambda: self._handle_arithmetic_not(),
             VMCommandsArithmeticTypes.OR: lambda: self._handle_arithmetic_or(),
             VMCommandsArithmeticTypes.SUB: lambda: self._handle_arithmetic_sub()
-        }[command]()
+        }[c_arithmetic_dictionary[command]]()
         self._out_stream.write(assembly_command)
 
     def _handle_arithmetic_add(self):
-        pass
+        exp, seg = self._prog_stack.pop()
+        assembly_command = exp + "D={}".format(
+            "A" if self._is_segment_const() else "M") + "\n"
+
+        exp, seg = self._prog_stack.pop()
+        assembly_command += exp + "D=M+{}".format(
+            "A" if self._is_segment_const() else "D") + "\n"
+
+        # Updating the value
+        assembly_command += self._prog_stack.push(VMSegmentTypes.CONSTANT)
+
+        return assembly_command
 
     def _handle_arithmetic_sub(self):
-        pass
+        exp, seg = self._prog_stack.pop()
+        assembly_command = exp + "D={}".format(
+            "A" if self._is_segment_const() else "M") + "\n"
 
-    def _handle_arithmetic_neq(self):
-        pass
+        exp, seg = self._prog_stack.pop()
+        assembly_command += exp + "D=M-{}".format(
+            "A" if self._is_segment_const() else "D") + "\n"
+
+        # Updating the value
+        assembly_command += self._prog_stack.push(VMSegmentTypes.CONSTANT)
+
+        return assembly_command
+
+    def _handle_arithmetic_neg(self):
+        exp, seg = self._prog_stack.pop()
+        assembly_command = exp + "D={}".format(
+            "A" if self._is_segment_const() else "M") + "\n"
+
+        assembly_command += "D=D-D" + "\n"
+        assembly_command += "D=D-D" + "\n"
+
+        # Updating the value
+        assembly_command += self._prog_stack.push(VMSegmentTypes.CONSTANT)
+
+        return assembly_command
 
     def _handle_arithmetic_eq(self):
         pass
@@ -94,10 +127,30 @@ class CodeWriter:
         :param index: a non negative integer
         :return:
         """
-        if command is VMCommandTypes.C_PUSH:
-            self._segments.set_value(segment, index)
+        # Does not handle non existing variable yet
+        assembly_command = ""
 
-        self._out_stream.write(self._segments.get_value(segment, index) + "\n")
+        if command is VMCommandTypes.C_PUSH:
+            # Parsing
+            assembly_command += "@{}".format(self._parser.arg2() if self._is_segment_const() else (get_segment_type(
+                self._parser.arg1())) + self._parser.arg2()) + "\n"
+            assembly_command += "D={}".format("A" if self._is_segment_const() else "M") + "\n"
+
+            # Updating values By know D should hold the new value
+            assembly_command += self._prog_stack.push(get_segment_type(self._parser.arg1()))
+
+        else:  # C_POP case
+            exp, seg = self._prog_stack.pop()
+            assembly_command += exp
+            assembly_command += "D=M" + "\n"
+            assembly_command += "@{}".format(str(int(get_segment_type(segment).value) + index)) + "\n"
+            assembly_command += "M=D" + "\n"
+
+        self._out_stream.write(assembly_command)
+
+    def _is_segment_const(self):
+        return self._parser.command_type() is not VMCommandTypes.C_ARITHMETIC and get_segment_type(
+            self._parser.arg1()) is VMSegmentTypes.CONSTANT
 
     def close(self):
         """

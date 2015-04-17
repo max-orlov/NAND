@@ -2,6 +2,7 @@ __author__ = 'maxorlov'
 from enum import Enum
 
 
+
 class VMCommandTypes(Enum):
     C_ARITHMETIC = "C_ARITHMETIC"
     C_PUSH = "C_PUSH"
@@ -13,6 +14,25 @@ class VMCommandTypes(Enum):
     C_RETURN = "C_RETURN"
     C_CALL = "C_CALL"
 
+c_command_dictionary={
+    "push": VMCommandTypes.C_PUSH,
+    "pop": VMCommandTypes.C_POP,
+    "label": VMCommandTypes.C_PUSH,
+    "goto": VMCommandTypes.C_GOTO,
+    "if-goto": VMCommandTypes.C_GOTO,
+    "function": VMCommandTypes.C_FUNCTION,
+    "return": VMCommandTypes.C_RETURN,
+    "call": VMCommandTypes.C_CALL,
+    "add":  VMCommandTypes.C_ARITHMETIC,
+    "sub":  VMCommandTypes.C_ARITHMETIC,
+    "neg":  VMCommandTypes.C_ARITHMETIC,
+    "eq":  VMCommandTypes.C_ARITHMETIC,
+    "gt":  VMCommandTypes.C_ARITHMETIC,
+    "lt":  VMCommandTypes.C_ARITHMETIC,
+    "and":  VMCommandTypes.C_ARITHMETIC,
+    "or":  VMCommandTypes.C_ARITHMETIC,
+    "not":  VMCommandTypes.C_ARITHMETIC
+}
 
 class VMCommandsArithmeticTypes(Enum):
     ADD = 'add',
@@ -25,19 +45,14 @@ class VMCommandsArithmeticTypes(Enum):
     OR = 'or',
     NOT = 'not'
 
-
-def get_c_command(command):
-    if command in VMCommandsArithmeticTypes:
-        return VMCommandTypes.C_ARITHMETIC
-    else:
-        return {
-            "push": VMCommandTypes.C_PUSH,
-            "pop": VMCommandTypes.C_POP,
-            "label": VMCommandTypes.C_PUSH,
-            "goto": VMCommandTypes.C_GOTO,
-            "if-goto": VMCommandTypes.C_GOTO,
-            "function": VMCommandTypes.C_FUNCTION,
-            "return": VMCommandTypes.C_RETURN,
-            "call": VMCommandTypes.C_CALL
-        }[command]
-
+c_arithmetic_dictionary ={
+    'add': VMCommandsArithmeticTypes.ADD,
+    'sub': VMCommandsArithmeticTypes.SUB,
+    'neg': VMCommandsArithmeticTypes.NEG,
+    'eq': VMCommandsArithmeticTypes.EQ,
+    'gt': VMCommandsArithmeticTypes.GT,
+    'lt': VMCommandsArithmeticTypes.LT,
+    'and': VMCommandsArithmeticTypes.AND,
+    'or': VMCommandsArithmeticTypes.OR,
+    'not': VMCommandsArithmeticTypes.NOT
+}

@@ -1,5 +1,5 @@
 __author__ = 'maxorlov'
-from VMCommandTypes import get_c_command, VMCommandTypes
+from VMCommandTypes import c_command_dictionary, VMCommandTypes
 
 
 class Parser:
@@ -22,10 +22,12 @@ class Parser:
         # Creating file iterator with indexes
         self._file_content = []
         for index, line in enumerate(self._in_stream):
-            if "//" in line and len(line[line.index("//"):].strip()) != '':
-                self._file_content.append(line[line.index("//"):].strip())
-            else:
+            if "//" in line and len(line[:line.index("//")].strip()) != 0:
+                    self._file_content.append(line[:line.index("//")].strip())
+            elif "//" not in line and len(line.strip()) > 0:
                 self._file_content.append(line.strip())
+
+        print(self._file_content)
 
     def has_more_command(self):
         """
@@ -53,8 +55,8 @@ class Parser:
 
         :return: C_ARITHMETIC, C_PUSH, C_POP, C_LABEL, C_GOTO, C_IF, C_FUNCTION, C_RETURN, C_CALL
         """
-        return get_c_command(
-            self._current_command.split(' ')[0]) if ' ' in self._current_command else self._current_command.strip()
+        return c_command_dictionary[
+            self._current_command.split(' ')[0] if ' ' in self._current_command else self._current_command.strip()]
 
     def arg1(self):
         """
