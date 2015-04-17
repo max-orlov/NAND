@@ -72,13 +72,11 @@ class CodeWriter:
         return assembly_command
 
     def _handle_arithmetic_sub(self):
-        exp, seg = self._prog_stack.pop()
-        assembly_command = exp + "D={}".format(
-            "A" if self._is_segment_const() else "M") + "\n"
+        exp = self._prog_stack.pop()
+        assembly_command = exp + "D=M" + "\n"
 
-        exp, seg = self._prog_stack.pop()
-        assembly_command += exp + "D=M-{}".format(
-            "A" if self._is_segment_const() else "D") + "\n"
+        exp = self._prog_stack.pop()
+        assembly_command += exp + "D=M-D" + "\n"
 
         # Updating the value
         assembly_command += self._prog_stack.push(VMSegmentTypes.CONSTANT)
@@ -86,9 +84,8 @@ class CodeWriter:
         return assembly_command
 
     def _handle_arithmetic_neg(self):
-        exp, seg = self._prog_stack.pop()
-        assembly_command = exp + "D={}".format(
-            "A" if self._is_segment_const() else "M") + "\n"
+        exp = self._prog_stack.pop()
+        assembly_command = exp + "D=M" + "\n"
 
         assembly_command += "D=D-D" + "\n"
         assembly_command += "D=D-D" + "\n"
