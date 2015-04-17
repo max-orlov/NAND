@@ -1,24 +1,24 @@
 __author__ = 'Maxim'
-SP = 256
 
 
 class VMStack:
+
     def __init__(self):
-        self._stack_size = 0
+        pass
 
     def push(self):
         """
         By this point D should contain the new value.
 
-        :param segment: The segment of which this came from (mainly needed for const)
         :rtype : str
         :return: A string representation of the push command.
         """
-        # Create Push command
-        assembly_command = "@{}".format(SP + self._stack_size + 1) + "\n"
+        # Pushing the new value
+        assembly_command = "@0" + "\n" + "A=M" + "\n"
         assembly_command += "M=D" + "\n"
-        # Do push
-        self._stack_size += 1
+
+        # Updating the SP
+        assembly_command += "@0" + "\n" + "M=M+1" + "\n"
 
         return assembly_command
 
@@ -28,10 +28,10 @@ class VMStack:
         :rtype : str, segment
         :return: A string representation of the pop command.
         """
-        # Create Pop command
-        assembly_command = "@{}".format(SP + self._stack_size) + "\n"
+        # Updating the SP
+        assembly_command = "@0" + "\n" + "M=M-1" + "\n"
 
-        # Do pop
-        self._stack_size -= 1
+        # Getting the value
+        assembly_command += "A=M" + "\n"
 
         return assembly_command

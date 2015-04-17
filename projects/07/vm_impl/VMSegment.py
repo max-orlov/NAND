@@ -3,11 +3,13 @@ from enum import Enum
 
 
 class VMSegmentTypes(Enum):
-    STATIC = "16"
-    ARGUMENT = "2"
-    LOCAL = "1"
-    THIS = "3"
-    THAT = "4"
+    LOCAL = 1                #==1
+    ARGUMENT = 2             #==2
+    THIS = 3                 #==3
+    THAT = 4                 #==4
+    TEMP = 5                 #<12
+    GENERAL_PURPOSE = 6      #<15
+    STATIC = 7               #<255
     CONSTANT = "constant"
     POINTER = "pointer"
 
@@ -20,7 +22,8 @@ def get_segment_type(seg_name):
         "constant": VMSegmentTypes.CONSTANT,
         "this": VMSegmentTypes.THIS,
         "that": VMSegmentTypes.THAT,
-        "pointer": VMSegmentTypes.POINTER
+        "pointer": VMSegmentTypes.POINTER,
+        "temp": VMSegmentTypes.TEMP
     }[seg_name]
 
 

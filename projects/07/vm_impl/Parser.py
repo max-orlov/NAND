@@ -27,7 +27,6 @@ class Parser:
             elif "//" not in line and len(line.strip()) > 0:
                 self._file_content.append(line.strip())
 
-        print(self._file_content)
 
     def has_more_command(self):
         """
