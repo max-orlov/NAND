@@ -3,13 +3,14 @@ from enum import Enum
 
 
 class VMSegmentTypes(Enum):
+    SP = 0                   #==0
     LOCAL = 1                #==1
     ARGUMENT = 2             #==2
     THIS = 3                 #==3
     THAT = 4                 #==4
-    TEMP = 5                 #<12
-    GENERAL_PURPOSE = 6      #<15
-    STATIC = 7               #<255
+    TEMP = 5                 #<=12
+    GENERAL_PURPOSE = 13      #<=15
+    STATIC = 16               #<=255
     CONSTANT = "constant"
     POINTER = "pointer"
 

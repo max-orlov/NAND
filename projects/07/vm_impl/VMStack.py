@@ -4,7 +4,7 @@ __author__ = 'Maxim'
 class VMStack:
 
     def __init__(self):
-        pass
+        self._sp_index = 0
 
     def push(self):
         """
@@ -16,11 +16,12 @@ class VMStack:
         # Pushing the new value
         return "\n".join(["@0", "A=M", "M=D", "@0", "M=M+1"]) + "\n"
 
+
     def pop(self):
         """
         pops up the value only into M.
         :rtype : str, segment
         :return: A string representation of the pop command.
         """
-        # Updating the SP
         return "\n".join(["@0", "M=M-1", "A=M"]) + "\n"
+

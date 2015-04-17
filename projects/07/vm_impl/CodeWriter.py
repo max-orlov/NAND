@@ -46,27 +46,28 @@ class CodeWriter:
         :param command: translates the command to assembly.
         :return: None
         """
-        assembly_command = {
-            VMCommandsArithmeticTypes.ADD: lambda: self._handle_arithmetic_add(),
-            VMCommandsArithmeticTypes.AND: lambda: self._handle_arithmetic_and(),
-            VMCommandsArithmeticTypes.EQ: lambda: self._handle_arithmetic_eq(),
-            VMCommandsArithmeticTypes.GT: lambda: self._handle_arithmetic_gt(),
-            VMCommandsArithmeticTypes.LT: lambda: self._handle_arithmetic_lt(),
-            VMCommandsArithmeticTypes.NEG: lambda: self._handle_arithmetic_neg(),
-            VMCommandsArithmeticTypes.NOT: lambda: self._handle_arithmetic_not(),
-            VMCommandsArithmeticTypes.OR: lambda: self._handle_arithmetic_or(),
-            VMCommandsArithmeticTypes.SUB: lambda: self._handle_arithmetic_sub()
-        }[c_arithmetic_dictionary[command]]()
-        self._out_stream.write(assembly_command if assembly_command is not None else "")
+        assembly_command = "\n".join([{
+                                          VMCommandsArithmeticTypes.ADD: lambda: self._handle_arithmetic_add(),
+                                          VMCommandsArithmeticTypes.AND: lambda: self._handle_arithmetic_and(),
+                                          VMCommandsArithmeticTypes.EQ: lambda: self._handle_arithmetic_eq(),
+                                          VMCommandsArithmeticTypes.GT: lambda: self._handle_arithmetic_gt(),
+                                          VMCommandsArithmeticTypes.LT: lambda: self._handle_arithmetic_lt(),
+                                          VMCommandsArithmeticTypes.NEG: lambda: self._handle_arithmetic_neg(),
+                                          VMCommandsArithmeticTypes.NOT: lambda: self._handle_arithmetic_not(),
+                                          VMCommandsArithmeticTypes.OR: lambda: self._handle_arithmetic_or(),
+                                          VMCommandsArithmeticTypes.SUB: lambda: self._handle_arithmetic_sub()
+                                      }[c_arithmetic_dictionary[command]](),
+                                      self._SP_stack.push()])
+        self._out_stream.write(assembly_command.replace("\n\n", "\n"))
 
     def _handle_arithmetic_add(self):
-        return "\n".join([self._SP_stack.pop(), "D=M", self._SP_stack.pop(), "D=M+D", self._SP_stack.push()])
+        return "\n".join([self._SP_stack.pop(), "D=M", self._SP_stack.pop(), "D=M+D"])
 
     def _handle_arithmetic_sub(self):
-        return "\n".join([self._SP_stack.pop(), "D=M", self._SP_stack.pop(), "D=M-D", self._SP_stack.push()])
+        return "\n".join([self._SP_stack.pop(), "D=M", self._SP_stack.pop(), "D=M-D"])
 
     def _handle_arithmetic_neg(self):
-        return "\n".join([self._SP_stack.pop(), "D=M", "D=-D", self._SP_stack.push()])
+        return "\n".join([self._SP_stack.pop(), "D=M", "D=-D"])
 
     def _handle_arithmetic_eq(self):
         return self._handle_boolean_condition("JEQ")
@@ -82,17 +83,16 @@ class CodeWriter:
                           "\n".join(
                               ["@___label_eq", "D; __condition", "@___label_not_eq", "0; JMP", "(___label_eq)", "D=-1",
                                "@___label_end", "0; JMP", "(___label_not_eq)", "D=0", "(___label_end)"]).replace(
-                              "__label", str(self._parser.get_id())).replace("__condition", condition),
-                          self._SP_stack.push()])
+                              "__label", str(self._parser.get_id())).replace("__condition", condition)])
 
     def _handle_arithmetic_and(self):
-        return "\n".join([self._SP_stack.pop(), "D=M", self._SP_stack.pop(), "D=M&D", self._SP_stack.push()])
+        return "\n".join([self._SP_stack.pop(), "D=M", self._SP_stack.pop(), "D=M&D"])
 
     def _handle_arithmetic_or(self):
-        return "\n".join([self._SP_stack.pop(), "D=M", self._SP_stack.pop(), "D=M|D", self._SP_stack.push()])
+        return "\n".join([self._SP_stack.pop(), "D=M", self._SP_stack.pop(), "D=M|D"])
 
     def _handle_arithmetic_not(self):
-        return "\n".join([self._SP_stack.pop(), "D=!M", self._SP_stack.push()])
+        return "\n".join([self._SP_stack.pop(), "D=!M"])
 
     def write_push_pop(self, command, segment, index):
         """
@@ -103,31 +103,37 @@ class CodeWriter:
         :param index: a non negative integer
         :return:
         """
-        # Does not handle non existing variable yet
-
+        assembly_command = ""
         if command is VMCommandTypes.C_PUSH:
             # Parsing
-            assembly_command = "\n".join(["@{}".format(self._parser.arg2() if self._is_segment_const() else
-                                                       str(get_segment_type(
-                                                           self._parser.arg1()).value + self._parser.arg2())),
-                                          "D={}".format("A" if self._is_segment_const() else "M"),
-                                          self._SP_stack.push()])
+            assembly_command += "@{}".format(index if self._is_segment_const() else get_segment_type(segment).value) + "\n"
+            if self._is_segment_const() is False:
+                assembly_command += ("" if get_segment_type(segment) is VMSegmentTypes.TEMP else "A=M") + "\n"
+                for i in range(0, index):
+                    assembly_command += "A=A+1" + "\n"
+            assembly_command += "D={}".format("A" if self._is_segment_const() else "M") + "\n"
+            assembly_command += self._SP_stack.push() + "\n"
 
-        else:  # C_POP case
-            assembly_command = "\n".join([self._SP_stack.pop(), "D=M",
-                                          "@{}".format(get_segment_type(segment).value + index),
-                                          "M=D"])
+        else:  # C_POP
+            assembly_command += self._SP_stack.pop() + "\n"
+            assembly_command += "D=M" + "\n"
+            assembly_command += "@{}".format(get_segment_type(segment).value) + "\n"
+            assembly_command += ("" if get_segment_type(segment) is VMSegmentTypes.TEMP else "A=M") + "\n"
+            for i in range(0, index):
+                assembly_command += "A=A+1" + "\n"
+            assembly_command += "M=D" + "\n"
 
-        self._out_stream.write(assembly_command)
+        self._out_stream.write(assembly_command + "\n")
 
     def _is_segment_const(self):
         return self._parser.command_type() is not VMCommandTypes.C_ARITHMETIC and get_segment_type(
             self._parser.arg1()) is VMSegmentTypes.CONSTANT
 
+
     def close(self):
         """
-        Closes the output file.
+            Closes the output file.
 
-        :return:
-        """
+            :return:
+            """
         self._out_stream.close()
