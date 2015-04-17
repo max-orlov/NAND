@@ -46,19 +46,18 @@ class CodeWriter:
         :param command: translates the command to assembly.
         :return: None
         """
-        assembly_command = "\n".join([{
-                                          VMCommandsArithmeticTypes.ADD: lambda: self._handle_arithmetic_add(),
-                                          VMCommandsArithmeticTypes.AND: lambda: self._handle_arithmetic_and(),
-                                          VMCommandsArithmeticTypes.EQ: lambda: self._handle_arithmetic_eq(),
-                                          VMCommandsArithmeticTypes.GT: lambda: self._handle_arithmetic_gt(),
-                                          VMCommandsArithmeticTypes.LT: lambda: self._handle_arithmetic_lt(),
-                                          VMCommandsArithmeticTypes.NEG: lambda: self._handle_arithmetic_neg(),
-                                          VMCommandsArithmeticTypes.NOT: lambda: self._handle_arithmetic_not(),
-                                          VMCommandsArithmeticTypes.OR: lambda: self._handle_arithmetic_or(),
-                                          VMCommandsArithmeticTypes.SUB: lambda: self._handle_arithmetic_sub()
-                                      }[c_arithmetic_dictionary[command]](),
-                                      self._SP_stack.push()])
-        self._out_stream.write(assembly_command.replace("\n\n", "\n"))
+        assembly_command = {VMCommandsArithmeticTypes.ADD: lambda: self._handle_arithmetic_add(),
+                            VMCommandsArithmeticTypes.AND: lambda: self._handle_arithmetic_and(),
+                            VMCommandsArithmeticTypes.EQ: lambda: self._handle_arithmetic_eq(),
+                            VMCommandsArithmeticTypes.GT: lambda: self._handle_arithmetic_gt(),
+                            VMCommandsArithmeticTypes.LT: lambda: self._handle_arithmetic_lt(),
+                            VMCommandsArithmeticTypes.NEG: lambda: self._handle_arithmetic_neg(),
+                            VMCommandsArithmeticTypes.NOT: lambda: self._handle_arithmetic_not(),
+                            VMCommandsArithmeticTypes.OR: lambda: self._handle_arithmetic_or(),
+                            VMCommandsArithmeticTypes.SUB: lambda: self._handle_arithmetic_sub()
+                           }[c_arithmetic_dictionary[command]]() + "\n"
+        assembly_command += self._SP_stack.push()
+        self._out_stream.write(assembly_command)
 
     def _handle_arithmetic_add(self):
         return "\n".join([self._SP_stack.pop(), "D=M", self._SP_stack.pop(), "D=M+D"])
@@ -107,31 +106,32 @@ class CodeWriter:
         if command is VMCommandTypes.C_PUSH:
             # Parsing
             assembly_command += "@{}".format(
-                index if self._is_segment_const() else get_segment_type(segment).value) + "\n"
-            if self._is_segment_const() is False:
-                assembly_command += ("" if get_segment_type(segment) is VMSegmentTypes.TEMP or get_segment_type(
-                    segment) is VMSegmentTypes.STATIC else "A=M") + "\n"
-                for i in range(0, index):
-                    assembly_command += "A=A+1" + "\n"
-            assembly_command += "D={}".format("A" if self._is_segment_const() else "M") + "\n"
+                index if self._is_segment_const(command, segment) else get_segment_type(segment).value) + "\n"
+            if self._is_segment_const(command, segment) is False:
+                assembly_command += self._find_the_ram_location(segment, index)
+            assembly_command += "D={}".format("A" if self._is_segment_const(command, segment) else "M") + "\n"
             assembly_command += self._SP_stack.push() + "\n"
 
         else:  # C_POP
             assembly_command += self._SP_stack.pop() + "\n"
             assembly_command += "D=M" + "\n"
             assembly_command += "@{}".format(get_segment_type(segment).value) + "\n"
-            assembly_command += ("" if get_segment_type(segment) is VMSegmentTypes.TEMP or get_segment_type(
-                segment) is VMSegmentTypes.STATIC else "A=M") + "\n"
-            for i in range(0, index):
-                assembly_command += "A=A+1" + "\n"
+            assembly_command += self._find_the_ram_location(segment, index)
             assembly_command += "M=D" + "\n"
 
-        self._out_stream.write(assembly_command + "\n")
+        self._out_stream.write(assembly_command)
 
-    def _is_segment_const(self):
-        return self._parser.command_type() is not VMCommandTypes.C_ARITHMETIC and get_segment_type(
-            self._parser.arg1()) is VMSegmentTypes.CONSTANT
+    @staticmethod
+    def _is_segment_const(command, segment):
+        return command is not VMCommandTypes.C_ARITHMETIC and get_segment_type(segment) is VMSegmentTypes.CONSTANT
 
+    @staticmethod
+    def _find_the_ram_location(segment, index):
+        assembly_command = ("" if get_segment_type(segment) is VMSegmentTypes.TEMP or get_segment_type(
+            segment) is VMSegmentTypes.STATIC else "A=M") + "\n"
+        for i in range(0, index):
+            assembly_command += "A=A+1" + "\n"
+        return assembly_command
 
     def close(self):
         """
@@ -139,4 +139,5 @@ class CodeWriter:
 
             :return:
             """
+
         self._out_stream.close()
