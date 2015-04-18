@@ -6,13 +6,13 @@ class VMSegmentTypes(Enum):
     SP = "SP"                   #==0
     LOCAL = "LCL"                #==1
     ARGUMENT = "ARG"             #==2
+    POINTER = "3"
     THIS = "THIS"                 #==3
     THAT = "THAT"                 #==4
     TEMP = 5                 #<=12
     GENERAL_PURPOSE = 13      #<=15
     STATIC = 16               #<=255
     CONSTANT = "constant"
-    POINTER = "pointer"
 
 
 def get_segment_type(seg_name):

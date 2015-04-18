@@ -104,19 +104,28 @@ class CodeWriter:
         """
         assembly_command = ""
         if command is VMCommandTypes.C_PUSH:
-            # Parsing
+            # Getting the value specified by the segment and index into M
             assembly_command += "@{}".format(
                 index if self._is_segment_const(command, segment) else get_segment_type(segment).value) + "\n"
             if self._is_segment_const(command, segment) is False:
                 assembly_command += self._find_the_ram_location(segment, index)
+
+            # Pushing the value from M/A into D
             assembly_command += "D={}".format("A" if self._is_segment_const(command, segment) else "M") + "\n"
+
+            # Pushing the value from D into the stack
             assembly_command += self._SP_stack.push() + "\n"
 
         else:  # C_POP
+            # Getting the stack top into D
             assembly_command += self._SP_stack.pop() + "\n"
             assembly_command += "D=M" + "\n"
+
+            # Getting to the specified location into M
             assembly_command += "@{}".format(get_segment_type(segment).value) + "\n"
             assembly_command += self._find_the_ram_location(segment, index)
+
+            # Putting the value of D into M
             assembly_command += "M=D" + "\n"
 
         self._out_stream.write(assembly_command)
@@ -126,9 +135,16 @@ class CodeWriter:
         return command is not VMCommandTypes.C_ARITHMETIC and get_segment_type(segment) is VMSegmentTypes.CONSTANT
 
     @staticmethod
-    def _find_the_ram_location(segment, index):
-        assembly_command = ("" if get_segment_type(segment) is VMSegmentTypes.TEMP or get_segment_type(
-            segment) is VMSegmentTypes.STATIC else "A=M") + "\n"
+    def _is_segment_pointed(segment):
+        """
+        You shouldn't change D because it might be used to store stuff.
+        :param segment:
+        :return:
+        """
+        return get_segment_type(segment) in {VMSegmentTypes.TEMP, VMSegmentTypes.STATIC, VMSegmentTypes.POINTER}
+
+    def _find_the_ram_location(self, segment, index):
+        assembly_command = ("" if self._is_segment_pointed(segment) else "A=M") + "\n"
         for i in range(0, index):
             assembly_command += "A=A+1" + "\n"
         return assembly_command
