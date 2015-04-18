@@ -60,24 +60,53 @@ class CodeWriter:
         self._out_stream.write(assembly_command)
 
     def _handle_arithmetic_add(self):
+        """
+        Creates the 'add' assembly output string
+        :return: representation of the 'add' operation assembly string
+        """
         return "\n".join([self._SP_stack.pop(), "D=M", self._SP_stack.pop(), "D=M+D"])
 
     def _handle_arithmetic_sub(self):
+        """
+        Creates the 'sub' assembly output string
+        :return: representation of the 'sub' operation assembly string
+        """
         return "\n".join([self._SP_stack.pop(), "D=M", self._SP_stack.pop(), "D=M-D"])
 
     def _handle_arithmetic_neg(self):
+        """
+        Creates the 'neg' assembly output string
+        :return: representation of the 'neg' operation assembly string
+        """
         return "\n".join([self._SP_stack.pop(), "D=M", "D=-D"])
 
     def _handle_arithmetic_eq(self):
+        """
+        Creates the 'eq' assembly output string
+        :return: representation of the 'eq' operation assembly string
+        """
         return self._handle_boolean_condition("JEQ")
 
     def _handle_arithmetic_gt(self):
+        """
+        Creates the 'gt' assembly output string
+        :return: representation of the 'gt' operation assembly string
+        """
         return self._handle_boolean_condition("JGT")
 
     def _handle_arithmetic_lt(self):
+        """
+        Creates the 'lt' assembly output string
+        :return: representation of the 'lt' operation assembly string
+        """
         return self._handle_boolean_condition("JLT")
 
     def _handle_boolean_condition(self, condition):
+        """
+        A helper function to all boolean operations (as they are quite the same)
+        :param condition: the type of the condition (eq,gt,lt)
+        :return: representation of the given condition operation assembly string
+        """
         return "\n".join([self._SP_stack.pop(), "D=M", self._SP_stack.pop(), "D=M-D",
                           "\n".join(
                               ["@___label_eq", "D; __condition", "@___label_not_eq", "0; JMP", "(___label_eq)", "D=-1",
@@ -85,12 +114,24 @@ class CodeWriter:
                               "__label", str(self._parser.get_id())).replace("__condition", condition)])
 
     def _handle_arithmetic_and(self):
+        """
+        Creates the 'and' assembly output string
+        :return: representation of the 'and' operation assembly string
+        """
         return "\n".join([self._SP_stack.pop(), "D=M", self._SP_stack.pop(), "D=M&D"])
 
     def _handle_arithmetic_or(self):
+        """
+        Creates the 'or' assembly output string
+        :return: representation of the 'or' operation assembly string
+        """
         return "\n".join([self._SP_stack.pop(), "D=M", self._SP_stack.pop(), "D=M|D"])
 
     def _handle_arithmetic_not(self):
+        """
+        Creates the 'not' assembly output string
+        :return: representation of the 'not' operation assembly string
+        """
         return "\n".join([self._SP_stack.pop(), "D=!M"])
 
     def write_push_pop(self, command, segment, index):
@@ -132,6 +173,12 @@ class CodeWriter:
 
     @staticmethod
     def _is_segment_const(command, segment):
+        """
+        Determines of the the segment is const or not
+        :param command: the command being issued
+        :param segment: the segment being addressed
+        :return:
+        """
         return command is not VMCommandTypes.C_ARITHMETIC and get_segment_type(segment) is VMSegmentTypes.CONSTANT
 
     @staticmethod
@@ -144,6 +191,13 @@ class CodeWriter:
         return get_segment_type(segment) in {VMSegmentTypes.TEMP, VMSegmentTypes.STATIC, VMSegmentTypes.POINTER}
 
     def _find_the_ram_location(self, segment, index):
+        """
+        Finds the exact location based on segment and index, and puts it into A
+
+        :param segment: the segment
+        :param index: the index
+        :return:
+        """
         assembly_command = ("" if self._is_segment_pointed(segment) else "A=M") + "\n"
         for i in range(0, index):
             assembly_command += "A=A+1" + "\n"
