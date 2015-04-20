@@ -21,11 +21,11 @@ class Parser:
         self._in_stream = open(input_stream)
         # Creating file iterator with indexes
         self._file_content = []
-        for index, line in enumerate(self._in_stream):
+        for line in self._in_stream.readlines():
             if "//" in line and len(line[:line.index("//")].strip()) != 0:
-                    self._file_content.append(line[:line.index("//")].strip())
+                    self._file_content.append(' '.join(line[:line.index("//")].strip().split()))
             elif "//" not in line and len(line.strip()) > 0:
-                self._file_content.append(line.strip())
+                self._file_content.append(' '.join(line.strip().split()))
 
     def get_id(self):
         return self._current_line_index

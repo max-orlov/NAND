@@ -3,6 +3,7 @@ from Parser import Parser
 from VMCommandTypes import VMCommandTypes, VMCommandsArithmeticTypes, c_arithmetic_dictionary
 from VMSegment import VMSegmentTypes, get_segment_type
 from VMStack import VMStack
+from os import path
 
 
 class CodeWriter:
@@ -20,15 +21,17 @@ class CodeWriter:
         self._out_stream = open(output_stream, "w")
         self._SP_stack = VMStack()
         self._parser = None
+        self._file_name = None
 
-    def set_file_name(self, file_name):
+    def set_file_name(self, file_path):
         """
         Informs the code writer that the translation of a new VM file is started.
 
-        :param file_name: the new file name.
+        :param file_path: the new file name.
         :return: None
         """
-        self._parser = Parser(file_name)
+        self._file_name = path.basename(file_path).split('.')[0]
+        self._parser = Parser(file_path)
         while self._parser.has_more_command():
             self._parser.advance()
             {
@@ -107,11 +110,38 @@ class CodeWriter:
         :param condition: the type of the condition (eq,gt,lt)
         :return: representation of the given condition operation assembly string
         """
-        return "\n".join([self._SP_stack.pop(), "D=M", self._SP_stack.pop(), "D=M-D",
+        return "\n".join([self._SP_stack.pop(), "D=M", "@15", "M=D",  # 14 <eq,lt,gt> 15
+                          self._SP_stack.pop(), "D=M", "@14", "M=D",
+                          "@15", "D=D-M", "@13", "M=D",  # 13 = 14-15
+                          # Checking they share the same sign
+
                           "\n".join(
-                              ["@___label_eq", "D; __condition", "@___label_not_eq", "0; JMP", "(___label_eq)", "D=-1",
-                               "@___label_end", "0; JMP", "(___label_not_eq)", "D=0", "(___label_end)"]).replace(
-                              "__label", str(self._parser.get_id())).replace("__condition", condition)])
+                              [
+                                  # If 14 >= 0 and 15 >= 0 than act as normal
+                                  "@14", "D=M", "@__prefix_1lt", "D; JLT",
+                                  "@15", "D=M", "@__prefix_fin", "D; JGE",
+                                  # If 14 > 0 and 15 < 0, then 14>15, so set D=-1 and act normal
+                                  "D=1", "@__prefix_check", "0; JMP",
+
+                                  # If 14 < 0 and 15 < 0, than act as normal
+                                  "(__prefix_1lt)", "@15", "D=M", "@__prefix_fin", "D; JLT",
+                                  # If 14 < 0 and 15 > 0 than 15>14
+                                  "D=-1", "@__prefix_check", "0; JMP",
+
+                                  # If (14 >= 0 , 15 >= 0) or (14 <= 0, 15 <= 0) than finalize the process naturally
+                                  "(__prefix_fin)", "@13", "D=M"
+                              ]
+                          ),
+
+                          "\n".join(
+                              ["(__prefix_check)", "@__prefix_is", "D; __condition", "@__prefix_not", "0; JMP",
+                               "(__prefix_is)", "D=-1", "@__prefix_end", "0; JMP",
+                               "(__prefix_not)", "D=0", "(__prefix_end)"
+                              ]
+                          ),
+
+        ]).replace("_prefix", self._file_name + "_" + str(self._parser.get_id()) + "_" + condition.lower()).replace(
+            "__condition", condition)
 
     def _handle_arithmetic_and(self):
         """
