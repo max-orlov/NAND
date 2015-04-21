@@ -1,5 +1,5 @@
-// 30000 > -30000
+// 30000 == -30000
 push constant 30000
 push constant 30000
 neg
-gt
+eq
