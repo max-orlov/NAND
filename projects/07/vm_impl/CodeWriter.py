@@ -1,10 +1,8 @@
-__author__ = 'maxorlov'
 from Parser import Parser
 from VMCommandTypes import VMCommandTypes, VMCommandsArithmeticTypes, c_arithmetic_dictionary
 from VMSegment import VMSegmentTypes, c_segment_dictionary
 from VMStack import VMStack
-from os import path
-
+from os.path import splitext, basename
 
 class CodeWriter:
     """
@@ -30,8 +28,8 @@ class CodeWriter:
         :param file_path: the new file name.
         :return: None
         """
-        self._file_name = path.basename(file_path).split('.')[0]
         self._parser = Parser(file_path)
+        self._file_name = splitext(basename(file_path))[0]
         while self._parser.has_more_command():
             self._parser.advance()
             {

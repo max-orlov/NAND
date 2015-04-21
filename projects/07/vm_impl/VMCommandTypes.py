@@ -1,6 +1,4 @@
-__author__ = 'maxorlov'
 from enum import Enum
-
 
 
 class VMCommandTypes(Enum):

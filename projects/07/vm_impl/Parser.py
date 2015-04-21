@@ -1,4 +1,3 @@
-__author__ = 'maxorlov'
 from VMCommandTypes import c_command_dictionary, VMCommandTypes
 
 
@@ -23,9 +22,9 @@ class Parser:
         self._file_content = []
         for line in self._in_stream.readlines():
             if "//" in line and len(line[:line.index("//")].strip()) != 0:
-                    self._file_content.append(' '.join(line[:line.index("//")].strip().split()))
+                self._file_content.append(' '.join(line[:line.index("//")].split()))
             elif "//" not in line and len(line.strip()) > 0:
-                self._file_content.append(' '.join(line.strip().split()))
+                self._file_content.append(' '.join(line.split()))
 
     def get_id(self):
         return self._current_line_index
@@ -82,7 +81,8 @@ class Parser:
         :rtype: int
         :return:
         """
-        if self.command_type() in [VMCommandTypes.C_PUSH, VMCommandTypes.C_POP, VMCommandTypes.C_FUNCTION, VMCommandTypes.C_CALL]:
+        if self.command_type() in [VMCommandTypes.C_PUSH, VMCommandTypes.C_POP, VMCommandTypes.C_FUNCTION,
+                                   VMCommandTypes.C_CALL]:
             return int(self._current_command.split(' ')[2])
         else:
             return None

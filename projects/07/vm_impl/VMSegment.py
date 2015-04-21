@@ -1,4 +1,3 @@
-__author__ = 'Maxim'
 from enum import Enum
 
 
