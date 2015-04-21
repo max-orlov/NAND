@@ -3,11 +3,11 @@ from enum import Enum
 
 
 class VMSegmentTypes(Enum):
-    SP = "SP"                   #==0
-    LOCAL = "LCL"                #==1
-    ARGUMENT = "ARG"             #==2
-    THIS = "THIS"                 #==3
-    THAT = "THAT"                 #==4
+    SP = "SP"  # ==0
+    LOCAL = "LCL"  # ==1
+    ARGUMENT = "ARG"  # ==2
+    THIS = "THIS"  # ==3
+    THAT = "THAT"  # ==4
 
     """ Designated memory segments - they point towards the hard coded locations:
         this,that - by pointer(location 3,4)
@@ -24,17 +24,16 @@ class VMSegmentTypes(Enum):
     CONSTANT = "constant"
 
 
-def get_segment_type(seg_name):
-    return {
-        "static": VMSegmentTypes.STATIC,
-        "argument": VMSegmentTypes.ARGUMENT,
-        "local": VMSegmentTypes.LOCAL,
-        "constant": VMSegmentTypes.CONSTANT,
-        "this": VMSegmentTypes.THIS,
-        "that": VMSegmentTypes.THAT,
-        "pointer": VMSegmentTypes.POINTER,
-        "temp": VMSegmentTypes.TEMP
-    }[seg_name]
+c_segment_dictionary = {
+    "static": VMSegmentTypes.STATIC,
+    "argument": VMSegmentTypes.ARGUMENT,
+    "local": VMSegmentTypes.LOCAL,
+    "constant": VMSegmentTypes.CONSTANT,
+    "this": VMSegmentTypes.THIS,
+    "that": VMSegmentTypes.THAT,
+    "pointer": VMSegmentTypes.POINTER,
+    "temp": VMSegmentTypes.TEMP
+}
 
 
 

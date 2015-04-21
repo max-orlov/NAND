@@ -1,8 +1,6 @@
 __author__ = 'Maxim'
 from os import path, getcwd, listdir
 from os.path import isabs, abspath, join
-import glob
-from fnmatch import filter
 from CodeWriter import CodeWriter
 import sys
 

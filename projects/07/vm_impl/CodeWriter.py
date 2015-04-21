@@ -1,7 +1,7 @@
 __author__ = 'maxorlov'
 from Parser import Parser
 from VMCommandTypes import VMCommandTypes, VMCommandsArithmeticTypes, c_arithmetic_dictionary
-from VMSegment import VMSegmentTypes, get_segment_type
+from VMSegment import VMSegmentTypes, c_segment_dictionary
 from VMStack import VMStack
 from os import path
 
@@ -177,7 +177,7 @@ class CodeWriter:
         if command is VMCommandTypes.C_PUSH:
             # Getting the value specified by the segment and index into M
             assembly_command += "@{}".format(
-                index if self._is_segment_const(command, segment) else get_segment_type(segment).value) + "\n"
+                index if self._is_segment_const(command, segment) else c_segment_dictionary[segment].value) + "\n"
             if self._is_segment_const(command, segment) is False:
                 assembly_command += self._find_the_ram_location(segment, index)
 
@@ -193,7 +193,7 @@ class CodeWriter:
             assembly_command += "D=M" + "\n"
 
             # Getting to the specified location into M
-            assembly_command += "@{}".format(get_segment_type(segment).value) + "\n"
+            assembly_command += "@{}".format(c_segment_dictionary[segment].value) + "\n"
             assembly_command += self._find_the_ram_location(segment, index)
 
             # Putting the value of D into M
@@ -209,7 +209,7 @@ class CodeWriter:
         :param segment: the segment being addressed
         :return:
         """
-        return command is not VMCommandTypes.C_ARITHMETIC and get_segment_type(segment) is VMSegmentTypes.CONSTANT
+        return command is not VMCommandTypes.C_ARITHMETIC and c_segment_dictionary[segment] is VMSegmentTypes.CONSTANT
 
     @staticmethod
     def _is_segment_pointed(segment):
@@ -218,7 +218,7 @@ class CodeWriter:
         :param segment:
         :return:
         """
-        return get_segment_type(segment) in {VMSegmentTypes.TEMP, VMSegmentTypes.STATIC, VMSegmentTypes.POINTER}
+        return c_segment_dictionary[segment] in {VMSegmentTypes.TEMP, VMSegmentTypes.STATIC, VMSegmentTypes.POINTER}
 
     def _find_the_ram_location(self, segment, index):
         """
