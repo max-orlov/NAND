@@ -1,7 +1,0 @@
-push constant 30000
-// 30000 is in stack
-push constant 0
-push constant 30000
-sub
-// -30000 is in stack
-gt
