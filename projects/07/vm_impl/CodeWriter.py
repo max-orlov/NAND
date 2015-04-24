@@ -1,5 +1,5 @@
 from Parser import Parser
-from VMCommandTypes import VMCommandTypes, VMCommandsArithmeticTypes, c_arithmetic_dictionary
+from VMCommand import VMCommandTypes, VMCommandsArithmeticTypes, c_arithmetic_dictionary
 from VMSegment import VMSegmentTypes, c_segment_dictionary
 from VMStack import VMStack
 from os.path import splitext, basename

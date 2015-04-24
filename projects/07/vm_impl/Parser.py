@@ -1,4 +1,4 @@
-from VMCommandTypes import c_command_dictionary, VMCommandTypes
+from VMCommand import c_command_dictionary, VMCommandTypes
 
 
 class Parser:
