@@ -13,7 +13,7 @@ class VMStack:
         :return: A string representation of the push command.
         """
         # Pushing the new value
-        return "\n".join(["@0", "A=M", "M=D", "@0", "M=M+1"]) + "\n"
+        return "\n".join(["@SP", "A=M", "M=D", "@0", "M=M+1"]) + "\n"
 
 
     def pop(self):
@@ -22,5 +22,5 @@ class VMStack:
         :rtype : str, segment
         :return: A string representation of the pop command.
         """
-        return "\n".join(["@0", "M=M-1", "A=M"]) + "\n"
+        return "\n".join(["@SP", "M=M-1", "A=M"]) + "\n"
 

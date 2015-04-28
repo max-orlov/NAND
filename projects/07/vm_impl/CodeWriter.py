@@ -4,6 +4,7 @@ from VMSegment import VMSegmentTypes, c_segment_dictionary
 from VMStack import VMStack
 from os.path import splitext, basename
 
+
 class CodeWriter:
     """
     Translates VM commands into Hack assembly code.
@@ -30,14 +31,27 @@ class CodeWriter:
         """
         self._parser = Parser(file_path)
         self._file_name = splitext(basename(file_path))[0]
+        self.write_init()
         while self._parser.has_more_command():
             self._parser.advance()
             {
+                # Simple arithmetic management (ex 07(
                 VMCommandTypes.C_ARITHMETIC: lambda: self.write_arithmetic(self._parser.arg1()),
                 VMCommandTypes.C_PUSH: lambda: self.write_push_pop(VMCommandTypes.C_PUSH, self._parser.arg1(),
                                                                    self._parser.arg2()),
                 VMCommandTypes.C_POP: lambda: self.write_push_pop(VMCommandTypes.C_POP, self._parser.arg1(),
                                                                   self._parser.arg2()),
+
+                # Label management
+                VMCommandTypes.C_LABEL: lambda: self.write_label(self._parser.arg1()),
+                VMCommandTypes.C_GOTO: lambda: self.write_go_to(self._parser.arg1()),
+                VMCommandTypes.C_IF: lambda: self.write_if(self._parser.arg1()),
+
+                # Function management
+                VMCommandTypes.C_FUNCTION: lambda: self.write_function(self._parser.arg1(), self._parser.arg2()),
+                VMCommandTypes.C_CALL: lambda: self.write_function(self._parser.arg1(), self._parser.arg2()),
+                VMCommandTypes.C_RETURN: lambda: self.write_return()
+
             }[self._parser.command_type()]()
 
     def write_arithmetic(self, command):
@@ -231,11 +245,38 @@ class CodeWriter:
             assembly_command += "A=A+1" + "\n"
         return assembly_command
 
+    def write_init(self):
+        self._out_stream.write("//Init")
+
+    def write_label(self, label):
+        assembly_command = '(' + str(self._file_name) + "_" + str(self._parser.get_id()) + "_" + label + ')' + '\n'
+        self._out_stream.write(assembly_command)
+
+    def write_go_to(self, label):
+        assembly_command = '@' + label + '\n'
+        assembly_command += '0; JMP' + '\n'
+        self._out_stream.write(assembly_command)
+
+    def write_if(self, label):
+        assembly_command = self._SP_stack.pop()
+        assembly_command += "D=M" + "\n"
+        assembly_command += '@' + label + '\n'
+        assembly_command += 'D; JNE'
+        self._out_stream.write(assembly_command)
+
+    def write_call(self, function_name, num_args):
+        pass
+
+    def write_return(self):
+        pass
+
+    def write_function(self, function_name, num_locals):
+        pass
+
     def close(self):
         """
-            Closes the output file.
+        Closes the output file.
 
-            :return:
-            """
-
+        :return:
+        """
         self._out_stream.close()
