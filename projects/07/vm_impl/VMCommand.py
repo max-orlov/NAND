@@ -15,9 +15,9 @@ class VMCommandTypes(Enum):
 c_command_dictionary={
     "push": VMCommandTypes.C_PUSH,
     "pop": VMCommandTypes.C_POP,
-    "label": VMCommandTypes.C_PUSH,
+    "label": VMCommandTypes.C_LABEL,
     "goto": VMCommandTypes.C_GOTO,
-    "if-goto": VMCommandTypes.C_GOTO,
+    "if-goto": VMCommandTypes.C_IF,
     "function": VMCommandTypes.C_FUNCTION,
     "return": VMCommandTypes.C_RETURN,
     "call": VMCommandTypes.C_CALL,

@@ -3,52 +3,38 @@ from enum import Enum
 
 class VMSegmentTypes:
     def __init__(self):
-        self._segment_types = dict.fromkeys(["SP", "LCL", "ARG", "THIS", "THAT",
+        self._segment_types = dict.fromkeys([
+            """SP:0, LCL:1, ARG:2, THIS:3, THAT:4"""
+            "SP", "LCL", "ARG", "THIS", "THAT",
 
-                                             """ Designated memory segments - they point towards the hard coded locations:
-                                            this,that - by pointer(location 3,4)
-                                            temp - for 'temp' segments(location 5-15)
-                                            general purpose - what is this good for?
+            """ Designated memory segments - they point towards the hard coded locations:
+                                            this,that - by pointer(location 3,4). the pointer itself is in
+                                            temp - for 'temp' segments(location 5-12)
+                                            general purpose (R13,R14,R15)
                                             static - for the static segment (location 16-255)
                                             """
-                                             "POINTER", "TEMP", "GENERAL_PURPOSE", "STATIC",
+            "POINTER", "TEMP", "R13", "R14", "R15", "STATIC",
 
-                                             """ Constant is a virtual segment so it does not get a real memory name
+            """ Constant is a virtual segment so it does not get a real memory name
                                              or address """
-                                             "constant"
+            "CONSTANT"
         ])
 
     def bootstrap(self, dic):
-        for key, value in dic:
-            self._segment_types[key] = value
+        for key in dic:
+            self._segment_types[key] = dic[key]
 
     def set_value(self, key, value):
         self._segment_types[key] = value
 
     def get_value(self, key):
-        return self._segment_types[key]
-
-
-class VMSegmentTypes(Enum):
-    SP = "SP"  # ==0
-    LOCAL = "LCL"  # ==1
-    ARGUMENT = "ARG"  # ==2
-    THIS = "THIS"  # ==3
-    THAT = "THAT"  # ==4
-
-    POINTER = 3  # 3
-    TEMP = 5  # 5
-    GENERAL_PURPOSE = 13  # 13
-    STATIC = 16  # 16
-
-
-c_segment_dictionary = {
-    "static": VMSegmentTypes.STATIC,
-    "argument": VMSegmentTypes.ARGUMENT,
-    "local": VMSegmentTypes.LOCAL,
-    "constant": VMSegmentTypes.CONSTANT,
-    "this": VMSegmentTypes.THIS,
-    "that": VMSegmentTypes.THAT,
-    "pointer": VMSegmentTypes.POINTER,
-    "temp": VMSegmentTypes.TEMP
-}
+        return self._segment_types[{"local": "LCL",
+                                    "argument": "ARG",
+                                    "this": "THIS",
+                                    "that": "THAT",
+                                    "pointer": "POINTER",
+                                    "temp": "TEMP",
+                                    "GP": "GENERAL_PURPOSE",
+                                    "static": "STATIC",
+                                    "constant": "CONSTANT"
+        }[key]]

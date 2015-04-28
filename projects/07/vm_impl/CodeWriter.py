@@ -1,6 +1,6 @@
 from Parser import Parser
 from VMCommand import VMCommandTypes, VMCommandsArithmeticTypes, c_arithmetic_dictionary
-from VMSegment import VMSegmentTypes, c_segment_dictionary
+from VMSegment import VMSegmentTypes
 from VMStack import VMStack
 from os.path import splitext, basename
 
@@ -19,6 +19,7 @@ class CodeWriter:
         """
         self._out_stream = open(output_stream, "w")
         self._SP_stack = VMStack()
+        self._segments = VMSegmentTypes()
         self._parser = None
         self._file_name = None
 
@@ -189,7 +190,7 @@ class CodeWriter:
         if command is VMCommandTypes.C_PUSH:
             # Getting the value specified by the segment and index into M
             assembly_command += "@{}".format(
-                index if self._is_segment_const(command, segment) else c_segment_dictionary[segment].value) + "\n"
+                index if self._is_segment_const(command, segment) else self._segments.get_value(segment)) + "\n"
             if self._is_segment_const(command, segment) is False:
                 assembly_command += self._find_the_ram_location(segment, index)
 
@@ -205,7 +206,7 @@ class CodeWriter:
             assembly_command += "D=M" + "\n"
 
             # Getting to the specified location into M
-            assembly_command += "@{}".format(c_segment_dictionary[segment].value) + "\n"
+            assembly_command += "@{}".format(self._segments.get_value(segment)) + "\n"
             assembly_command += self._find_the_ram_location(segment, index)
 
             # Putting the value of D into M
@@ -213,15 +214,15 @@ class CodeWriter:
 
         self._out_stream.write(assembly_command)
 
-    @staticmethod
-    def _is_segment_const(command, segment):
+    def _is_segment_const(self, command, segment):
         """
         Determines of the the segment is const or not
         :param command: the command being issued
         :param segment: the segment being addressed
         :return:
         """
-        return command is not VMCommandTypes.C_ARITHMETIC and c_segment_dictionary[segment] is VMSegmentTypes.CONSTANT
+        return command is not VMCommandTypes.C_ARITHMETIC and self._segments.get_value(
+            segment) == self._segments.get_value("constant")
 
     @staticmethod
     def _is_segment_pointed(segment):
@@ -230,7 +231,7 @@ class CodeWriter:
         :param segment:
         :return:
         """
-        return c_segment_dictionary[segment] in {VMSegmentTypes.TEMP, VMSegmentTypes.STATIC, VMSegmentTypes.POINTER}
+        return segment in {"temp", "static", "pointer"}
 
     def _find_the_ram_location(self, segment, index):
         """
@@ -246,22 +247,25 @@ class CodeWriter:
         return assembly_command
 
     def write_init(self):
-        self._out_stream.write("//Init")
+        self._out_stream.write("//Init\n")
+        self._segments.bootstrap(
+            {"SP": 0, "LCL": 1, "ARG": 2, "THIS": 3, "THAT": 4, "POINTER": 3, "TEMP": 5, "R13": 13, "R14": 14,
+             "R15": 15, "STATIC": 16, "CONSTANT": "constant"})
 
     def write_label(self, label):
-        assembly_command = '(' + str(self._file_name) + "_" + str(self._parser.get_id()) + "_" + label + ')' + '\n'
+        assembly_command = '(' + str(self._file_name) + "_" + label + ')' + '\n'
         self._out_stream.write(assembly_command)
 
     def write_go_to(self, label):
-        assembly_command = '@' + label + '\n'
+        assembly_command = '@{}_{}'.format(str(self._file_name), label) + '\n'
         assembly_command += '0; JMP' + '\n'
         self._out_stream.write(assembly_command)
 
     def write_if(self, label):
         assembly_command = self._SP_stack.pop()
-        assembly_command += "D=M" + "\n"
-        assembly_command += '@' + label + '\n'
-        assembly_command += 'D; JNE'
+        assembly_command += "D=M" + '\n'
+        assembly_command += '@{}_{}'.format(str(self._file_name), label) + '\n'
+        assembly_command += 'D; JNE' + '\n'
         self._out_stream.write(assembly_command)
 
     def write_call(self, function_name, num_args):
