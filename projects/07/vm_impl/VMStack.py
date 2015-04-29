@@ -3,9 +3,10 @@
 class VMStack:
 
     def __init__(self):
-        self._sp_index = 0
+        pass
 
-    def push(self):
+    @staticmethod
+    def push():
         """
         By this point D should contain the new value.
 
@@ -13,14 +14,14 @@ class VMStack:
         :return: A string representation of the push command.
         """
         # Pushing the new value
-        return "\n".join(["@SP", "A=M", "M=D", "@0", "M=M+1"]) + "\n"
+        return "\n".join(["@SP", "A=M", "M=D", "@0", "M=M+1"])
 
-
-    def pop(self):
+    @staticmethod
+    def pop():
         """
         pops up the value only into M.
         :rtype : str, segment
         :return: A string representation of the pop command.
         """
-        return "\n".join(["@SP", "M=M-1", "A=M"]) + "\n"
+        return "\n".join(["@SP", "M=M-1", "A=M"])
 

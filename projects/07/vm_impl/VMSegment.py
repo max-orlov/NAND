@@ -38,3 +38,6 @@ class VMSegmentTypes:
                                     "static": "STATIC",
                                     "constant": "CONSTANT"
         }[key]]
+
+    def get_address(self, key):
+        return self._segment_types[key]

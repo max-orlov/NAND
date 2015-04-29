@@ -62,39 +62,39 @@ class CodeWriter:
         :param command: translates the command to assembly.
         :return: None
         """
-        assembly_command = {VMCommandsArithmeticTypes.ADD: lambda: self._handle_arithmetic_add(),
-                            VMCommandsArithmeticTypes.AND: lambda: self._handle_arithmetic_and(),
-                            VMCommandsArithmeticTypes.EQ: lambda: self._handle_arithmetic_eq(),
-                            VMCommandsArithmeticTypes.GT: lambda: self._handle_arithmetic_gt(),
-                            VMCommandsArithmeticTypes.LT: lambda: self._handle_arithmetic_lt(),
-                            VMCommandsArithmeticTypes.NEG: lambda: self._handle_arithmetic_neg(),
-                            VMCommandsArithmeticTypes.NOT: lambda: self._handle_arithmetic_not(),
-                            VMCommandsArithmeticTypes.OR: lambda: self._handle_arithmetic_or(),
-                            VMCommandsArithmeticTypes.SUB: lambda: self._handle_arithmetic_sub()
-                           }[c_arithmetic_dictionary[command]]() + "\n"
-        assembly_command += self._SP_stack.push()
-        self._out_stream.write(assembly_command)
+        assembly_commands = {VMCommandsArithmeticTypes.ADD: lambda: self._handle_arithmetic_add(),
+                             VMCommandsArithmeticTypes.AND: lambda: self._handle_arithmetic_and(),
+                             VMCommandsArithmeticTypes.EQ: lambda: self._handle_arithmetic_eq(),
+                             VMCommandsArithmeticTypes.GT: lambda: self._handle_arithmetic_gt(),
+                             VMCommandsArithmeticTypes.LT: lambda: self._handle_arithmetic_lt(),
+                             VMCommandsArithmeticTypes.NEG: lambda: self._handle_arithmetic_neg(),
+                             VMCommandsArithmeticTypes.NOT: lambda: self._handle_arithmetic_not(),
+                             VMCommandsArithmeticTypes.OR: lambda: self._handle_arithmetic_or(),
+                             VMCommandsArithmeticTypes.SUB: lambda: self._handle_arithmetic_sub()
+        }[c_arithmetic_dictionary[command]]()
+        assembly_commands.append(self._SP_stack.push())
+        self._out_stream.writelines("\n".join(assembly_commands) + "\n")
 
     def _handle_arithmetic_add(self):
         """
         Creates the 'add' assembly output string
         :return: representation of the 'add' operation assembly string
         """
-        return "\n".join([self._SP_stack.pop(), "D=M", self._SP_stack.pop(), "D=M+D"])
+        return [self._SP_stack.pop(), "D=M", self._SP_stack.pop(), "D=M+D"]
 
     def _handle_arithmetic_sub(self):
         """
         Creates the 'sub' assembly output string
         :return: representation of the 'sub' operation assembly string
         """
-        return "\n".join([self._SP_stack.pop(), "D=M", self._SP_stack.pop(), "D=M-D"])
+        return [self._SP_stack.pop(), "D=M", self._SP_stack.pop(), "D=M-D"]
 
     def _handle_arithmetic_neg(self):
         """
         Creates the 'neg' assembly output string
         :return: representation of the 'neg' operation assembly string
         """
-        return "\n".join([self._SP_stack.pop(), "D=M", "D=-D"])
+        return [self._SP_stack.pop(), "D=M", "D=-D"]
 
     def _handle_arithmetic_eq(self):
         """
@@ -161,21 +161,21 @@ class CodeWriter:
         Creates the 'and' assembly output string
         :return: representation of the 'and' operation assembly string
         """
-        return "\n".join([self._SP_stack.pop(), "D=M", self._SP_stack.pop(), "D=M&D"])
+        return [self._SP_stack.pop(), "D=M", self._SP_stack.pop(), "D=M&D"]
 
     def _handle_arithmetic_or(self):
         """
         Creates the 'or' assembly output string
         :return: representation of the 'or' operation assembly string
         """
-        return "\n".join([self._SP_stack.pop(), "D=M", self._SP_stack.pop(), "D=M|D"])
+        return [self._SP_stack.pop(), "D=M", self._SP_stack.pop(), "D=M|D"]
 
     def _handle_arithmetic_not(self):
         """
         Creates the 'not' assembly output string
         :return: representation of the 'not' operation assembly string
         """
-        return "\n".join([self._SP_stack.pop(), "D=!M"])
+        return [self._SP_stack.pop(), "D=!M"]
 
     def write_push_pop(self, command, segment, index):
         """
@@ -186,33 +186,33 @@ class CodeWriter:
         :param index: a non negative integer
         :return:
         """
-        assembly_command = ""
+        assembly_commands = []
         if command is VMCommandTypes.C_PUSH:
             # Getting the value specified by the segment and index into M
-            assembly_command += "@{}".format(
-                index if self._is_segment_const(command, segment) else self._segments.get_value(segment)) + "\n"
+            assembly_commands.append("@{}".format(
+                index if self._is_segment_const(command, segment) else self._segments.get_value(segment)))
             if self._is_segment_const(command, segment) is False:
-                assembly_command += self._find_the_ram_location(segment, index)
+                assembly_commands.append(self._find_the_ram_location(segment, index))
 
             # Pushing the value from M/A into D
-            assembly_command += "D={}".format("A" if self._is_segment_const(command, segment) else "M") + "\n"
+            assembly_commands.append("D={}".format("A" if self._is_segment_const(command, segment) else "M"))
 
             # Pushing the value from D into the stack
-            assembly_command += self._SP_stack.push() + "\n"
+            assembly_commands.append(self._SP_stack.push())
 
         else:  # C_POP
             # Getting the stack top into D
-            assembly_command += self._SP_stack.pop() + "\n"
-            assembly_command += "D=M" + "\n"
+            assembly_commands.append(self._SP_stack.pop())
+            assembly_commands.append("D=M")
 
             # Getting to the specified location into M
-            assembly_command += "@{}".format(self._segments.get_value(segment)) + "\n"
-            assembly_command += self._find_the_ram_location(segment, index)
+            assembly_commands.append("@{}".format(self._segments.get_value(segment)))
+            assembly_commands.append(self._find_the_ram_location(segment, index))
 
             # Putting the value of D into M
-            assembly_command += "M=D" + "\n"
+            assembly_commands.append("M=D")
 
-        self._out_stream.write(assembly_command)
+        self._out_stream.writelines("\n".join(assembly_commands) + "\n")
 
     def _is_segment_const(self, command, segment):
         """
@@ -253,29 +253,138 @@ class CodeWriter:
              "R15": 15, "STATIC": 16, "CONSTANT": "constant"})
 
     def write_label(self, label):
-        assembly_command = '(' + str(self._file_name) + "_" + label + ')' + '\n'
-        self._out_stream.write(assembly_command)
+        """
+        Writes the assembly code that is the translation of the label command
+
+        :param label: the label name.
+        :return:
+        """
+        assembly_commands = ['(' + str(self._file_name) + "_" + label + ')']
+        self._out_stream.writelines("\n".join(assembly_commands) + "\n")
 
     def write_go_to(self, label):
-        assembly_command = '@{}_{}'.format(str(self._file_name), label) + '\n'
-        assembly_command += '0; JMP' + '\n'
-        self._out_stream.write(assembly_command)
+        """
+        Writes the assembly code that is the translation of the goto command
+
+        :param label: the label name.
+        :return:
+        """
+        assembly_commands = ['@{}_{}'.format(str(self._file_name), label), '0; JMP']
+        self._out_stream.writelines("\n".join(assembly_commands))
 
     def write_if(self, label):
-        assembly_command = self._SP_stack.pop()
-        assembly_command += "D=M" + '\n'
-        assembly_command += '@{}_{}'.format(str(self._file_name), label) + '\n'
-        assembly_command += 'D; JNE' + '\n'
-        self._out_stream.write(assembly_command)
+        """
+        Writes the assembly code that is the translation of the if-goto command
+
+        :param label: the label name.
+        :return: None
+        """
+        assembly_commands = [self._SP_stack.pop(), "D=M", '@{}_{}'.format(str(self._file_name), label), 'D; JNE']
+        self._out_stream.writelines("\n".join(assembly_commands) + "\n")
 
     def write_call(self, function_name, num_args):
-        pass
+        """
+        Writes the assembly code that is the translation of the call command.
+
+        :param function_name: function name to call.
+        :param num_args: num of args passed to the function.
+        :return: None
+        """
+        assembly_commands = []
+
+        # Pushing the return address label
+        assembly_commands.append("@{}".format(function_name + "_return"))
+        assembly_commands.append("D=M")
+        assembly_commands.append(self._SP_stack.push())
+
+        # Pushing LCL,ARG,THIS,THAT
+        segments = ["LCL", "ARG", "THIS", "THAT"]
+        for segment in segments:
+            assembly_commands.append(
+                "\n".join(["@{}".format(self._segments.get_address(segment)), "D=A", self._SP_stack.push()]))
+
+        # Calculating the value for ARG
+        assembly_commands.append("\n".join(
+            ["@{}".format(self._segments.get_address("SP")), "D=A", "@{}".format(num_args), "D=D-A", "@5", "D=D-A"]))
+
+        # Setting the ARG value
+        assembly_commands.append("\n".join(["@{}".format(segments[1]), "M=D"]))
+
+        # Calculating the value for LCL
+        assembly_commands.append("\n".join(["@{}".format(self._segments.get_address("SP")), "D=A"]))
+
+        # Setting the LCL value
+        assembly_commands.append("\n".join(["@{}".format(segments[0]), "M=D"]))
+
+        # Jumping to function_name
+        assembly_commands.append("\n".join(["@{}".format(function_name), "0; JMP"]))
+
+        # Setting the returns-address label
+        assembly_commands.append("({})".format(function_name + "_return"))
+
+        self._out_stream.writelines("\n".join(assembly_commands) + "\n")
 
     def write_return(self):
-        pass
+        """
+        Writes the assembly code that is the translation of the return command.
+
+        :return: None
+        """
+        assembly_commands = []
+
+        # Calculating FRAME (R13)
+        assembly_commands.append("\n".join(
+            ["@{}".format(self._segments.get_address("LCL")), "D=M", "@{}".format(self._segments.get_address("R13")),
+             "M=D"]))
+
+        # Setting RET (R14)
+        assembly_commands.append(
+            "\n".join(["@5", "D=D-A", "A=D", "D=M", "@{}".format(self._segments.get_address("R14")), "M=D"]))
+
+        # Setting ARG
+        assembly_commands.append(
+            "\n".join([self._SP_stack.pop(), "D=M", "@{}".format(self._segments.get_address("ARG")), "A=M", "M=D"]))
+
+        # Setting SP
+        assembly_commands.append("\n".join(["D=A", "@{}".format(self._segments.get_address("SP")), "M=D+1"]))
+
+        # Setting THAT
+        assembly_commands.append("\n".join(["@{}".format(self._segments.get_address("R13")), "D=M-1", "A=D", "D=M",
+                                            "@{}".format(self._segments.get_address("THAT")), "M=D"]))
+
+        # Setting THIS
+        assembly_commands.append(
+            "\n".join(["@{}".format(self._segments.get_address("R13")), "D=M-1", "D=D-1", "A=D", "D=M",
+                       "@{}".format(self._segments.get_address('THIS')), "M=D"]))
+
+        # Setting ARG
+        assembly_commands.append(
+            "\n".join(["@{}".format(self._segments.get_address("R13")), "D=M-1", "D=D-1", "D=D-1", "A=D", "D=M",
+                       "@{}".format(self._segments.get_address("ARG")), "M=D"]))
+
+        # Setting LCL
+        assembly_commands.append(
+            "\n".join(
+                ["@{}".format(self._segments.get_address("R13")), "D=M-1", "D=D-1", "D=D-1", "D=D-1", "A=D", "D=M",
+                 "@{}".format(self._segments.get_address("LCL")), "M=D"]))
+
+        # go to RET
+        assembly_commands.append("\n".join(["@{}".format(self._segments.get_address("R14")), "A=M", "0; JMP"]))
+
+        self._out_stream.writelines("\n".join(assembly_commands) + "\n")
 
     def write_function(self, function_name, num_locals):
-        pass
+        """
+        Writes the assembly code that is the translation of the given function command.
+
+        :param function_name: the function name
+        :param num_locals: the number of local variables this function has.
+        :return: None
+        """
+        assembly_commands = ["\n".join(["({})".format(function_name), "@0", "D=A"])]
+        for _ in range(0, num_locals):
+            assembly_commands.append(self._SP_stack.push())
+        self._out_stream.writelines("\n".join(assembly_commands) + "\n")
 
     def close(self):
         """
