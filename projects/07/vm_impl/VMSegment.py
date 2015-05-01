@@ -21,8 +21,8 @@ class VMSegmentTypes:
         ])
 
     def bootstrap(self, dic):
-        for key in dic:
-            self._segment_types[key] = dic[key]
+        for key, value in dic:
+            self._segment_types[key] = value
 
     def set_value(self, key, value):
         self._segment_types[key] = value
