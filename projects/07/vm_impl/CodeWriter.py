@@ -342,9 +342,10 @@ class CodeWriter:
         assembly_commands.append(
             "\n".join(["@5", "D=D-A", "A=D", "D=M", "@{}".format(get_address("R14")), "M=D"]))
 
+        # We need to save the temporary stack value, than update the sp, and only than update the ARG value (i think)
         # Setting ARG
         assembly_commands.append(
-            "\n".join([self._SP_stack.pop(), "D=A", "@{}".format(get_address("ARG")), "M=D"]))
+            "\n".join([self._SP_stack.pop(), "D=M", "@{}".format(get_address("ARG")), "M=D"]))
 
         # Setting SP
         assembly_commands.append("//SETTING SP" + "\n")
