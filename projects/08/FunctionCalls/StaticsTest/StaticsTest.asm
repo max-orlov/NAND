@@ -2,7 +2,7 @@
 D=A
 @SP
 M=D
-@Sys.init_return
+@Sys.init1_return
 D=A
 @SP
 A=M
@@ -51,7 +51,7 @@ D=M
 M=D
 @Sys.init
 0; JMP
-(Sys.init_return)
+(Sys.init1_return)
 //NEW FUNCTION : Class1.set
 (Class1.set)
 D=0
@@ -245,7 +245,7 @@ A=M
 D=A
 @SP
 M=D
-@Sys.init_return
+@Sys.init2_return
 D=A
 @SP
 A=M
@@ -294,7 +294,7 @@ D=M
 M=D
 @Sys.init
 0; JMP
-(Sys.init_return)
+(Sys.init2_return)
 //NEW FUNCTION : Class2.set
 (Class2.set)
 D=0
@@ -488,7 +488,7 @@ A=M
 D=A
 @SP
 M=D
-@Sys.init_return
+@Sys.init3_return
 D=A
 @SP
 A=M
@@ -537,7 +537,7 @@ D=M
 M=D
 @Sys.init
 0; JMP
-(Sys.init_return)
+(Sys.init3_return)
 //NEW FUNCTION : Sys.init
 (Sys.init)
 D=0
@@ -555,7 +555,7 @@ A=M
 M=D
 @0
 M=M+1
-@Class1.set_return
+@Class1.set4_return
 D=A
 @SP
 A=M
@@ -604,7 +604,7 @@ D=M
 M=D
 @Class1.set
 0; JMP
-(Class1.set_return)
+(Class1.set4_return)
 @SP
 M=M-1
 A=M
@@ -627,7 +627,7 @@ A=M
 M=D
 @0
 M=M+1
-@Class2.set_return
+@Class2.set5_return
 D=A
 @SP
 A=M
@@ -676,7 +676,7 @@ D=M
 M=D
 @Class2.set
 0; JMP
-(Class2.set_return)
+(Class2.set5_return)
 @SP
 M=M-1
 A=M
@@ -685,7 +685,7 @@ D=M
 
 
 M=D
-@Class1.get_return
+@Class1.get6_return
 D=A
 @SP
 A=M
@@ -734,8 +734,8 @@ D=M
 M=D
 @Class1.get
 0; JMP
-(Class1.get_return)
-@Class2.get_return
+(Class1.get6_return)
+@Class2.get7_return
 D=A
 @SP
 A=M
@@ -784,7 +784,7 @@ D=M
 M=D
 @Class2.get
 0; JMP
-(Class2.get_return)
+(Class2.get7_return)
 (Sys_Sys.init_WHILE)
 @Sys_Sys.init_WHILE
 0; JMP
