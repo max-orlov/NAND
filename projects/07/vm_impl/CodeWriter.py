@@ -32,7 +32,7 @@ class CodeWriter:
         """
         self._parser = Parser(file_path)
         self._file_name = splitext(basename(file_path))[0]
-        #self.write_init()
+        self.write_init()
         while self._parser.has_more_command():
             self._parser.advance()
             {
