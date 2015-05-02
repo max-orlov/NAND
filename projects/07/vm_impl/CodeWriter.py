@@ -22,6 +22,7 @@ class CodeWriter:
         self._parser = None
         self._file_name = None
         self._current_function = "first"
+        self._current_function_call_num = 0
 
     def set_file_name(self, file_path):
         """
@@ -281,7 +282,9 @@ class CodeWriter:
         :param label: the label name.
         :return: None
         """
-        assembly_commands = [self._SP_stack.pop(), "D=M", '@{}_{}_{}'.format(str(self._file_name), self._current_function, label), 'D; JNE']
+        assembly_commands = [self._SP_stack.pop(),  "D=M",
+                             '@{}_{}_{}'.format(str(self._file_name), self._current_function, label),
+                             'D; JNE']
         self._out_stream.writelines("\n".join(assembly_commands) + "\n")
 
     def write_call(self, function_name, num_args):
@@ -292,10 +295,12 @@ class CodeWriter:
         :param num_args: num of args passed to the function.
         :return: None
         """
+        self._current_function_call_num += 1
+
         assembly_commands = []
 
         # Pushing the return address label
-        assembly_commands.append("@{}".format(function_name + "_return"))
+        assembly_commands.append("@{}".format(function_name + str(self._current_function_call_num) + "_return"))
         assembly_commands.append("D=A")
         assembly_commands.append(self._SP_stack.push())
 
@@ -321,7 +326,7 @@ class CodeWriter:
         assembly_commands.append("\n".join(["@{}".format(function_name), "0; JMP"]))
 
         # Setting the returns-address label
-        assembly_commands.append("({})".format(function_name + "_return"))
+        assembly_commands.append("({})".format(function_name + str(self._current_function_call_num) + "_return"))
 
         self._out_stream.writelines("\n".join(assembly_commands) + "\n")
 
