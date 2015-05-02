@@ -1,6 +1,6 @@
 from Parser import Parser
 from VMCommand import VMCommandTypes, VMCommandsArithmeticTypes, c_arithmetic_dictionary
-from VMSegment import VMSegmentTypes
+from VMSegment import get_address
 from VMStack import VMStack
 from os.path import splitext, basename
 
@@ -19,7 +19,6 @@ class CodeWriter:
         """
         self._out_stream = open(output_stream, "w")
         self._SP_stack = VMStack()
-        self._segments = VMSegmentTypes()
         self._parser = None
         self._file_name = None
 
@@ -50,7 +49,7 @@ class CodeWriter:
 
                 # Function management
                 VMCommandTypes.C_FUNCTION: lambda: self.write_function(self._parser.arg1(), self._parser.arg2()),
-                VMCommandTypes.C_CALL: lambda: self.write_function(self._parser.arg1(), self._parser.arg2()),
+                VMCommandTypes.C_CALL: lambda: self.write_call(self._parser.arg1(), self._parser.arg2()),
                 VMCommandTypes.C_RETURN: lambda: self.write_return()
 
             }[self._parser.command_type()]()
@@ -123,38 +122,38 @@ class CodeWriter:
         :param condition: the type of the condition (eq,gt,lt)
         :return: representation of the given condition operation assembly string
         """
-        return "\n".join([self._SP_stack.pop(), "D=M", "@15", "M=D",  # 14 <eq,lt,gt> 15
-                          self._SP_stack.pop(), "D=M", "@14", "M=D",
-                          "@15", "D=D-M", "@13", "M=D",  # 13 = 14-15
-                          # Checking they share the same sign
+        return ["\n".join([self._SP_stack.pop(), "D=M", "@15", "M=D",  # 14 <eq,lt,gt> 15
+                           self._SP_stack.pop(), "D=M", "@14", "M=D",
+                           "@15", "D=D-M", "@13", "M=D",  # 13 = 14-15
+                           # Checking they share the same sign
 
-                          "\n".join(
-                              [
-                                  # If 14 >= 0 and 15 >= 0 than act as normal
-                                  "@14", "D=M", "@__prefix_1lt", "D; JLT",
-                                  "@15", "D=M", "@__prefix_fin", "D; JGE",
-                                  # If 14 > 0 and 15 < 0, then 14>15, so set D=-1 and act normal
-                                  "D=1", "@__prefix_check", "0; JMP",
+                           "\n".join(
+                               [
+                                   # If 14 >= 0 and 15 >= 0 than act as normal
+                                   "@14", "D=M", "@__prefix_1lt", "D; JLT",
+                                   "@15", "D=M", "@__prefix_fin", "D; JGE",
+                                   # If 14 > 0 and 15 < 0, then 14>15, so set D=-1 and act normal
+                                   "D=1", "@__prefix_check", "0; JMP",
 
-                                  # If 14 < 0 and 15 < 0, than act as normal
-                                  "(__prefix_1lt)", "@15", "D=M", "@__prefix_fin", "D; JLT",
-                                  # If 14 < 0 and 15 > 0 than 15>14
-                                  "D=-1", "@__prefix_check", "0; JMP",
+                                   # If 14 < 0 and 15 < 0, than act as normal
+                                   "(__prefix_1lt)", "@15", "D=M", "@__prefix_fin", "D; JLT",
+                                   # If 14 < 0 and 15 > 0 than 15>14
+                                   "D=-1", "@__prefix_check", "0; JMP",
 
-                                  # If (14 >= 0 , 15 >= 0) or (14 <= 0, 15 <= 0) than finalize the process naturally
-                                  "(__prefix_fin)", "@13", "D=M"
-                              ]
-                          ),
+                                   # If (14 >= 0 , 15 >= 0) or (14 <= 0, 15 <= 0) than finalize the process naturally
+                                   "(__prefix_fin)", "@13", "D=M"
+                               ]
+                           ),
 
-                          "\n".join(
-                              ["(__prefix_check)", "@__prefix_is", "D; __condition", "@__prefix_not", "0; JMP",
-                               "(__prefix_is)", "D=-1", "@__prefix_end", "0; JMP",
-                               "(__prefix_not)", "D=0", "(__prefix_end)"
-                              ]
-                          ),
+                           "\n".join(
+                               ["(__prefix_check)", "@__prefix_is", "D; __condition", "@__prefix_not", "0; JMP",
+                                "(__prefix_is)", "D=-1", "@__prefix_end", "0; JMP",
+                                "(__prefix_not)", "D=0", "(__prefix_end)"
+                               ]
+                           ),
 
         ]).replace("_prefix", self._file_name + "_" + str(self._parser.get_id()) + "_" + condition.lower()).replace(
-            "__condition", condition)
+            "__condition", condition) + "\n"]
 
     def _handle_arithmetic_and(self):
         """
@@ -190,7 +189,7 @@ class CodeWriter:
         if command is VMCommandTypes.C_PUSH:
             # Getting the value specified by the segment and index into M
             assembly_commands.append("@{}".format(
-                index if self._is_segment_const(command, segment) else self._segments.get_value(segment)))
+                index if self._is_segment_const(command, segment) else get_address(segment)))
             if self._is_segment_const(command, segment) is False:
                 assembly_commands.append(self._find_the_ram_location(segment, index))
 
@@ -206,7 +205,7 @@ class CodeWriter:
             assembly_commands.append("D=M")
 
             # Getting to the specified location into M
-            assembly_commands.append("@{}".format(self._segments.get_value(segment)))
+            assembly_commands.append("@{}".format(get_address(segment)))
             assembly_commands.append(self._find_the_ram_location(segment, index))
 
             # Putting the value of D into M
@@ -221,8 +220,7 @@ class CodeWriter:
         :param segment: the segment being addressed
         :return:
         """
-        return command is not VMCommandTypes.C_ARITHMETIC and self._segments.get_value(
-            segment) == self._segments.get_value("constant")
+        return command is not VMCommandTypes.C_ARITHMETIC and get_address(segment) == get_address("constant")
 
     @staticmethod
     def _is_segment_pointed(segment):
@@ -247,10 +245,13 @@ class CodeWriter:
         return assembly_command
 
     def write_init(self):
-        self._out_stream.write("//Init\n")
-        self._segments.bootstrap(
-            {"SP": 0, "LCL": 1, "ARG": 2, "THIS": 3, "THAT": 4, "POINTER": 3, "TEMP": 5, "R13": 13, "R14": 14,
-             "R15": 15, "STATIC": 16, "CONSTANT": "constant"})
+        # Setting SP = 256
+        assembly_commands = ["\n".join(["@256", "D=A", "@{}".format(get_address("SP")), "M=D"]) + "\n"]
+        self._out_stream.writelines(assembly_commands)
+
+        # Calling Sys.init
+        self.write_call("Sys.init", 0)
+        # TODO: check if only 0 is available for the sys.init function
 
     def write_label(self, label):
         """
@@ -270,7 +271,7 @@ class CodeWriter:
         :return:
         """
         assembly_commands = ['@{}_{}'.format(str(self._file_name), label), '0; JMP']
-        self._out_stream.writelines("\n".join(assembly_commands))
+        self._out_stream.writelines("\n".join(assembly_commands) + "\n")
 
     def write_if(self, label):
         """
@@ -294,27 +295,27 @@ class CodeWriter:
 
         # Pushing the return address label
         assembly_commands.append("@{}".format(function_name + "_return"))
-        assembly_commands.append("D=M")
+        assembly_commands.append("D=A")
         assembly_commands.append(self._SP_stack.push())
 
         # Pushing LCL,ARG,THIS,THAT
         segments = ["LCL", "ARG", "THIS", "THAT"]
         for segment in segments:
             assembly_commands.append(
-                "\n".join(["@{}".format(self._segments.get_address(segment)), "D=A", self._SP_stack.push()]))
+                "\n".join(["@{}".format(get_address(segment)), "D=M", self._SP_stack.push()]))
 
         # Calculating the value for ARG
         assembly_commands.append("\n".join(
-            ["@{}".format(self._segments.get_address("SP")), "D=A", "@{}".format(num_args), "D=D-A", "@5", "D=D-A"]))
+            ["@{}".format(get_address("SP")), "D=M", "@{}".format(num_args), "D=D-A", "@5", "D=D-A"]))
 
         # Setting the ARG value
-        assembly_commands.append("\n".join(["@{}".format(segments[1]), "M=D"]))
+        assembly_commands.append("\n".join(["@{}".format(get_address("ARG")), "M=D"]))
 
         # Calculating the value for LCL
-        assembly_commands.append("\n".join(["@{}".format(self._segments.get_address("SP")), "D=A"]))
+        assembly_commands.append("\n".join(["@{}".format(get_address("SP")), "D=M"]))
 
         # Setting the LCL value
-        assembly_commands.append("\n".join(["@{}".format(segments[0]), "M=D"]))
+        assembly_commands.append("\n".join(["@{}".format(get_address("LCL")), "M=D"]))
 
         # Jumping to function_name
         assembly_commands.append("\n".join(["@{}".format(function_name), "0; JMP"]))
@@ -332,44 +333,54 @@ class CodeWriter:
         """
         assembly_commands = []
 
-        # Calculating FRAME (R13)
+        # Calculating FRAME
         assembly_commands.append("\n".join(
-            ["@{}".format(self._segments.get_address("LCL")), "D=M", "@{}".format(self._segments.get_address("R13")),
+            ["@{}".format(get_address("LCL")), "D=M", "@{}".format(get_address("R13")),
              "M=D"]))
 
         # Setting RET (R14)
         assembly_commands.append(
-            "\n".join(["@5", "D=D-A", "A=D", "D=M", "@{}".format(self._segments.get_address("R14")), "M=D"]))
+            "\n".join(["@5", "D=D-A", "A=D", "D=M", "@{}".format(get_address("R14")), "M=D"]))
 
         # Setting ARG
         assembly_commands.append(
-            "\n".join([self._SP_stack.pop(), "D=M", "@{}".format(self._segments.get_address("ARG")), "A=M", "M=D"]))
+            "\n".join([self._SP_stack.pop(), "D=A", "@{}".format(get_address("ARG")), "M=D"]))
 
         # Setting SP
-        assembly_commands.append("\n".join(["D=A", "@{}".format(self._segments.get_address("SP")), "M=D+1"]))
+        assembly_commands.append("//SETTING SP" + "\n")
+
+        assembly_commands.append(
+            "\n".join(["@{}".format(get_address("ARG")), "D=M", "@{}".format(get_address("SP")), "M=D+1"]))
 
         # Setting THAT
-        assembly_commands.append("\n".join(["@{}".format(self._segments.get_address("R13")), "D=M-1", "A=D", "D=M",
-                                            "@{}".format(self._segments.get_address("THAT")), "M=D"]))
+        assembly_commands.append("//SETTING THAT" + "\n")
+
+        assembly_commands.append("\n".join(["@{}".format(get_address("R13")), "D=M-1", "A=D", "D=M",
+                                            "@{}".format(get_address("THAT")), "M=D"]))
 
         # Setting THIS
+        assembly_commands.append("//SETTING THIS" + "\n")
+
         assembly_commands.append(
-            "\n".join(["@{}".format(self._segments.get_address("R13")), "D=M-1", "D=D-1", "A=D", "D=M",
-                       "@{}".format(self._segments.get_address('THIS')), "M=D"]))
+            "\n".join(["@{}".format(get_address("R13")), "D=M-1", "D=D-1", "A=D", "D=M",
+                       "@{}".format(get_address('THIS')), "M=D"]))
 
         # Setting ARG
+        assembly_commands.append("//SETTING ARG" + "\n")
         assembly_commands.append(
-            "\n".join(["@{}".format(self._segments.get_address("R13")), "D=M-1", "D=D-1", "D=D-1", "A=D", "D=M",
-                       "@{}".format(self._segments.get_address("ARG")), "M=D"]))
+            "\n".join(["@{}".format(get_address("R13")), "D=M-1", "D=D-1", "D=D-1", "A=D", "D=M",
+                       "@{}".format(get_address("ARG")), "M=D"]))
 
         # Setting LCL
+        assembly_commands.append("//SETTING LCL" + "\n")
         assembly_commands.append(
             "\n".join(
-                ["@{}".format(self._segments.get_address("R13")), "D=M-1", "D=D-1", "D=D-1", "D=D-1", "A=D", "D=M",
-                 "@{}".format(self._segments.get_address("LCL")), "M=D"]))
+                ["@{}".format(get_address("R13")), "D=M-1", "D=D-1", "D=D-1", "D=D-1", "A=D", "D=M",
+                 "@{}".format(get_address("LCL")), "M=D"]))
 
         # go to RET
-        assembly_commands.append("\n".join(["@{}".format(self._segments.get_address("R14")), "A=M", "0; JMP"]))
+        assembly_commands.append("//GOTO RET" + "\n")
+        assembly_commands.append("\n".join(["@{}".format(get_address("R14")), "A=M", "0; JMP"]))
 
         self._out_stream.writelines("\n".join(assembly_commands) + "\n")
 
@@ -381,8 +392,10 @@ class CodeWriter:
         :param num_locals: the number of local variables this function has.
         :return: None
         """
-        assembly_commands = ["\n".join(["({})".format(function_name), "@0", "D=A"])]
+        assembly_commands = [
+            "\n".join(["//NEW FUNCTION : {}".format(function_name), "({})".format(function_name), "D=0"])]
         for _ in range(0, num_locals):
+            assembly_commands.append("//PUSHING")
             assembly_commands.append(self._SP_stack.push())
         self._out_stream.writelines("\n".join(assembly_commands) + "\n")
 
