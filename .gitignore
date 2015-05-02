@@ -49,3 +49,4 @@ projects/06/compiler_impl/.idea/*
 projects/06/compiler_impl/__pycache__/*
 projects/07/vm_impl/.idea/*
 projects/08/.idea/*
+*.pyc
