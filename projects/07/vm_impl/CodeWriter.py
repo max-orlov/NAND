@@ -21,6 +21,7 @@ class CodeWriter:
         self._SP_stack = VMStack()
         self._parser = None
         self._file_name = None
+        self._current_function = "first"
 
     def set_file_name(self, file_path):
         """
@@ -31,7 +32,7 @@ class CodeWriter:
         """
         self._parser = Parser(file_path)
         self._file_name = splitext(basename(file_path))[0]
-        self.write_init()
+        #self.write_init()
         while self._parser.has_more_command():
             self._parser.advance()
             {
@@ -260,7 +261,7 @@ class CodeWriter:
         :param label: the label name.
         :return:
         """
-        assembly_commands = ['(' + str(self._file_name) + "_" + label + ')']
+        assembly_commands = ['(' + str(self._file_name) + "_" + self._current_function + "_" + label + ')']
         self._out_stream.writelines("\n".join(assembly_commands) + "\n")
 
     def write_go_to(self, label):
@@ -270,7 +271,7 @@ class CodeWriter:
         :param label: the label name.
         :return:
         """
-        assembly_commands = ['@{}_{}'.format(str(self._file_name), label), '0; JMP']
+        assembly_commands = ['@{}_{}_{}'.format(str(self._file_name), self._current_function, label), '0; JMP']
         self._out_stream.writelines("\n".join(assembly_commands) + "\n")
 
     def write_if(self, label):
@@ -280,7 +281,7 @@ class CodeWriter:
         :param label: the label name.
         :return: None
         """
-        assembly_commands = [self._SP_stack.pop(), "D=M", '@{}_{}'.format(str(self._file_name), label), 'D; JNE']
+        assembly_commands = [self._SP_stack.pop(), "D=M", '@{}_{}_{}'.format(str(self._file_name), self._current_function, label), 'D; JNE']
         self._out_stream.writelines("\n".join(assembly_commands) + "\n")
 
     def write_call(self, function_name, num_args):
@@ -393,6 +394,7 @@ class CodeWriter:
         :param num_locals: the number of local variables this function has.
         :return: None
         """
+        self._current_function = function_name
         assembly_commands = [
             "\n".join(["//NEW FUNCTION : {}".format(function_name), "({})".format(function_name), "D=0"])]
         for _ in range(0, num_locals):
