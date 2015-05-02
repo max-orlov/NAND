@@ -2,7 +2,7 @@
 D=A
 @SP
 M=D
-@Sys.init_return
+@Sys.init1_return
 D=A
 @SP
 A=M
@@ -51,7 +51,7 @@ D=M
 M=D
 @Sys.init
 0; JMP
-(Sys.init_return)
+(Sys.init1_return)
 //NEW FUNCTION : Main.fibonacci
 (Main.fibonacci)
 D=0
@@ -229,7 +229,7 @@ A=M
 M=D
 @0
 M=M+1
-@Main.fibonacci_return
+@Main.fibonacci2_return
 D=A
 @SP
 A=M
@@ -278,7 +278,7 @@ D=M
 M=D
 @Main.fibonacci
 0; JMP
-(Main.fibonacci_return)
+(Main.fibonacci2_return)
 @ARG
 A=M
 
@@ -308,7 +308,7 @@ A=M
 M=D
 @0
 M=M+1
-@Main.fibonacci_return
+@Main.fibonacci3_return
 D=A
 @SP
 A=M
@@ -357,7 +357,7 @@ D=M
 M=D
 @Main.fibonacci
 0; JMP
-(Main.fibonacci_return)
+(Main.fibonacci3_return)
 @SP
 M=M-1
 A=M
@@ -429,7 +429,7 @@ A=M
 D=A
 @SP
 M=D
-@Sys.init_return
+@Sys.init4_return
 D=A
 @SP
 A=M
@@ -478,7 +478,7 @@ D=M
 M=D
 @Sys.init
 0; JMP
-(Sys.init_return)
+(Sys.init4_return)
 //NEW FUNCTION : Sys.init
 (Sys.init)
 D=0
@@ -489,7 +489,7 @@ A=M
 M=D
 @0
 M=M+1
-@Main.fibonacci_return
+@Main.fibonacci5_return
 D=A
 @SP
 A=M
@@ -538,7 +538,7 @@ D=M
 M=D
 @Main.fibonacci
 0; JMP
-(Main.fibonacci_return)
+(Main.fibonacci5_return)
 (Sys_Sys.init_WHILE)
 @Sys_Sys.init_WHILE
 0; JMP
