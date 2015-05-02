@@ -1,3 +1,57 @@
+@256
+D=A
+@SP
+M=D
+@Sys.init_return
+D=A
+@SP
+A=M
+M=D
+@0
+M=M+1
+@LCL
+D=M
+@SP
+A=M
+M=D
+@0
+M=M+1
+@ARG
+D=M
+@SP
+A=M
+M=D
+@0
+M=M+1
+@THIS
+D=M
+@SP
+A=M
+M=D
+@0
+M=M+1
+@THAT
+D=M
+@SP
+A=M
+M=D
+@0
+M=M+1
+@SP
+D=M
+@0
+D=D-A
+@5
+D=D-A
+@ARG
+M=D
+@SP
+D=M
+@LCL
+M=D
+@Sys.init
+0; JMP
+(Sys.init_return)
 //NEW FUNCTION : Main.fibonacci
 (Main.fibonacci)
 D=0
@@ -77,9 +131,9 @@ M=M+1
 M=M-1
 A=M
 D=M
-@Main_IF_TRUE
+@Main_Main.fibonacci_IF_TRUE
 D; JNE
-@Main_IF_FALSE
+@Main_Main.fibonacci_IF_FALSE
 0; JMP
 (Main_Main.fibonacci_IF_TRUE)
 @ARG
@@ -106,23 +160,18 @@ M=M-1
 A=M
 D=M
 @ARG
+A=M
 M=D
-//SETTING SP
-
 @ARG
 D=M
 @SP
 M=D+1
-//SETTING THAT
-
 @13
 D=M-1
 A=D
 D=M
 @THAT
 M=D
-//SETTING THIS
-
 @13
 D=M-1
 D=D-1
@@ -130,8 +179,6 @@ A=D
 D=M
 @THIS
 M=D
-//SETTING ARG
-
 @13
 D=M-1
 D=D-1
@@ -140,8 +187,6 @@ A=D
 D=M
 @ARG
 M=D
-//SETTING LCL
-
 @13
 D=M-1
 D=D-1
@@ -151,8 +196,6 @@ A=D
 D=M
 @LCL
 M=D
-//GOTO RET
-
 @14
 A=M
 0; JMP
@@ -343,23 +386,18 @@ M=M-1
 A=M
 D=M
 @ARG
+A=M
 M=D
-//SETTING SP
-
 @ARG
 D=M
 @SP
 M=D+1
-//SETTING THAT
-
 @13
 D=M-1
 A=D
 D=M
 @THAT
 M=D
-//SETTING THIS
-
 @13
 D=M-1
 D=D-1
@@ -367,8 +405,6 @@ A=D
 D=M
 @THIS
 M=D
-//SETTING ARG
-
 @13
 D=M-1
 D=D-1
@@ -377,8 +413,6 @@ A=D
 D=M
 @ARG
 M=D
-//SETTING LCL
-
 @13
 D=M-1
 D=D-1
@@ -388,11 +422,63 @@ A=D
 D=M
 @LCL
 M=D
-//GOTO RET
-
 @14
 A=M
 0; JMP
+@256
+D=A
+@SP
+M=D
+@Sys.init_return
+D=A
+@SP
+A=M
+M=D
+@0
+M=M+1
+@LCL
+D=M
+@SP
+A=M
+M=D
+@0
+M=M+1
+@ARG
+D=M
+@SP
+A=M
+M=D
+@0
+M=M+1
+@THIS
+D=M
+@SP
+A=M
+M=D
+@0
+M=M+1
+@THAT
+D=M
+@SP
+A=M
+M=D
+@0
+M=M+1
+@SP
+D=M
+@0
+D=D-A
+@5
+D=D-A
+@ARG
+M=D
+@SP
+D=M
+@LCL
+M=D
+@Sys.init
+0; JMP
+(Sys.init_return)
 //NEW FUNCTION : Sys.init
 (Sys.init)
 D=0
@@ -454,5 +540,5 @@ M=D
 0; JMP
 (Main.fibonacci_return)
 (Sys_Sys.init_WHILE)
-@Sys_WHILE
+@Sys_Sys.init_WHILE
 0; JMP

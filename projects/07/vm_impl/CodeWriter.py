@@ -300,8 +300,7 @@ class CodeWriter:
         assembly_commands.append(self._SP_stack.push())
 
         # Pushing LCL,ARG,THIS,THAT
-        segments = ["LCL", "ARG", "THIS", "THAT"]
-        for segment in segments:
+        for segment in ["LCL", "ARG", "THIS", "THAT"]:
             assembly_commands.append(
                 "\n".join(["@{}".format(get_address(segment)), "D=M", self._SP_stack.push()]))
 
@@ -343,45 +342,35 @@ class CodeWriter:
         assembly_commands.append(
             "\n".join(["@5", "D=D-A", "A=D", "D=M", "@{}".format(get_address("R14")), "M=D"]))
 
-        # We need to save the temporary stack value, than update the sp, and only than update the ARG value (i think)
-        # Setting ARG
+        # Setting *ARG
         assembly_commands.append(
-            "\n".join([self._SP_stack.pop(), "D=M", "@{}".format(get_address("ARG")), "M=D"]))
+            "\n".join([self._SP_stack.pop(), "D=M", "@{}".format(get_address("ARG")), "A=M", "M=D"]))
 
         # Setting SP
-        assembly_commands.append("//SETTING SP" + "\n")
-
         assembly_commands.append(
             "\n".join(["@{}".format(get_address("ARG")), "D=M", "@{}".format(get_address("SP")), "M=D+1"]))
 
         # Setting THAT
-        assembly_commands.append("//SETTING THAT" + "\n")
-
         assembly_commands.append("\n".join(["@{}".format(get_address("R13")), "D=M-1", "A=D", "D=M",
                                             "@{}".format(get_address("THAT")), "M=D"]))
 
         # Setting THIS
-        assembly_commands.append("//SETTING THIS" + "\n")
-
         assembly_commands.append(
             "\n".join(["@{}".format(get_address("R13")), "D=M-1", "D=D-1", "A=D", "D=M",
                        "@{}".format(get_address('THIS')), "M=D"]))
 
         # Setting ARG
-        assembly_commands.append("//SETTING ARG" + "\n")
         assembly_commands.append(
             "\n".join(["@{}".format(get_address("R13")), "D=M-1", "D=D-1", "D=D-1", "A=D", "D=M",
                        "@{}".format(get_address("ARG")), "M=D"]))
 
         # Setting LCL
-        assembly_commands.append("//SETTING LCL" + "\n")
         assembly_commands.append(
             "\n".join(
                 ["@{}".format(get_address("R13")), "D=M-1", "D=D-1", "D=D-1", "D=D-1", "A=D", "D=M",
                  "@{}".format(get_address("LCL")), "M=D"]))
 
         # go to RET
-        assembly_commands.append("//GOTO RET" + "\n")
         assembly_commands.append("\n".join(["@{}".format(get_address("R14")), "A=M", "0; JMP"]))
 
         self._out_stream.writelines("\n".join(assembly_commands) + "\n")
