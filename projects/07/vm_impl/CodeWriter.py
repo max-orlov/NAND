@@ -190,13 +190,11 @@ class CodeWriter:
         assembly_commands = []
         if command is VMCommandTypes.C_PUSH:
             # Getting the value specified by the segment and index into M
-            assembly_commands.append("@{}".format(
-                index if self._is_segment_const(command, segment) else get_address(segment)))
-            if self._is_segment_const(command, segment) is False:
-                assembly_commands.append(self._find_the_ram_location(segment, index))
+            assembly_commands.append(
+                get_address(segment, index, self._file_name) if segment == "static" else get_address(segment, index))
 
             # Pushing the value from M/A into D
-            assembly_commands.append("D={}".format("A" if self._is_segment_const(command, segment) else "M"))
+            assembly_commands.append("D={}".format("A" if segment == "constant" else "M"))
 
             # Pushing the value from D into the stack
             assembly_commands.append(self._SP_stack.push())
@@ -207,48 +205,17 @@ class CodeWriter:
             assembly_commands.append("D=M")
 
             # Getting to the specified location into M
-            assembly_commands.append("@{}".format(get_address(segment)))
-            assembly_commands.append(self._find_the_ram_location(segment, index))
+            assembly_commands.append(
+                get_address(segment, index, self._file_name) if segment == "static" else get_address(segment, index))
 
             # Putting the value of D into M
             assembly_commands.append("M=D")
 
         self._out_stream.writelines("\n".join(assembly_commands) + "\n")
 
-    def _is_segment_const(self, command, segment):
-        """
-        Determines of the the segment is const or not
-        :param command: the command being issued
-        :param segment: the segment being addressed
-        :return:
-        """
-        return command is not VMCommandTypes.C_ARITHMETIC and get_address(segment) == get_address("constant")
-
-    @staticmethod
-    def _is_segment_pointed(segment):
-        """
-        You shouldn't change D because it might be used to store stuff.
-        :param segment:
-        :return:
-        """
-        return segment in {"temp", "static", "pointer"}
-
-    def _find_the_ram_location(self, segment, index):
-        """
-        Finds the exact location based on segment and index, and puts it into A
-
-        :param segment: the segment
-        :param index: the index
-        :return:
-        """
-        assembly_command = ("" if self._is_segment_pointed(segment) else "A=M") + "\n"
-        for i in range(0, index):
-            assembly_command += "A=A+1" + "\n"
-        return assembly_command
-
     def write_init(self):
         # Setting SP = 256
-        assembly_commands = ["\n".join(["@256", "D=A", "@{}".format(get_address("SP")), "M=D"]) + "\n"]
+        assembly_commands = ["\n".join(["@256", "D=A", "{}".format(get_address("SP")), "M=D"]) + "\n"]
         self._out_stream.writelines(assembly_commands)
 
         # Calling Sys.init
@@ -282,8 +249,8 @@ class CodeWriter:
         :param label: the label name.
         :return: None
         """
-        assembly_commands = [self._SP_stack.pop(),  "D=M",
-                             '@{}_{}_{}'.format(str(self._file_name), self._current_function, label),
+        assembly_commands = [self._SP_stack.pop(), "D=M",
+                             '@{}_{}_{}'.format(self._file_name, self._current_function, label),
                              'D; JNE']
         self._out_stream.writelines("\n".join(assembly_commands) + "\n")
 
@@ -297,36 +264,25 @@ class CodeWriter:
         """
         self._current_function_call_num += 1
 
-        assembly_commands = []
-
         # Pushing the return address label
-        assembly_commands.append("@{}".format(function_name + str(self._current_function_call_num) + "_return"))
-        assembly_commands.append("D=A")
-        assembly_commands.append(self._SP_stack.push())
+        assembly_commands = ["@{}_return".format(function_name + str(self._current_function_call_num)), "D=A",
+                             self._SP_stack.push()]
 
         # Pushing LCL,ARG,THIS,THAT
-        for segment in ["LCL", "ARG", "THIS", "THAT"]:
-            assembly_commands.append(
-                "\n".join(["@{}".format(get_address(segment)), "D=M", self._SP_stack.push()]))
+        for seg in ["LCL", "ARG", "THIS", "THAT"]:
+            assembly_commands.extend(["@" + seg, "D=M", self._SP_stack.push()])
 
-        # Calculating the value for ARG
-        assembly_commands.append("\n".join(
-            ["@{}".format(get_address("SP")), "D=M", "@{}".format(num_args), "D=D-A", "@5", "D=D-A"]))
+        # Setting ARG
+        assembly_commands.extend(["@SP", "D=M", "@" + str(num_args + 5), "D=D-A", "@ARG", "M=D"])
 
-        # Setting the ARG value
-        assembly_commands.append("\n".join(["@{}".format(get_address("ARG")), "M=D"]))
-
-        # Calculating the value for LCL
-        assembly_commands.append("\n".join(["@{}".format(get_address("SP")), "D=M"]))
-
-        # Setting the LCL value
-        assembly_commands.append("\n".join(["@{}".format(get_address("LCL")), "M=D"]))
+        # Setting LCL
+        assembly_commands.extend(["@SP", "D=M", "@LCL", "M=D"])
 
         # Jumping to function_name
-        assembly_commands.append("\n".join(["@{}".format(function_name), "0; JMP"]))
+        assembly_commands.extend(["@" + function_name, "0; JMP"])
 
         # Setting the returns-address label
-        assembly_commands.append("({})".format(function_name + str(self._current_function_call_num) + "_return"))
+        assembly_commands.append("({}_return)".format(function_name + str(self._current_function_call_num)))
 
         self._out_stream.writelines("\n".join(assembly_commands) + "\n")
 
@@ -336,47 +292,22 @@ class CodeWriter:
 
         :return: None
         """
-        assembly_commands = []
 
-        # Calculating FRAME
-        assembly_commands.append("\n".join(
-            ["@{}".format(get_address("LCL")), "D=M", "@{}".format(get_address("R13")),
-             "M=D"]))
+        # FRAME=LCL
+        assembly_commands = ["@LCL", "D=M", "@R13", "M=D"]
 
-        # Setting RET (R14)
-        assembly_commands.append(
-            "\n".join(["@5", "D=D-A", "A=D", "D=M", "@{}".format(get_address("R14")), "M=D"]))
+        # *ARG=pop()
+        assembly_commands.extend([self._SP_stack.pop(), "D=M", "@ARG", "A=M", "M=D"])
 
-        # Setting *ARG
-        assembly_commands.append(
-            "\n".join([self._SP_stack.pop(), "D=M", "@{}".format(get_address("ARG")), "A=M", "M=D"]))
+        # SP=ARG+1
+        assembly_commands.extend(["@ARG", "D=M", "@SP", "M=D+1"])
 
-        # Setting SP
-        assembly_commands.append(
-            "\n".join(["@{}".format(get_address("ARG")), "D=M", "@{}".format(get_address("SP")), "M=D+1"]))
+        # THAT=*(FRAME-1) THIS=*(FRAME-2) ARG=*(FRAME-3) LCL=*(FRAME-4) RET=*(FRAME-5)
+        for i, seg in enumerate(["THAT", "THIS", "ARG", "LCL", "R14"]):
+            assembly_commands.extend(["@R13", "D=M", "@" + str(i+1), "D=D-A", "A=D", "D=M", "@" + seg, "M=D"])
 
-        # Setting THAT
-        assembly_commands.append("\n".join(["@{}".format(get_address("R13")), "D=M-1", "A=D", "D=M",
-                                            "@{}".format(get_address("THAT")), "M=D"]))
-
-        # Setting THIS
-        assembly_commands.append(
-            "\n".join(["@{}".format(get_address("R13")), "D=M-1", "D=D-1", "A=D", "D=M",
-                       "@{}".format(get_address('THIS')), "M=D"]))
-
-        # Setting ARG
-        assembly_commands.append(
-            "\n".join(["@{}".format(get_address("R13")), "D=M-1", "D=D-1", "D=D-1", "A=D", "D=M",
-                       "@{}".format(get_address("ARG")), "M=D"]))
-
-        # Setting LCL
-        assembly_commands.append(
-            "\n".join(
-                ["@{}".format(get_address("R13")), "D=M-1", "D=D-1", "D=D-1", "D=D-1", "A=D", "D=M",
-                 "@{}".format(get_address("LCL")), "M=D"]))
-
-        # go to RET
-        assembly_commands.append("\n".join(["@{}".format(get_address("R14")), "A=M", "0; JMP"]))
+        # goto RET
+        assembly_commands.extend(["@R14", "A=M", "0; JMP"])
 
         self._out_stream.writelines("\n".join(assembly_commands) + "\n")
 
@@ -389,10 +320,8 @@ class CodeWriter:
         :return: None
         """
         self._current_function = function_name
-        assembly_commands = [
-            "\n".join(["//NEW FUNCTION : {}".format(function_name), "({})".format(function_name), "D=0"])]
+        assembly_commands = ["({})".format(function_name), "D=0"]
         for _ in range(0, num_locals):
-            assembly_commands.append("//PUSHING")
             assembly_commands.append(self._SP_stack.push())
         self._out_stream.writelines("\n".join(assembly_commands) + "\n")
 

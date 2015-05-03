@@ -1,12 +1,9 @@
 function Sys.init 0
-call Sys.main 0
-pop temp 0
-label LOOP
-goto LOOP
+push constant 6
+call Sys.set 1
+push static 0
 
-// Sys.main() calls Sys.add12(123) and stores return value (135) in temp 0.
-// Returns 456.
-
-function Sys.main 0
-push constant 123
+function Sys.set 0
+push argument 0
+pop static 0
 return

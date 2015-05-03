@@ -1,4 +1,5 @@
 @111
+
 D=A
 @SP
 A=M
@@ -6,6 +7,7 @@ M=D
 @0
 M=M+1
 @333
+
 D=A
 @SP
 A=M
@@ -13,6 +15,7 @@ M=D
 @0
 M=M+1
 @888
+
 D=A
 @SP
 A=M
@@ -23,43 +26,24 @@ M=M+1
 M=M-1
 A=M
 D=M
-@16
-
-A=A+1
-A=A+1
-A=A+1
-A=A+1
-A=A+1
-A=A+1
-A=A+1
-A=A+1
+@StaticTest.8
 
 M=D
 @SP
 M=M-1
 A=M
 D=M
-@16
-
-A=A+1
-A=A+1
-A=A+1
+@StaticTest.3
 
 M=D
 @SP
 M=M-1
 A=M
 D=M
-@16
-
-A=A+1
+@StaticTest.1
 
 M=D
-@16
-
-A=A+1
-A=A+1
-A=A+1
+@StaticTest.3
 
 D=M
 @SP
@@ -67,9 +51,7 @@ A=M
 M=D
 @0
 M=M+1
-@16
-
-A=A+1
+@StaticTest.1
 
 D=M
 @SP
@@ -90,16 +72,7 @@ A=M
 M=D
 @0
 M=M+1
-@16
-
-A=A+1
-A=A+1
-A=A+1
-A=A+1
-A=A+1
-A=A+1
-A=A+1
-A=A+1
+@StaticTest.8
 
 D=M
 @SP

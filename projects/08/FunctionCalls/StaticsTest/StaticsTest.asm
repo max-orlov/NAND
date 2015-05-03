@@ -1,6 +1,8 @@
 @256
 D=A
 @SP
+A=M
+
 M=D
 @Sys.init1_return
 D=A
@@ -52,7 +54,6 @@ M=D
 @Sys.init
 0; JMP
 (Sys.init1_return)
-//NEW FUNCTION : Class1.set
 (Class1.set)
 D=0
 @ARG
@@ -68,8 +69,7 @@ M=M+1
 M=M-1
 A=M
 D=M
-@16
-
+@Class1.0
 
 M=D
 @ARG
@@ -86,12 +86,11 @@ M=M+1
 M=M-1
 A=M
 D=M
-@16
-
-A=A+1
+@Class1.1
 
 M=D
 @0
+
 D=A
 @SP
 A=M
@@ -100,13 +99,13 @@ M=D
 M=M+1
 @LCL
 D=M
-@13
+@R13
 M=D
 @5
 D=D-A
 A=D
 D=M
-@14
+@R14
 M=D
 @SP
 M=M-1
@@ -119,44 +118,42 @@ M=D
 D=M
 @SP
 M=D+1
-@13
+@R13
 D=M-1
 A=D
 D=M
 @THAT
 M=D
-@13
-D=M-1
-D=D-1
+@R13
+D=M
+@2
+D=D-A
 A=D
 D=M
 @THIS
 M=D
-@13
-D=M-1
-D=D-1
-D=D-1
+@R13
+D=M
+@3
+D=D-A
 A=D
 D=M
 @ARG
 M=D
-@13
-D=M-1
-D=D-1
-D=D-1
-D=D-1
+@R13
+D=M
+@4
+D=D-A
 A=D
 D=M
 @LCL
 M=D
-@14
+@R14
 A=M
 0; JMP
-//NEW FUNCTION : Class1.get
 (Class1.get)
 D=0
-@16
-
+@Class1.0
 
 D=M
 @SP
@@ -164,9 +161,7 @@ A=M
 M=D
 @0
 M=M+1
-@16
-
-A=A+1
+@Class1.1
 
 D=M
 @SP
@@ -189,13 +184,13 @@ M=D
 M=M+1
 @LCL
 D=M
-@13
+@R13
 M=D
 @5
 D=D-A
 A=D
 D=M
-@14
+@R14
 M=D
 @SP
 M=M-1
@@ -208,42 +203,44 @@ M=D
 D=M
 @SP
 M=D+1
-@13
+@R13
 D=M-1
 A=D
 D=M
 @THAT
 M=D
-@13
-D=M-1
-D=D-1
+@R13
+D=M
+@2
+D=D-A
 A=D
 D=M
 @THIS
 M=D
-@13
-D=M-1
-D=D-1
-D=D-1
+@R13
+D=M
+@3
+D=D-A
 A=D
 D=M
 @ARG
 M=D
-@13
-D=M-1
-D=D-1
-D=D-1
-D=D-1
+@R13
+D=M
+@4
+D=D-A
 A=D
 D=M
 @LCL
 M=D
-@14
+@R14
 A=M
 0; JMP
 @256
 D=A
 @SP
+A=M
+
 M=D
 @Sys.init2_return
 D=A
@@ -295,7 +292,6 @@ M=D
 @Sys.init
 0; JMP
 (Sys.init2_return)
-//NEW FUNCTION : Class2.set
 (Class2.set)
 D=0
 @ARG
@@ -311,8 +307,7 @@ M=M+1
 M=M-1
 A=M
 D=M
-@16
-
+@Class2.0
 
 M=D
 @ARG
@@ -329,12 +324,11 @@ M=M+1
 M=M-1
 A=M
 D=M
-@16
-
-A=A+1
+@Class2.1
 
 M=D
 @0
+
 D=A
 @SP
 A=M
@@ -343,13 +337,13 @@ M=D
 M=M+1
 @LCL
 D=M
-@13
+@R13
 M=D
 @5
 D=D-A
 A=D
 D=M
-@14
+@R14
 M=D
 @SP
 M=M-1
@@ -362,44 +356,42 @@ M=D
 D=M
 @SP
 M=D+1
-@13
+@R13
 D=M-1
 A=D
 D=M
 @THAT
 M=D
-@13
-D=M-1
-D=D-1
+@R13
+D=M
+@2
+D=D-A
 A=D
 D=M
 @THIS
 M=D
-@13
-D=M-1
-D=D-1
-D=D-1
+@R13
+D=M
+@3
+D=D-A
 A=D
 D=M
 @ARG
 M=D
-@13
-D=M-1
-D=D-1
-D=D-1
-D=D-1
+@R13
+D=M
+@4
+D=D-A
 A=D
 D=M
 @LCL
 M=D
-@14
+@R14
 A=M
 0; JMP
-//NEW FUNCTION : Class2.get
 (Class2.get)
 D=0
-@16
-
+@Class2.0
 
 D=M
 @SP
@@ -407,9 +399,7 @@ A=M
 M=D
 @0
 M=M+1
-@16
-
-A=A+1
+@Class2.1
 
 D=M
 @SP
@@ -432,13 +422,13 @@ M=D
 M=M+1
 @LCL
 D=M
-@13
+@R13
 M=D
 @5
 D=D-A
 A=D
 D=M
-@14
+@R14
 M=D
 @SP
 M=M-1
@@ -451,42 +441,44 @@ M=D
 D=M
 @SP
 M=D+1
-@13
+@R13
 D=M-1
 A=D
 D=M
 @THAT
 M=D
-@13
-D=M-1
-D=D-1
+@R13
+D=M
+@2
+D=D-A
 A=D
 D=M
 @THIS
 M=D
-@13
-D=M-1
-D=D-1
-D=D-1
+@R13
+D=M
+@3
+D=D-A
 A=D
 D=M
 @ARG
 M=D
-@13
-D=M-1
-D=D-1
-D=D-1
-D=D-1
+@R13
+D=M
+@4
+D=D-A
 A=D
 D=M
 @LCL
 M=D
-@14
+@R14
 A=M
 0; JMP
 @256
 D=A
 @SP
+A=M
+
 M=D
 @Sys.init3_return
 D=A
@@ -538,10 +530,10 @@ M=D
 @Sys.init
 0; JMP
 (Sys.init3_return)
-//NEW FUNCTION : Sys.init
 (Sys.init)
 D=0
 @6
+
 D=A
 @SP
 A=M
@@ -549,6 +541,7 @@ M=D
 @0
 M=M+1
 @8
+
 D=A
 @SP
 A=M
@@ -611,9 +604,9 @@ A=M
 D=M
 @5
 
-
 M=D
 @23
+
 D=A
 @SP
 A=M
@@ -621,6 +614,7 @@ M=D
 @0
 M=M+1
 @15
+
 D=A
 @SP
 A=M
@@ -682,7 +676,6 @@ M=M-1
 A=M
 D=M
 @5
-
 
 M=D
 @Class1.get6_return
