@@ -1,13 +1,10 @@
-//NEW FUNCTION : SimpleFunction.test
 (SimpleFunction.test)
 D=0
-//PUSHING
 @SP
 A=M
 M=D
 @0
 M=M+1
-//PUSHING
 @SP
 A=M
 M=D
@@ -103,6 +100,8 @@ M=M+1
 D=M
 @R13
 M=D
+@R13
+D=M
 @5
 D=D-A
 A=D
@@ -121,7 +120,9 @@ D=M
 @SP
 M=D+1
 @R13
-D=M-1
+D=M
+@1
+D=D-A
 A=D
 D=M
 @THAT

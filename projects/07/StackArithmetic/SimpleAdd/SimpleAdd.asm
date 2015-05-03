@@ -1,12 +1,4 @@
 @7
-A=M
-A=A+1
-A=A+1
-A=A+1
-A=A+1
-A=A+1
-A=A+1
-A=A+1
 
 D=A
 @SP
@@ -15,15 +7,6 @@ M=D
 @0
 M=M+1
 @8
-A=M
-A=A+1
-A=A+1
-A=A+1
-A=A+1
-A=A+1
-A=A+1
-A=A+1
-A=A+1
 
 D=A
 @SP

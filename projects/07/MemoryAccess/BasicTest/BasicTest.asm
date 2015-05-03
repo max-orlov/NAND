@@ -1,4 +1,5 @@
 @10
+
 D=A
 @SP
 A=M
@@ -11,8 +12,10 @@ A=M
 D=M
 @LCL
 A=M
+
 M=D
 @21
+
 D=A
 @SP
 A=M
@@ -20,6 +23,7 @@ M=D
 @0
 M=M+1
 @22
+
 D=A
 @SP
 A=M
@@ -34,6 +38,7 @@ D=M
 A=M
 A=A+1
 A=A+1
+
 M=D
 @SP
 M=M-1
@@ -42,8 +47,10 @@ D=M
 @ARG
 A=M
 A=A+1
+
 M=D
 @36
+
 D=A
 @SP
 A=M
@@ -62,8 +69,10 @@ A=A+1
 A=A+1
 A=A+1
 A=A+1
+
 M=D
 @42
+
 D=A
 @SP
 A=M
@@ -71,6 +80,7 @@ M=D
 @0
 M=M+1
 @45
+
 D=A
 @SP
 A=M
@@ -88,6 +98,7 @@ A=A+1
 A=A+1
 A=A+1
 A=A+1
+
 M=D
 @SP
 M=M-1
@@ -97,8 +108,10 @@ D=M
 A=M
 A=A+1
 A=A+1
+
 M=D
 @510
+
 D=A
 @SP
 A=M
@@ -116,9 +129,11 @@ A=A+1
 A=A+1
 A=A+1
 A=A+1
+
 M=D
 @LCL
 A=M
+
 D=M
 @SP
 A=M
@@ -132,6 +147,7 @@ A=A+1
 A=A+1
 A=A+1
 A=A+1
+
 D=M
 @SP
 A=M
@@ -154,6 +170,7 @@ M=M+1
 @ARG
 A=M
 A=A+1
+
 D=M
 @SP
 A=M
@@ -181,6 +198,7 @@ A=A+1
 A=A+1
 A=A+1
 A=A+1
+
 D=M
 @SP
 A=M
@@ -195,6 +213,7 @@ A=A+1
 A=A+1
 A=A+1
 A=A+1
+
 D=M
 @SP
 A=M
@@ -234,6 +253,7 @@ A=A+1
 A=A+1
 A=A+1
 A=A+1
+
 D=M
 @SP
 A=M
