@@ -1,8 +1,6 @@
 @256
 D=A
 @SP
-A=M
-
 M=D
 @Sys.init1_return
 D=A
@@ -41,8 +39,6 @@ M=D
 M=M+1
 @SP
 D=M
-@0
-D=D-A
 @5
 D=D-A
 @ARG
@@ -151,6 +147,8 @@ M=M+1
 D=M
 @R13
 M=D
+@R13
+D=M
 @5
 D=D-A
 A=D
@@ -169,7 +167,9 @@ D=M
 @SP
 M=D+1
 @R13
-D=M-1
+D=M
+@1
+D=D-A
 A=D
 D=M
 @THAT
@@ -269,9 +269,7 @@ M=D
 M=M+1
 @SP
 D=M
-@1
-D=D-A
-@5
+@6
 D=D-A
 @ARG
 M=D
@@ -349,9 +347,7 @@ M=D
 M=M+1
 @SP
 D=M
-@1
-D=D-A
-@5
+@6
 D=D-A
 @ARG
 M=D
@@ -379,6 +375,8 @@ M=M+1
 D=M
 @R13
 M=D
+@R13
+D=M
 @5
 D=D-A
 A=D
@@ -397,7 +395,9 @@ D=M
 @SP
 M=D+1
 @R13
-D=M-1
+D=M
+@1
+D=D-A
 A=D
 D=M
 @THAT
@@ -432,8 +432,6 @@ A=M
 @256
 D=A
 @SP
-A=M
-
 M=D
 @Sys.init4_return
 D=A
@@ -472,8 +470,6 @@ M=D
 M=M+1
 @SP
 D=M
-@0
-D=D-A
 @5
 D=D-A
 @ARG
@@ -532,9 +528,7 @@ M=D
 M=M+1
 @SP
 D=M
-@1
-D=D-A
-@5
+@6
 D=D-A
 @ARG
 M=D

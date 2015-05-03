@@ -215,8 +215,7 @@ class CodeWriter:
 
     def write_init(self):
         # Setting SP = 256
-        assembly_commands = ["\n".join(["@256", "D=A", "{}".format(get_address("SP")), "M=D"]) + "\n"]
-        self._out_stream.writelines(assembly_commands)
+        self._out_stream.write("\n".join(["@256", "D=A", "{}".format("@SP"), "M=D"]) + "\n")
 
         # Calling Sys.init
         self.write_call("Sys.init", 0)
@@ -296,14 +295,17 @@ class CodeWriter:
         # FRAME=LCL
         assembly_commands = ["@LCL", "D=M", "@R13", "M=D"]
 
+        # RET=*(FRAME-5)
+        assembly_commands.extend(["@R13", "D=M", "@5", "D=D-A", "A=D", "D=M", "@R14", "M=D"])
+
         # *ARG=pop()
         assembly_commands.extend([self._SP_stack.pop(), "D=M", "@ARG", "A=M", "M=D"])
 
         # SP=ARG+1
         assembly_commands.extend(["@ARG", "D=M", "@SP", "M=D+1"])
 
-        # THAT=*(FRAME-1) THIS=*(FRAME-2) ARG=*(FRAME-3) LCL=*(FRAME-4) RET=*(FRAME-5)
-        for i, seg in enumerate(["THAT", "THIS", "ARG", "LCL", "R14"]):
+        # THAT=*(FRAME-1) THIS=*(FRAME-2) ARG=*(FRAME-3) LCL=*(FRAME-4)
+        for i, seg in enumerate(["THAT", "THIS", "ARG", "LCL"]):
             assembly_commands.extend(["@R13", "D=M", "@" + str(i+1), "D=D-A", "A=D", "D=M", "@" + seg, "M=D"])
 
         # goto RET

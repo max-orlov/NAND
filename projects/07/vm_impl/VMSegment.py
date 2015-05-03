@@ -5,10 +5,10 @@ def get_address(segment, index=0, file_name=""):
                              "ARG": "@ARG",  # 2
                              "THIS": "@THIS",  # 3
                              "THAT": "@THAT",  # 4
-                             "local": "@LCL",  # 5
-                             "argument": "@ARG",
-                             "this": "@THIS",
-                             "that": "@THAT",
+                             "local": "@LCL",  # 1
+                             "argument": "@ARG",  # 2
+                             "this": "@THIS",  # 3
+                             "that": "@THAT",  # 4
                              "R13": "@R13",
                              "R14": "@R14",
                              "R15": "@R15",
@@ -23,9 +23,9 @@ def get_address(segment, index=0, file_name=""):
         if segment not in ["temp", "pointer", "constant"]:
             assembly_commands.append("A=M")
 
-            # find the right index
-            for _ in range(0, index):
-                assembly_commands.append("A=A+1")
+        # find the right index
+        for _ in range(0, index):
+            assembly_commands.append("A=A+1")
 
     # returning this great string.
     return "\n".join(assembly_commands) + "\n"
