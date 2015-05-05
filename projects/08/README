@@ -1,0 +1,22 @@
+jonnydman, maxorlov
+===============================================================================
+Jonny Gulayev, ID 304028749, georgy.gulayev@mail.huji.ac.il
+Maxim Orlov, ID 314363227, maxim.orlov@mail.huji.ac.il
+===============================================================================
+
+                           Project 7 - Assembler
+                           ----------------------- 
+  
+Submitted Files
+---------------
+README 			- This file.
+Main.py         - The main class which orchestrates the input files and the outputs.
+CodeWriter      - Writes the translated code into the output file (uses the parser class).
+Parser          - Used to parse the given file.
+VMCommand       - Contains enum representation for the commands.
+VMSegment       - Contains enums for the different segments and their location on the ram.
+VMStack         - A helper class which creates s logical stack, and returns the pop/push
+                  assembly code.
+
+Remarks
+-------
