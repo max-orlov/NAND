@@ -1,0 +1,102 @@
+/**
+ */
+class WallBreakGame {
+	// the base rectangle
+	field Rectangle base;
+	
+	// the bouncing ball
+	field Ball ball;
+	
+	// the direction of the base - 0: none, 1: right, 2: left
+	field int baseDirection;
+	// the direction of the ball - 1: up-right, 2: up-left, 3: down-right, 4: down-left
+	field int ballDirection;
+	
+	/** Constructs a new Wall Break Game. */
+    constructor WallBreakGame new() {
+        let base = Rectangle.new(242, 244, 30, 10);
+		let ball = Ball.new(257, 238, 5);
+        let baseDirection = 0;
+		let ballDirection = 1;
+
+        return this;
+    }
+	
+    /** Deallocates the object's memory. */
+    method void dispose() {
+        do base.dispose();
+		do ball.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    /** Starts the game. Handles inputs from the user that control
+     *  the base's movement. */
+    method void run() {
+        var char key;
+        var boolean exit;
+
+        let exit = false;
+
+        while (~exit) {
+            // waits for a key to be pressed.
+            while (key = 0) {
+                let key = Keyboard.keyPressed();
+                do moveBase();
+				do moveBall();
+				do Sys.wait(5); // Delays the next movement.
+            }
+
+            if (key = 81) {
+                let exit = true;
+            }
+            if (key = 132) {
+                let baseDirection = 1;
+            }
+            if (key = 130) {
+                let baseDirection = 2;
+            }
+
+            // waits for the key to be released.
+            while (~(key = 0)) {
+                let key = Keyboard.keyPressed();
+                do moveBase();
+				do moveBall();
+				do Sys.wait(5); // Delays the next movement.
+            }
+        }
+            
+        return;
+	}
+
+    /** Moves the base by 2 pixels in the current direction. */
+    method void moveBase() {
+        if (baseDirection = 1) {
+            do base.moveRight();
+        }
+        if (baseDirection = 2) {
+            do base.moveLeft();
+        }
+
+        return;
+    }
+
+    /** Moves the ball by 2 pixels in the current direction. */
+    method void moveBall() {
+		let ballDirection = ball.getDirection(ballDirection);
+        if (ballDirection = 1) {
+            do ball.moveUpRight();
+        }
+        if (ballDirection = 2) {
+            do ball.moveUpLeft();
+        }
+        if (ballDirection = 3) {
+            do ball.moveDownRight();
+        }
+        if (ballDirection = 4) {
+            do ball.moveDownLeft();
+        }
+
+        return;
+    }
+}
