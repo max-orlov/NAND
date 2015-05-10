@@ -99,6 +99,9 @@ push local 0
 push constant 0
 eq
 not
+push local 2
+not
+and
 not
 if-goto WHILE_END2
 call Keyboard.keyPressed 0
@@ -150,7 +153,8 @@ push constant 0
 pop local 0
 push this 1
 push this 3
-call Ball.getDirection 2
+push this 0
+call Ball.getDirection 3
 pop this 3
 push this 3
 push constant 1

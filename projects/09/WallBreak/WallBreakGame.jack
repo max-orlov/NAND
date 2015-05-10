@@ -60,7 +60,7 @@ class WallBreakGame {
             }
 
             // waits for the key to be released.
-            while (~(key = 0)) {
+            while ( (~(key = 0)) & (~isGameOver) ){
                 let key = Keyboard.keyPressed();
                 do moveBase();
 				let isGameOver = moveBall();
@@ -87,7 +87,7 @@ class WallBreakGame {
     method boolean moveBall() {
 		var boolean isGameOver;
 		let isGameOver = false;
-		let ballDirection = ball.getDirection(ballDirection);
+		let ballDirection = ball.getDirection(ballDirection, base);
 
         if (ballDirection = 1) {
             do ball.moveUpRight();

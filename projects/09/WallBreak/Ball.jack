@@ -48,7 +48,7 @@ class Ball {
     }
 	
 	/** Gets the direction the ball should go next. */
-	method int getDirection(int curDirection) {
+	method int getDirection(int curDirection, Rectangle base) {
 		var int direction;        // 1: up-right, 2: up-left, 3: down-right, 4: down-left
 		var boolean isUp, isRight;
 		
@@ -72,13 +72,15 @@ class Ball {
 		if ((y - radius) < 3) {
 			let isUp = false;
 		}
-		if ((y + radius) > 240) {
-			let isUp = true;
+		if ( (~isUp) & (240 < (y + radius)) ) {
+		    if ( Math.abs(base.getX() - x) < base.getWidth() ){
+			    let isUp = true;
+			}
 		}
 		if ((x - radius) < 3) {
 			let isRight = true;
 		}
-		if ((x + radius) > 507) {
+		if ((x + radius) > 509) {
 			let isRight = false;
 		}
 		// set the direction.
@@ -144,13 +146,13 @@ by 2 pixels each direction. */
 
     method boolean checkGameOver(Rectangle base){
         var boolean con1, con2;
-        let con1 =  y < (256 - base.getHeight())
-        let con2 = Math.abs(base.getX() - x) > base.getWidth();
-        if ( (con1) & (con2) ){
+        let con1 =  (246 < (y + radius));
+        if ( (con1)){
             return true;
         }
         else{
             return false;
         }
     }
+
 }
