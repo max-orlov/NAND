@@ -33,14 +33,21 @@ call Memory.deAlloc 1
 pop temp 0
 push constant 0
 return
-function WallBreakGame.run 2
+function WallBreakGame.run 3
 push argument 0
 pop pointer 0
 push constant 0
 pop local 1
+push constant 0
+pop local 2
+call Keyboard.keyPressed 0
+pop local 0
 label WHILE_EXP0
 push local 1
 not
+push local 2
+not
+and
 not
 if-goto WHILE_END0
 label WHILE_EXP1
@@ -52,11 +59,8 @@ if-goto WHILE_END1
 call Keyboard.keyPressed 0
 pop local 0
 push pointer 0
-call WallBreakGame.moveBase 1
-pop temp 0
-push pointer 0
 call WallBreakGame.moveBall 1
-pop temp 0
+pop local 2
 push constant 5
 call Sys.wait 1
 pop temp 0
@@ -104,7 +108,7 @@ call WallBreakGame.moveBase 1
 pop temp 0
 push pointer 0
 call WallBreakGame.moveBall 1
-pop temp 0
+pop local 2
 push constant 5
 call Sys.wait 1
 pop temp 0
@@ -139,9 +143,11 @@ pop temp 0
 label IF_FALSE1
 push constant 0
 return
-function WallBreakGame.moveBall 0
+function WallBreakGame.moveBall 1
 push argument 0
 pop pointer 0
+push constant 0
+pop local 0
 push this 1
 push this 3
 call Ball.getDirection 2
@@ -173,8 +179,9 @@ if-goto IF_TRUE2
 goto IF_FALSE2
 label IF_TRUE2
 push this 1
-call Ball.moveDownRight 1
-pop temp 0
+push this 0
+call Ball.moveDownRight 2
+pop local 0
 label IF_FALSE2
 push this 3
 push constant 4
@@ -183,8 +190,9 @@ if-goto IF_TRUE3
 goto IF_FALSE3
 label IF_TRUE3
 push this 1
-call Ball.moveDownLeft 1
-pop temp 0
+push this 0
+call Ball.moveDownLeft 2
+pop local 0
 label IF_FALSE3
-push constant 0
+push local 0
 return

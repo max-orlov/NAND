@@ -22,6 +22,18 @@ class Rectangle {
         return this;
     }
 
+    method int getX(){
+        return x;
+    }
+
+    method int getWidth(){
+        return width;
+    }
+
+    method int getHeight(){
+        return height;
+    }
+
     /** Deallocates the object's memory. */
     method void dispose() {
         do Memory.deAlloc(this);

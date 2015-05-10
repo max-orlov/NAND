@@ -69,16 +69,16 @@ class Ball {
 			let isRight = false;
 		}
 		
-		if ((y - radius) < 1) {
+		if ((y - radius) < 3) {
 			let isUp = false;
 		}
-		if ((y + radius) > 243) {
+		if ((y + radius) > 240) {
 			let isUp = true;
 		}
-		if ((x - radius) < 1) {
+		if ((x - radius) < 3) {
 			let isRight = true;
 		}
-		if ((x + radius) > 510) {
+		if ((x + radius) > 507) {
 			let isRight = false;
 		}
 		// set the direction.
@@ -97,7 +97,8 @@ class Ball {
 		return direction;
 	}
 
-    /** Moves up-right by 2 pixels each direction. */
+    /** Moves up-right In Ball.jack (line 146): In subroutine checkBallBase: Expected (
+by 2 pixels each direction. */
     method void moveUpRight() {
         if (((y - radius) > 1) & ((x + radius) < 510)) {
             do erase();
@@ -120,24 +121,36 @@ class Ball {
     }
 
     /** Moves down-right by 2 pixels each direction. */
-    method void moveDownRight() {
+    method boolean moveDownRight(Rectangle base) {
         if (((y + radius) < 242) & ((x + radius) < 510)) {
             do erase();
             let y = y + 2;
 			let x = x + 2;
             do draw();
         }
-        return;
+        return checkGameOver(base);
     }
 
     /** Moves down-left by 2 pixels each direction. */
-    method void moveDownLeft() {
+    method boolean moveDownLeft(Rectangle base) {
         if (((y + radius) < 242) & ((x - radius) > 1)) {
             do erase();
             let y = y + 2;
 			let x = x - 2;
             do draw();
         }
-        return;
+        return checkGameOver(base);
+    }
+
+    method boolean checkGameOver(Rectangle base){
+        var boolean con1, con2;
+        let con1 =  y < (256 - base.getHeight())
+        let con2 = Math.abs(base.getX() - x) > base.getWidth();
+        if ( (con1) & (con2) ){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 }
