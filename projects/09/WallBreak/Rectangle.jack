@@ -22,6 +22,10 @@ class Rectangle {
         return this;
     }
 
+    method int getY(){
+        return y;
+    }
+
     method int getX(){
         return x;
     }

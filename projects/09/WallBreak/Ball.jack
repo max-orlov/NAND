@@ -16,11 +16,15 @@ class Ball {
     // The radius of the ball
     field int radius;
 
+    // The speed of the ball
+    field int speed;
+
     /** Constructs a new ball with a given location and size. */
-    constructor Ball new(int Ax, int Ay, int Aradius) {
+    constructor Ball new(int Ax, int Ay, int Aradius, int Aspeed) {
         let x = Ax;
         let y = Ay;
         let radius = Aradius;
+        let speed = Aspeed;
 
         do draw();
 
@@ -72,8 +76,8 @@ class Ball {
 		if ((y - radius) < 3) {
 			let isUp = false;
 		}
-		if ( (~isUp) & (240 < (y + radius)) ) {
-		    if ( Math.abs(base.getX() - x) < base.getWidth() ){
+		if ( (~isUp) & (235 < y ) ) {
+		    if ( ( x > (base.getX() - 2)) & ( x < (base.getX() + base.getWidth() + 2)) ){
 			    let isUp = true;
 			}
 		}
@@ -104,8 +108,8 @@ by 2 pixels each direction. */
     method void moveUpRight() {
         if (((y - radius) > 1) & ((x + radius) < 510)) {
             do erase();
-            let y = y - 2;
-			let x = x + 2;
+            let y = y - speed;
+			let x = x + speed;
             do draw();
         }
         return;
@@ -115,8 +119,8 @@ by 2 pixels each direction. */
     method void moveUpLeft() {
         if (((y - radius) > 1) & ((x - radius) > 1)) {
             do erase();
-            let y = y - 2;
-			let x = x - 2;
+            let y = y - speed;
+			let x = x - speed;
             do draw();
         }
         return;
@@ -124,10 +128,10 @@ by 2 pixels each direction. */
 
     /** Moves down-right by 2 pixels each direction. */
     method boolean moveDownRight(Rectangle base) {
-        if (((y + radius) < 242) & ((x + radius) < 510)) {
+        if ( ((y + radius)  < base.getY()) & ((x + radius) < 510)) {
             do erase();
-            let y = y + 2;
-			let x = x + 2;
+            let y = y + speed;
+			let x = x + speed;
             do draw();
         }
         return checkGameOver(base);
@@ -135,24 +139,17 @@ by 2 pixels each direction. */
 
     /** Moves down-left by 2 pixels each direction. */
     method boolean moveDownLeft(Rectangle base) {
-        if (((y + radius) < 242) & ((x - radius) > 1)) {
+        if ( ((y + radius)  < base.getY()) & ((x - radius) > 1)) {
             do erase();
-            let y = y + 2;
-			let x = x - 2;
+            let y = y + speed;
+			let x = x - speed;
             do draw();
         }
         return checkGameOver(base);
     }
 
     method boolean checkGameOver(Rectangle base){
-        var boolean con1, con2;
-        let con1 =  (246 < (y + radius));
-        if ( (con1)){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return (y+radius) > base.getY();
     }
 
 }

@@ -13,9 +13,23 @@ class WallBreakGame {
 	field int ballDirection;
 	
 	/** Constructs a new Wall Break Game. */
-    constructor WallBreakGame new() {
-        let base = Rectangle.new(242, 244, 30, 10);
-		let ball = Ball.new(257, 238, 5);
+    constructor WallBreakGame new(int level) {
+        if ( level = 3 ){
+            let base = Rectangle.new(242, 244, 20, 10);
+            let ball = Ball.new(257, 238, 5, 4);
+
+        }
+
+        if ( level = 2 ){
+            let base = Rectangle.new(242, 244, 25, 10);
+            let ball = Ball.new(257, 238, 5, 3);
+        }
+
+        if ( level = 1){
+            let base = Rectangle.new(242, 244, 30, 10);
+            let ball = Ball.new(257, 238, 5, 2);
+        }
+
         let baseDirection = 0;
 		let ballDirection = 1;
 
@@ -35,37 +49,49 @@ class WallBreakGame {
     method void run() {
         var char key;
         var boolean exit, isGameOver;
+        var String str;
 
         let exit = false;
         let isGameOver = false;
         let key = Keyboard.keyPressed();
 
         while ((~exit) & (~isGameOver)) {
-            // waits for a key to be pressed.
 
-            while (key = 0) {
+            // Move the ball
+            let isGameOver = moveBall();
+
+            if ( ~isGameOver ){
+                // Get key press
                 let key = Keyboard.keyPressed();
-                let isGameOver = moveBall();
-				do Sys.wait(5); // Delays the next movement.
-            }
 
-            if (key = 81) {
-                let exit = true;
-            }
-            if (key = 132) {
-                let baseDirection = 1;
-            }
-            if (key = 130) {
-                let baseDirection = 2;
-            }
+                // Press 'q' to quit.
+                if (key = 81) {
+                    let exit = true;
+                }
 
-            // waits for the key to be released.
-            while ( (~(key = 0)) & (~isGameOver) ){
-                let key = Keyboard.keyPressed();
+                // Press left to move the base left
+                if (key = 132) {
+                    let baseDirection = 1;
+                }
+
+                // Press right to move the base right
+                if (key = 130) {
+                    let baseDirection = 2;
+                }
+
+                // Move the base once, and stop it.
                 do moveBase();
-				let isGameOver = moveBall();
-				do Sys.wait(5); // Delays the next movement.
+                let baseDirection = 0;
+
+                // Delay for a while.
+                do Sys.wait(4); // Delays the next movement.
             }
+        }
+
+        if ( isGameOver ){
+            let str = String.new(10);
+            let str = "You Lost";
+            do Output.printString(str);
         }
             
         return;
