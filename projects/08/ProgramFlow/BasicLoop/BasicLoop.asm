@@ -10,12 +10,34 @@ M=M+1
 M=M-1
 A=M
 D=M
+@R13
+M=D
 @LCL
+A=M
+D=A
+@0
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
 A=M
 
 M=D
 (BasicLoop_first_LOOP_START)
+@R13
+M=D
 @ARG
+A=M
+D=A
+@0
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
 A=M
 
 D=M
@@ -24,7 +46,18 @@ A=M
 M=D
 @0
 M=M+1
+@R13
+M=D
 @LCL
+A=M
+D=A
+@0
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
 A=M
 
 D=M
@@ -50,11 +83,33 @@ M=M+1
 M=M-1
 A=M
 D=M
+@R13
+M=D
 @LCL
+A=M
+D=A
+@0
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
 A=M
 
 M=D
+@R13
+M=D
 @ARG
+A=M
+D=A
+@0
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
 A=M
 
 D=M
@@ -88,11 +143,33 @@ M=M+1
 M=M-1
 A=M
 D=M
+@R13
+M=D
 @ARG
+A=M
+D=A
+@0
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
 A=M
 
 M=D
+@R13
+M=D
 @ARG
+A=M
+D=A
+@0
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
 A=M
 
 D=M
@@ -107,7 +184,18 @@ A=M
 D=M
 @BasicLoop_first_LOOP_START
 D; JNE
+@R13
+M=D
 @LCL
+A=M
+D=A
+@0
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
 A=M
 
 D=M

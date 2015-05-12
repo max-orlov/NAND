@@ -1,6 +1,16 @@
+@R13
+M=D
 @ARG
 A=M
-A=A+1
+D=A
+@1
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
+A=M
 
 D=M
 @SP
@@ -12,8 +22,18 @@ M=M+1
 M=M-1
 A=M
 D=M
+@R13
+M=D
 @3
-A=A+1
+D=A
+@1
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
+A=M
 
 M=D
 @0
@@ -28,7 +48,18 @@ M=M+1
 M=M-1
 A=M
 D=M
+@R13
+M=D
 @THAT
+A=M
+D=A
+@0
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
 A=M
 
 M=D
@@ -44,12 +75,33 @@ M=M+1
 M=M-1
 A=M
 D=M
+@R13
+M=D
 @THAT
 A=M
-A=A+1
+D=A
+@1
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
+A=M
 
 M=D
+@R13
+M=D
 @ARG
+A=M
+D=A
+@0
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
 A=M
 
 D=M
@@ -83,12 +135,34 @@ M=M+1
 M=M-1
 A=M
 D=M
+@R13
+M=D
 @ARG
+A=M
+D=A
+@0
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
 A=M
 
 M=D
 (FibonacciSeries_first_MAIN_LOOP_START)
+@R13
+M=D
 @ARG
+A=M
+D=A
+@0
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
 A=M
 
 D=M
@@ -106,7 +180,18 @@ D; JNE
 @FibonacciSeries_first_END_PROGRAM
 0; JMP
 (FibonacciSeries_first_COMPUTE_ELEMENT)
+@R13
+M=D
 @THAT
+A=M
+D=A
+@0
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
 A=M
 
 D=M
@@ -115,9 +200,19 @@ A=M
 M=D
 @0
 M=M+1
+@R13
+M=D
 @THAT
 A=M
-A=A+1
+D=A
+@1
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
+A=M
 
 D=M
 @SP
@@ -142,14 +237,33 @@ M=M+1
 M=M-1
 A=M
 D=M
+@R13
+M=D
 @THAT
 A=M
-A=A+1
-A=A+1
+D=A
+@2
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
+A=M
 
 M=D
+@R13
+M=D
 @3
-A=A+1
+D=A
+@1
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
+A=M
 
 D=M
 @SP
@@ -182,11 +296,32 @@ M=M+1
 M=M-1
 A=M
 D=M
+@R13
+M=D
 @3
-A=A+1
+D=A
+@1
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
+A=M
 
 M=D
+@R13
+M=D
 @ARG
+A=M
+D=A
+@0
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
 A=M
 
 D=M
@@ -220,7 +355,18 @@ M=M+1
 M=M-1
 A=M
 D=M
+@R13
+M=D
 @ARG
+A=M
+D=A
+@0
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
 A=M
 
 M=D

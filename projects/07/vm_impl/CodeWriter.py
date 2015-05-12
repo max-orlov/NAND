@@ -200,8 +200,10 @@ class CodeWriter:
             assembly_commands.append(self._SP_stack.push())
 
         else:  # C_POP
-            # Getting the stack top into D
+            # Getting the stack top into M
             assembly_commands.append(self._SP_stack.pop())
+
+            # Pushing the value into D
             assembly_commands.append("D=M")
 
             # Getting to the specified location into M

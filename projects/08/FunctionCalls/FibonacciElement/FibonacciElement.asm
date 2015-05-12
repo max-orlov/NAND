@@ -52,7 +52,18 @@ M=D
 (Sys.init1_return)
 (Main.fibonacci)
 D=0
+@R13
+M=D
 @ARG
+A=M
+D=A
+@0
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
 A=M
 
 D=M
@@ -134,7 +145,18 @@ D; JNE
 @Main_Main.fibonacci_IF_FALSE
 0; JMP
 (Main_Main.fibonacci_IF_TRUE)
+@R13
+M=D
 @ARG
+A=M
+D=A
+@0
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
 A=M
 
 D=M
@@ -202,7 +224,18 @@ M=D
 A=M
 0; JMP
 (Main_Main.fibonacci_IF_FALSE)
+@R13
+M=D
 @ARG
+A=M
+D=A
+@0
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
 A=M
 
 D=M
@@ -280,7 +313,18 @@ M=D
 @Main.fibonacci
 0; JMP
 (Main.fibonacci2_return)
+@R13
+M=D
 @ARG
+A=M
+D=A
+@0
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
 A=M
 
 D=M

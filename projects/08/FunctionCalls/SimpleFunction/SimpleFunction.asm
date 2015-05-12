@@ -10,7 +10,18 @@ A=M
 M=D
 @0
 M=M+1
+@R13
+M=D
 @LCL
+A=M
+D=A
+@0
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
 A=M
 
 D=M
@@ -19,9 +30,19 @@ A=M
 M=D
 @0
 M=M+1
+@R13
+M=D
 @LCL
 A=M
-A=A+1
+D=A
+@1
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
+A=M
 
 D=M
 @SP
@@ -51,7 +72,18 @@ A=M
 M=D
 @0
 M=M+1
+@R13
+M=D
 @ARG
+A=M
+D=A
+@0
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
 A=M
 
 D=M
@@ -73,9 +105,19 @@ A=M
 M=D
 @0
 M=M+1
+@R13
+M=D
 @ARG
 A=M
-A=A+1
+D=A
+@1
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
+A=M
 
 D=M
 @SP

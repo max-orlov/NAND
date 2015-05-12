@@ -52,7 +52,18 @@ M=D
 (Sys.init1_return)
 (Class1.set)
 D=0
+@R13
+M=D
 @ARG
+A=M
+D=A
+@0
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
 A=M
 
 D=M
@@ -68,9 +79,19 @@ D=M
 @Class1.0
 
 M=D
+@R13
+M=D
 @ARG
 A=M
-A=A+1
+D=A
+@1
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
+A=M
 
 D=M
 @SP
@@ -294,7 +315,18 @@ M=D
 (Sys.init2_return)
 (Class2.set)
 D=0
+@R13
+M=D
 @ARG
+A=M
+D=A
+@0
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
 A=M
 
 D=M
@@ -310,9 +342,19 @@ D=M
 @Class2.0
 
 M=D
+@R13
+M=D
 @ARG
 A=M
-A=A+1
+D=A
+@1
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
+A=M
 
 D=M
 @SP
@@ -604,7 +646,18 @@ M=D
 M=M-1
 A=M
 D=M
+@R13
+M=D
 @5
+D=A
+@0
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
+A=M
 
 M=D
 @23
@@ -675,7 +728,18 @@ M=D
 M=M-1
 A=M
 D=M
+@R13
+M=D
 @5
+D=A
+@0
+D=D+A
+@R14
+M=D
+@R13
+D=M
+@R14
+A=M
 
 M=D
 @Class1.get6_return
