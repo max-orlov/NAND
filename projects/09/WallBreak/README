@@ -1,0 +1,20 @@
+jonnydman, maxorlov
+===============================================================================
+Jonny Gulayev, ID 304028749, georgy.gulayev@mail.huji.ac.il
+Maxim Orlov, ID 314363227, maxim.orlov@mail.huji.ac.il
+===============================================================================
+
+                           Project 7 - Assembler
+                           ----------------------- 
+  
+Submitted Files
+---------------
+README 			    - This file.
+Ball.jack           - A file which contains the ball class.
+Main.jack           - A file which starts up the game - uses the WallBreakGame class.
+Rectangle.jack      - A file which contains the Rectangle class - used for the base.
+WallBreakGame.jack  - A file which holds the WallBreakGame class, which is used as the game engine,
+                      combining the other files.
+
+Remarks
+-------
