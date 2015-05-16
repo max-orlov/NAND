@@ -1,0 +1,1 @@
+let length = Keyboard.readInt("HOW MANY //my NUMBERS? ");  //lake

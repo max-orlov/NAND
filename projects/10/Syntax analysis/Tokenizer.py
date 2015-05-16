@@ -29,17 +29,19 @@ def __is_identifier(s):
 
 
 def __clear_comments(s):
-    string = re.sub(re.compile("/\*.*?\*/", re.DOTALL), "", s)
+    # clear multi line
+    string = re.sub(re.compile("/\*.*?\*/]", re.DOTALL), "", s)
+
+    # clear one line
     string = re.sub(re.compile("//.*?\n"), "", string)
     return string
 
 
 def tokenize(str_input):
     str_output = "<tokens>" + "\n"
-    pattern = '(".*"|[^a-zA-Z0-9_]|{})'.format(['\{}'.format(k)] for k in symbols)
-    no_comments = __clear_comments(str_input)
+    pat = '(".*"|[^a-zA-Z0-9_]|{})'.format(['\{}'.format(k)] for k in symbols)
 
-    for t in [k.strip() for k in re.split(pattern, no_comments) if k.strip() != ""]:
+    for t in [k.strip() for k in re.split(pat, __clear_comments(str_input)) if k.strip() != ""]:
         str_output += __get_token(t) + "\n"
 
     str_output += "</tokens>" + "\n"
