@@ -55,8 +55,8 @@ def __get_token(t):
     elif __is_symbol(t):
         if t in ['>', '<', '""', "&"]:
             return s.format("symbol", {
-                '>': "&lt;",
-                '<': "&gt;",
+                '>': "&gt;",
+                '<': "&lt;",
                 '""': "&quot;",
                 '&': "&amp;"
             }[t])
