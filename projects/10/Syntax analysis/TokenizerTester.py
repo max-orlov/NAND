@@ -1,4 +1,3 @@
-__author__ = 'Maxim'
 from Tokenizer import tokenize
 import sys
 
@@ -6,5 +5,5 @@ import sys
 in_stream = open(sys.argv[1])
 s = "".join(in_stream.readlines())
 
-
-print(tokenize(s))
+out_stream = open("token_out.txt", "w")
+out_stream.write(tokenize(s))
