@@ -58,7 +58,6 @@ def __clear_comments(s):
             elif c == '\n' and is_slash_comment:
                 is_slash_comment = False
 
-    print (out_string)
     return out_string
 
 
