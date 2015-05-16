@@ -19,7 +19,7 @@ def __is_keyword(s):
 
 
 def __is_string(s):
-    return len(s) > 2 and s[0] == "'" and s[-1] == "'"
+    return len(s) > 2 and s[0] == '"' and s[-1] == '"'
 
 
 def __is_symbol(s):
@@ -38,7 +38,7 @@ def __clear_comments(s):
 
 def tokenize(str_input):
     str_output = "<tokens>" + "\n"
-    pattern = '([^a-zA-Z0-9_\"]|{})'.format(['\{}'.format(k)] for k in symbols)
+    pattern = '(".*"|[^a-zA-Z0-9_]|{})'.format(['\{}'.format(k)] for k in symbols)
     no_comments = __clear_comments(str_input)
 
     for t in [k.strip() for k in re.split(pattern, no_comments) if k.strip() != ""]:
