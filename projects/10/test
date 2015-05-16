@@ -1,1 +1,26 @@
-let length = Keyboard.readInt("HOW MANY //my NUMBERS? ");  //lake
+C:\Python34\python.exe "C:/Users/Maxim/SkyDrive/University/Year III/II Semester/CS/67925  FROM NAND TO TETRIS/NAND/projects/10/Syntax analysis/TokenizerTester.py" "C:\Users\Maxim\SkyDrive\University\Year III\II Semester\CS\67925  FROM NAND TO TETRIS\NAND\projects\10\Square\Main.jack"
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/09/Square/Main.jack
+
+/**
+ * The Main class initializes a new Square Dance game and starts it.
+ */
+class Main {
+
+    /** Initializes a new game and starts it. */    
+    function void main() {
+        var SquareGame game;
+
+        let game = SquareGame.new();
+        do game.run();
+		do game.dispose();
+
+        return;
+    }
+}
+
+
+
+Process finished with exit code 0

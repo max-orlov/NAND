@@ -29,12 +29,37 @@ def __is_identifier(s):
 
 
 def __clear_comments(s):
-    # clear multi line
-    string = re.sub(re.compile("/\*.*?\*/]", re.DOTALL), "", s)
+    is_string = False
+    is_slash_comment = False
+    is_star_comment = False
+    out_string = ""
+    for i, c in enumerate(s):
+        if s[i] == '"':
+            is_string = not is_string
 
-    # clear one line
-    string = re.sub(re.compile("//.*?\n"), "", string)
-    return string
+        if not is_string:
+            # Slash comment type
+            if s[i:i+2] == '//':
+                is_slash_comment = True
+
+            # Star comment type
+            elif s[i:i+2] == '/*':
+                is_star_comment = True
+
+        if not is_slash_comment and not is_star_comment:
+            out_string += c
+
+        if not is_string:
+            # Closing slash comment
+            if s[i-2:i] == '*/' and is_star_comment:
+                is_star_comment = False
+
+            # Closing one line comment
+            elif c == '\n' and is_slash_comment:
+                is_slash_comment = False
+
+    print (out_string)
+    return out_string
 
 
 def tokenize(str_input):
