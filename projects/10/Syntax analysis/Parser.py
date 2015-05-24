@@ -112,7 +112,7 @@ def parseVarDec(tList, startIndex, indent):
     varOutA = []
     while "," in tList[index]:
         symOut, index = parseSymbol(tList, index, indent + 1)
-        out = parseVarName(tList, index, indent + 1)
+        out, index = parseVarName(tList, index, indent + 1)
         varOutA.extend([symOut, out])
     symOut, index = parseSymbol(tList, index, indent + 1)
     return BASIC_INDENT * indent + "<varDec>\n" + \
@@ -269,9 +269,6 @@ def parseSubroutineCall(tList, startIndex, indent):
     exListOut, index = parseExpressionList(tList, index, indent)
     symCloseOut, index = parseSymbol(tList, index, indent)
     return classNameOut + subOut + symOpenOut + exListOut + symCloseOut, index
-    #return BASIC_INDENT * indent + "<subroutineCall>\n" + \
-    #       classNameOut + subOut + symOpenOut + exListOut + symCloseOut +\
-    #       BASIC_INDENT * indent + "</subroutineCall>\n", index
 
 
 def parseExpressionList(tList, startIndex, indent):
