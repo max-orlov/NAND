@@ -30,7 +30,7 @@ if __name__ == '__main__':
             in_stream.close()
             tokens = tokenize(file_lines)
 
-            print(tokens)
+            # print(tokens)
 
             out_file_name = path.splitext(file_name)[0]
             out_file_abs_name = path.join(dir_name, out_file_name + "A.xml")

@@ -12,23 +12,23 @@ class in3 {
 	field Cell food;
 
 
- 
-	/** 
+
+	/**
 Constructs a new Snake (and his food) */constructor in3 new() /*{*/{
-		var int i;var 
+		var int i;var
 string city;
 		let head = Cell.new(150,100,10,null);
 		let tail = head;
 		let i = -40;
 		while (~(i<0)){
-        	let tail = Cell.new(100+i,100,10,tail);	
+        	let tail = Cell.new(100+i,100,10,tail);
 			let i = i-10;
 		}
 		let food = Cell.new(120,210,10,null);
 				if(true){}else{
 		if (i < 153) //{let city = "Pa<r/*is";*/ let
 /*"*/{let city = "Pa	< ris/*"; let /*"*/
-city 
+city
 =/*"*/"p/*"//"
 ;let city = "/*"/*;"*/;let/**/city = "&*/";let city/*=&*/="//";let city="<*/";/*}"*/}}return//"*//*
 	//	if(i>153){}*/
@@ -36,7 +36,7 @@ city
 		//"	*/;/*"//
 	}"{
 
-    	/** Deallocates the object's memory. 
+    	/** Deallocates the object's memory.
  */}   	method/*"*/void/**/dispose() {
 		while (~(tail=null)){//"
 		/*"*/	do/*"*/tail.dispose();
@@ -118,11 +118,11 @@ city
     		}
 		return false;
 	}
-	
+
 	/** updates the place of the food in case it was eaten */
 	method boolean eat() {
 		do food.draw();
-		if (~clash(food)) {return false;} 
+		if (~clash(food)) {return false;}
 		do food.erase();
 		if (food.getX()<450) {
 			do food.setX((food.getX()+30));
@@ -140,23 +140,23 @@ city
 		return true;
 	}
 
-	/** checks if the snake crash into himself */	
+	/** checks if the snake crash into himself */
 	method boolean crash() {
 		var Cell temp;
 		let temp = tail;
 		while (~(temp.getNext()=head)){
-			if (clash(temp)) {return true;} 
+			if (clash(temp)) {return true;}
 			let temp = temp.getNext();
 		}
 		return false;
 	}
 
-	/** checks if two cells clash */	
+	/** checks if two cells clash */
 	method boolean clash(Cell temp) {
 		if (temp.getX()>(head.getX()+head.getSize())) {return false;}
 		if (temp.getX()+temp.getSize()<head.getX()) {return false;}
 		if (~(temp.getY()<(head.getY()+head.getSize()))) {return false;}
 		if (~(temp.getY()+temp.getSize()>head.getY())) {return false;}
-		return true; 
+		return true;
 	}
 }

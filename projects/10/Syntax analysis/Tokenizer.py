@@ -32,32 +32,34 @@ def __clear_comments(s):
     is_string = False
     is_slash_comment = False
     is_star_comment = False
+    is_comment = False
     out_string = ""
     for i, c in enumerate(s):
         if s[i] == '"':
             is_string = not is_string
 
-        if not is_string:
+        if not is_string and not is_comment:
             # Slash comment type
             if s[i:i+2] == '//':
-                is_slash_comment = True
+                is_slash_comment = is_comment = True
 
             # Star comment type
-            elif s[i:i+2] == '/*':
-                is_star_comment = True
+            if s[i:i+2] == '/*':
+                is_star_comment = is_comment = True
 
-        if not is_slash_comment and not is_star_comment:
+        if not is_comment:
             out_string += c
 
-        if not is_string:
-            # Closing slash comment
-            if s[i-2:i] == '*/' and is_star_comment:
-                is_star_comment = False
-
+        if not is_string and is_comment:
             # Closing one line comment
-            elif c == '\n' and is_slash_comment:
-                is_slash_comment = False
+            if is_slash_comment and c == '\n':
+                is_slash_comment = is_comment = False
 
+            # Closing slash comment
+            elif is_star_comment and s[i-1:i+1] == '*/':
+                is_star_comment = is_comment = False
+
+    print(out_string)
     return out_string
 
 
