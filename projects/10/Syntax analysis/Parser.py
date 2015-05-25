@@ -253,8 +253,6 @@ def parseTerm(tList, startIndex, indent):
     else:
         termOut, index = parseBase(tList, startIndex, indent + 1)
 
-        print("THIS IS TERM OUT----------------------->" + termOut)
-
     return BASIC_INDENT * indent + "<term>\n" + \
            termOut +\
            BASIC_INDENT * indent + "</term>\n", index
@@ -274,7 +272,7 @@ def parseSubroutineCall(tList, startIndex, indent):
 
 
 def parseExpressionList(tList, startIndex, indent):
-    if ")" in tList[startIndex]:
+    if ")" in tList[startIndex] and "<stringConstant>" not in tList[startIndex]:
         return BASIC_INDENT * indent + "<expressionList>\n" + \
                BASIC_INDENT * indent + "</expressionList>\n", startIndex
 

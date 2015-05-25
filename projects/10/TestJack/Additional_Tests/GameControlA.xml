@@ -840,15 +840,26 @@
               <identifier> readInt </identifier>
               <symbol> ( </symbol>
               <expressionList>
+                <expression>
+                  <term>
+                    <stringConstant> Enter vertical power (0-100):  </stringConstant>
+                    <expression>
+                      <term>
+                        <symbol> ) </symbol>
+                      </term>
+                    </expression>
+                    <symbol> ; </symbol>
+                  </term>
+                </expression>
               </expressionList>
-              <stringConstant> Enter vertical power (0-100):  </stringConstant>
+              <symbol> } </symbol>
             </term>
           </expression>
-          <symbol> ) </symbol>
+          <keyword> method </keyword>
         </returnStatement>
       </statements>
-      <symbol> ; </symbol>
+      <keyword> int </keyword>
     </subroutineBody>
   </subroutineDec>
-  <symbol> } </symbol>
+  <identifier> getHorizontal </identifier>
 </class>
