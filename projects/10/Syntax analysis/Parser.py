@@ -233,7 +233,9 @@ def parseExpression(tList, startIndex, indent):
 
 def parseTerm(tList, startIndex, indent):
     termOut = ""
-    if "(" in tList[startIndex]:
+    if "stringConstant" in tList[startIndex]:
+        termOut, index = parseString(tList, startIndex, indent + 1)
+    elif "(" in tList[startIndex]:
         symOpenOut, index = parseSymbol(tList, startIndex, indent + 1)
         out, index = parseExpression(tList, index, indent + 1)
         symCloseOut, index = parseSymbol(tList, index, indent + 1)
