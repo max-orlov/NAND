@@ -253,6 +253,8 @@ def parseTerm(tList, startIndex, indent):
     else:
         termOut, index = parseBase(tList, startIndex, indent + 1)
 
+        print("THIS IS TERM OUT----------------------->" + termOut)
+
     return BASIC_INDENT * indent + "<term>\n" + \
            termOut +\
            BASIC_INDENT * indent + "</term>\n", index

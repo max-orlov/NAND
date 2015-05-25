@@ -13,7 +13,7 @@ if __name__ == '__main__':
             dir_and_files.append((path.split(file_path)[0], path.split(file_path)[1]))
         else:
             # Getting all files with '.jack' extension from that dir and adding the (dir:files) tuple to the list
-            dir_and_files.append((file_path, [file for file in listdir(file_path) if path.splitext(file)[1] == '.jack']))
+            dir_and_files.append((file_path, [file for file in listdir(file_path) if path.splitext(file)[1] == '.jack'])) # NOQA
 
     for runner_dir_and_files in dir_and_files:
         dir_name = runner_dir_and_files[0]
@@ -22,7 +22,7 @@ if __name__ == '__main__':
         if isinstance(runner_dir_and_files[1], list):
             files_list = runner_dir_and_files[1]
         else:
-            files_list = [runner_dir_and_files[1],]
+            files_list = [runner_dir_and_files[1], ]
 
         for file_name in files_list:
             in_stream = open(path.join(dir_name, file_name))
@@ -30,8 +30,10 @@ if __name__ == '__main__':
             in_stream.close()
             tokens = tokenize(file_lines)
 
+            print(tokens)
+
             out_file_name = path.splitext(file_name)[0]
-            out_file_abs_name = path.join(dir_name, out_file_name + ".xml")
+            out_file_abs_name = path.join(dir_name, out_file_name + "A.xml")
             out_stream = open(out_file_abs_name, "w")
             out_stream.write(parseTokens(tokens))
             out_stream.close()
