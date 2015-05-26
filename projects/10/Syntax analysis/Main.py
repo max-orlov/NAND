@@ -33,7 +33,7 @@ if __name__ == '__main__':
             # print(tokens)
 
             out_file_name = path.splitext(file_name)[0]
-            out_file_abs_name = path.join(dir_name, out_file_name + "A.xml")
+            out_file_abs_name = path.join(dir_name, out_file_name + ".xml")
             out_stream = open(out_file_abs_name, "w")
             out_stream.write(parseTokens(tokens))
             out_stream.close()
