@@ -1,5 +1,4 @@
 #!/bin/sh
-cd ~/tecs-software-suite-2.5/bin/classes/
 
 echo '====FrogGame.xml====' 
 sh /home/maxim/NAND/tools/TextComparer.sh FrogGame.xml FrogGameA.xml
