@@ -39,11 +39,11 @@ def __clear_comments(s):
 
         if not is_string and not (is_slash_comment or is_star_comment):
             # Slash comment type
-            if s[i:i+2] == '//':
+            if s[i:i + 2] == '//':
                 is_slash_comment = True
 
             # Star comment type
-            if s[i:i+2] == '/*':
+            if s[i:i + 2] == '/*':
                 is_star_comment = True
 
         if not (is_star_comment or is_slash_comment):
@@ -55,7 +55,7 @@ def __clear_comments(s):
                 is_slash_comment = False
 
             # Closing slash comment
-            elif is_star_comment and s[i-1:i+1] == '*/':
+            elif is_star_comment and s[i - 1:i + 1] == '*/':
                 is_star_comment = False
                 out_string += " "
 
@@ -89,6 +89,7 @@ def __get_token(t):
     elif __is_int(t):
         return s.format("integerConstant", t)
     elif __is_string(t):
-        return s.format("stringConstant", t[1:t.find('"', 1)])
+        return s.format("stringConstant",
+                        t[1:t.find('"', 1)].replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;'))
     elif __is_identifier(t):
         return s.format("identifier", t)
