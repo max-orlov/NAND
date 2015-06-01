@@ -117,6 +117,7 @@ class Math {
     function int sqrt(int x) {
         var int y,j;
         let y = 0;
+        //TODO: address the bit calc.
         let j = Math.divide(bits+1,2) - 1;
         while (~(j < 0)){
             if ( (~(Math.pow(y + Math.pow(2,j),2) > x)) & ( (Math.pow( y + Math.pow(2,j) , 2)) > 0 ) ) {
