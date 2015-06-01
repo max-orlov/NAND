@@ -7,20 +7,24 @@
  * A library of basic system services.
  */
 class Sys {
-
+    field Math math;
     /** Performs all the initializations required by the OS. */
     function void init() {
+        let math = Math.init(16);
     }
 
     /** Halts execution. */
     function void halt() {
+    return;
     }
 
     /** Waits approximately duration milliseconds and then returns. */
     function void wait(int duration) {
+        return;
     }
 
     /** Prints the given error code in the form "ERR<errorCode>", and halts. */
     function void error(int errorCode) {
+        return;
     }
 }

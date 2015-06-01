@@ -1,0 +1,149 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/12/Math.jack
+
+/**
+ * A basic math library.
+ */
+class Math {
+
+    static Array twoToThe;
+    static int bits;
+
+
+    /** Initializes the library. */
+    function void init() {
+        var int index, val;
+        let index = 0;
+        let val = 1;
+
+        let bits = 15;
+        let twoToThe = Array.new(bits);
+        while (index < bits){
+            let twoToThe[index] = val;
+            let val = val + val;
+            let index = index + 1;
+        }
+        return;
+    }
+
+    function boolean bit(int x, int j){
+        var int sum, index;
+        let sum = 0;
+        let index = bits - 1;
+        while ( index > (j - 1) ){
+            if ( ~((sum + twoToThe[index]) > x) ){
+                if ( index = j ){
+                    return true;
+                }
+                else{
+                    let sum = sum + twoToThe[index];
+                }
+            }
+            let index = index - 1;
+        }
+        return false;
+    }
+
+    /** Returns the absolute value of x. */
+    function int abs(int x) {
+        if (x > 0){
+            return x;
+        }
+        else{
+            return (-x);
+        }
+    }
+
+    /** Returns the product of x and y. */
+    function int multiply(int x, int y) {
+        var int sum, shiftedX, j;
+        let sum = 0;
+        let shiftedX = Math.abs(x);
+        let j = 0;
+        while ( j < bits ){
+            if ( Math.bit(Math.abs(y), j) ){
+                let sum = sum + shiftedX;
+            }
+            let shiftedX = shiftedX + shiftedX;
+            let j = j + 1;
+        }
+
+        return Math.calcNeg(sum,x,y);
+    }
+
+    /** Returns the integer part of x/y. */
+    function int divide(int x, int y) {
+        var int q, sum, absX, absY;
+        let absX = Math.abs(x);
+        let absY = Math.abs(y);
+
+        if ( absY > absX ){
+            return 0;
+        }
+
+        let q = Math.divide(absX , (absY + absY));
+
+        if ( absX - (Math.multiply(q,absY) + Math.multiply(q,absY)) < absY ){
+            let sum = q + q;
+        }
+        else{
+            let sum = (q + q) + 1;
+        }
+
+        return Math.calcNeg(sum,x,y);
+    }
+
+    function int calcNeg(int sum, int x, int y){
+        if ( ( (x<0) & (y>0) ) | ( (x>0) & (y<0) ) ){
+            let sum = (-sum);
+        }
+        return sum;
+    }
+
+    function int pow(int x, int y){
+        var int i, sum;
+        let i = y;
+        let sum = 1;
+        while (i > 0){
+            let sum = Math.multiply(sum, x);
+            let i = i - 1;
+        }
+        return sum;
+    }
+
+    /** Returns the integer part of the square root of x. */
+    function int sqrt(int x) {
+        var int y,j;
+        let y = 0;
+        let j = Math.divide(bits,2) - 1;
+        while (~(j < 0)){
+            if (~(Math.pow(y + Math.pow(2,j),2) > x)){
+                let y = y + Math.pow(2,j);
+            }
+            let j = j -1 ;
+        }
+        return y;
+    }
+
+    /** Returns the greater number. */
+    function int max(int a, int b) {
+    if (a>b){
+        return a;
+    }
+    else{
+        return b;
+    }
+    }
+
+    /** Returns the smaller number. */
+    function int min(int a, int b) {
+        if (a<b){
+            return a;
+        }
+        else{
+            return b;
+        }
+    }
+}
