@@ -43,16 +43,16 @@ class Main {
         while (~ok) {
             do Output.printString("Please press the number '3': ");
     	    let c = Keyboard.readChar();
-        
+
             do Output.println();
-        
+
             if (c = 51) {
 	        do Output.printString("ok");
 	        do Output.println();
 	        let ok = true;
 	    }
 	}
-	
+
 	let ok = false;
         do Output.printString("readLine test:");
         do Output.println();
@@ -84,10 +84,10 @@ class Main {
 	        let ok = true;
 	    }
 	}
-        
+
         do Output.println();
         do Output.printString("Test completed successfully");
-        
+
         return;
     }
 
