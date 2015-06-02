@@ -76,8 +76,8 @@ class String {
         var int v, i, d;
         let v = 0;
         let i = 0;
-        let d = 0;
-        while ( (i < index) & (d>-1) & (d<10) ){
+        let d = 48;
+        while ( (i < index) & (d>47) & (d<58) ){
             if (~(str[i]=45)){
                 let d = String.getDigitValue(str[i]);
                 let v = Math.multiply(v, 10) + d;

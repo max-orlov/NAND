@@ -8,33 +8,84 @@
  */
 class Screen {
 
+    static boolean color;
+
     /** Initializes the Screen. */
     function void init() {
+        do Screen.setColor(true);
+        // TODO : add clearScreen() ?
+        return;
     }
 
     /** Erases the whole screen. */
     function void clearScreen() {
+        var boolean bool;
+        let bool = color;
+        do Screen.setColor(false);
+        do Screen.drawRectangle(0,0,511,255);
+        do Screen.setColor(bool);
+        return;
     }
 
     /** Sets the color to be used in further draw commands
      *  where white = false, black = true. */
     function void setColor(boolean b) {
+        let color = b;
+        return;
     }
 
     /** Draws the (x, y) pixel. */
     function void drawPixel(int x, int y) {
+        do Memory.poke((16384 + (y*32) + (x/16)), color);
+        return;
     }
 
     /** Draws a line from (x1, y1) to (x2, y2). */
     function void drawLine(int x1, int y1, int x2, int y2) {
+        var int a,b, dx, dy, adyMinusbdx;
+        let a = 0;
+        let b = 0;
+        let dy = Math.abs(y2 - y1);
+        let dx = Math.abs(x2 - x1);
+        let adyMinusbdx = 0;
+        while ( (~(a>dx)) & (~(b>dy)) ){
+            do Screen.drawPixel((x1+a),(y1+b));
+            if ( ~(adyMinusbdx < 0) ){
+                let a = a+1;
+                let adyMinusbdx = adyMinusbdx + dy;
+            }
+            else{
+                let b = b+1;
+                let adyMinusbdx = adyMinusbdx - dx;
+            }
+        }
+        return;
     }
 
     /** Draws a filled rectangle where the top left corner
      *  is (x1, y1) and the bottom right corner is (x2, y2). */
     function void drawRectangle(int x1, int y1, int x2, int y2) {
+        var int i;
+        let i = y1;
+
+        while ( i < (y2 + 1)){
+            do Screen.drawLine(x1, i, x2, i);
+            let i = i + 1;
+        }
+        return;
     }
 
     /** Draws a filled circle of radius r around (cx, cy). */
     function void drawCircle(int cx, int cy, int r) {
+        var int dy, tmpX, tmpY;
+        let dy = (-r);
+
+        while ( dy < r){
+            let tmpX = Math.sqrt((r*r) - (dy*dy));
+            let tmpY = cy + dy;
+            do Screen.drawLine( (cx - tmpX) , tmpY, (cx + tmpX) , tmpY);
+            let dy = dy + 1;
+        }
+        return;
     }
 }
