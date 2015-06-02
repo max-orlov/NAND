@@ -25,7 +25,7 @@ class String {
     /** De-allocates the string and frees its space. */
     method void dispose() {
         if (size > 0){
-            do str.deAlloc();
+            do str.dispose();
         }
         return;
     }
