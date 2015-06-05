@@ -76,23 +76,29 @@ class Math {
     /** Returns the integer part of x/y. */
     function int divide(int x, int y) {
         var int q, sum, absX, absY;
-        let absX = Math.abs(x);
-        let absY = Math.abs(y);
+        if (~(y = 0)){
+            let absX = Math.abs(x);
+            let absY = Math.abs(y);
 
-        if ( absY > absX ){
-            return 0;
-        }
+            if ( absY > absX ){
+                return 0;
+            }
 
-        let q = Math.divide(absX , (absY + absY));
+            let q = Math.divide(absX , (absY + absY));
 
-        if ( absX - (Math.multiply(q,absY) + Math.multiply(q,absY)) < absY ){
-            let sum = q + q;
+            if ( absX - (Math.multiply(q,absY) + Math.multiply(q,absY)) < absY ){
+                let sum = q + q;
+            }
+            else{
+                let sum = (q + q) + 1;
+            }
+
+            return Math.calcNeg(sum,x,y);
         }
         else{
-            let sum = (q + q) + 1;
+            Sys.error(2);
+            return;
         }
-
-        return Math.calcNeg(sum,x,y);
     }
 
     function int calcNeg(int sum, int x, int y){
@@ -116,16 +122,22 @@ class Math {
     /** Returns the integer part of the square root of x. */
     function int sqrt(int x) {
         var int y,j;
-        let y = 0;
-        //TODO: address the bit calc.
-        let j = Math.divide(bits+1,2) - 1;
-        while (~(j < 0)){
-            if ( (~(Math.pow(y + Math.pow(2,j),2) > x)) & ( (Math.pow( y + Math.pow(2,j) , 2)) > 0 ) ) {
-                let y = y + Math.pow(2,j);
+        if ( x > 0){
+            let y = 0;
+            //TODO: address the bit calc.
+            let j = Math.divide(bits+1,2) - 1;
+            while (~(j < 0)){
+                if ( (~(Math.pow(y + Math.pow(2,j),2) > x)) & ( (Math.pow( y + Math.pow(2,j) , 2)) > 0 ) ) {
+                    let y = y + Math.pow(2,j);
+                }
+                let j = j -1 ;
             }
-            let j = j -1 ;
+            return y;
         }
-        return y;
+        else{
+            Sys.error(4);
+            return;
+        }
     }
 
     /** Returns the greater number. */

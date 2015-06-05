@@ -18,6 +18,9 @@ class String {
         if ( size > 0 ){
             let str = Array.new(size);
         }
+        else{
+            Sys.error(14);
+        }
         let index = 0;
         return this;
     }
@@ -37,27 +40,47 @@ class String {
 
     /** Returns the character at location j. */
     method char charAt(int j) {
-        return str[j];
+        if (j < length ){
+            return str[j];
+        }
+        else{
+            Sys.error(15);
+        }
     }
 
     /** Sets the j'th character of this string to be c. */
     method void setCharAt(int j, char c) {
-        let str[j] = c;
+        if (j<length){
+            let str[j] = c;
+        }
+        else{
+            Sys.error(16);
+        }
         return;
     }
 
     /** Appends the character c to the end of this String.
      *  Returns this string as the return value. */
     method String appendChar(char c) {
-        let str[index] = c;
-        let index = index + 1;
+        if (index < length - 1){
+            let str[index] = c;
+            let index = index + 1;
+        }
+        else{
+            Sys.error(17);
+        }
         return this;
     }
 
     /** Erases the last character from this String. */
     method void eraseLastChar() {
-        let str[index] = 0;
-        let index = index - 1;
+        if (index > 0){
+            let str[index] = 0;
+            let index = index - 1;
+        }
+        else{
+            Sys.error(18);
+        }
         return;
     }
 
@@ -110,8 +133,13 @@ class String {
             do appendChar(c);
         }
         else{
-            do int2String(number/10);
-            do appendChar(c);
+            if (index < size){
+                do int2String(number/10);
+                do appendChar(c);
+            }
+            else{
+                Sys.error(19):
+            }
         }
         return;
     }

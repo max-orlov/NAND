@@ -10,8 +10,12 @@ class Array {
 
     /** Constructs a new Array of the given size. */
     function Array new(int size) {
-        return Memory.alloc(size);
-
+        if (size > 0){
+            return Memory.alloc(size);
+        }
+        else{
+            Sys.error(2);
+        }
     }
 
     /** De-allocates the array and frees its space. */

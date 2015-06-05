@@ -48,13 +48,18 @@ class Screen {
     /** Draws the (x, y) pixel. */
     function void drawPixel(int x, int y) {
         var int cor, bit;
-        let cor = 16384 + (y * 32) + (x/16);
-        let bit = twoToThe[x & 15];
-        if (color){
-            do Memory.poke( cor, Memory.peek(cor) | bit);
+        if ( (x<0) | (y<0) ){
+            Sys.error(7);
         }
         else{
-            do Memory.poke( cor, (Memory.peek(cor) & (~bit) ) );
+            let cor = 16384 + (y * 32) + (x/16);
+            let bit = twoToThe[x & 15];
+            if (color){
+                do Memory.poke( cor, Memory.peek(cor) | bit);
+            }
+            else{
+                do Memory.poke( cor, (Memory.peek(cor) & (~bit) ) );
+            }
         }
         return;
     }
@@ -76,29 +81,33 @@ class Screen {
     /** Draws a line from (x1, y1) to (x2, y2). */
     function void drawLine(int x1, int y1, int x2, int y2) {
         var int a, b, dx, dy, adyMinusbdx, xf, yf;
-
-        if ( (x1=x2) & (y1=y2) ){
-            do Screen.drawPixel(x1,y1);
-            return;
+        if ( (x1<0) | (x2<0) | (y1<0) | (y2<0) ){
+            Sys.error(8);
         }
-
-        let a = 0;
-        let b = 0;
-        let xf = Screen.getDirection(x1,x2);
-        let yf = Screen.getDirection(y1,y2);
-        let dy = Math.abs(y2 - y1);
-        let dx = Math.abs(x2 - x1);
-        let adyMinusbdx = 0;
-
-        while ( ((~(a>dx)) | (dx=0)) & ((~(b>dy)) | (dy=0)) ){
-            do Screen.drawPixel((x1+(a*xf)),(y1+(b*yf)));
-            if ( ~(adyMinusbdx < 0) ){
-                let a = a + 1;
-                let adyMinusbdx = adyMinusbdx - dy;
+        else{
+            if ( (x1=x2) & (y1=y2) ){
+                do Screen.drawPixel(x1,y1);
+                return;
             }
-            else{
-                let b = b + 1;
-                let adyMinusbdx = adyMinusbdx + dx;
+
+            let a = 0;
+            let b = 0;
+            let xf = Screen.getDirection(x1,x2);
+            let yf = Screen.getDirection(y1,y2);
+            let dy = Math.abs(y2 - y1);
+            let dx = Math.abs(x2 - x1);
+            let adyMinusbdx = 0;
+
+            while ( ((~(a>dx)) | (dx=0)) & ((~(b>dy)) | (dy=0)) ){
+                do Screen.drawPixel((x1+(a*xf)),(y1+(b*yf)));
+                if ( ~(adyMinusbdx < 0) ){
+                    let a = a + 1;
+                    let adyMinusbdx = adyMinusbdx - dy;
+                }
+                else{
+                    let b = b + 1;
+                    let adyMinusbdx = adyMinusbdx + dx;
+                }
             }
         }
         return;
@@ -109,10 +118,14 @@ class Screen {
     function void drawRectangle(int x1, int y1, int x2, int y2) {
         var int i;
         let i = y1;
-
-        while ( i < (y2 + 1)){
-            do Screen.drawLine(x1, i, x2, i);
-            let i = i + 1;
+        if ( (x1<0) | (x2<0) | (y1<0) | (y2<0) ){
+            Sys.error(9);
+        }
+        else{
+            while ( i < (y2 + 1)){
+                do Screen.drawLine(x1, i, x2, i);
+                let i = i + 1;
+            }
         }
         return;
     }
@@ -121,18 +134,27 @@ class Screen {
     function void drawCircle(int cx, int cy, int r) {
         var int dy, tmpX, tmpY, tmpY2;
         let dy = r;
-
-        while ( ~(dy = 0) ){
-            let tmpX = Math.sqrt((r*r) - (dy*dy));
-            do Output.println();
-            let tmpY = cy + dy;
-            let tmpY2 = cy - dy;
-            do Screen.drawLine( (cx - tmpX) , tmpY, (cx + tmpX) , tmpY);
-            do Screen.drawLine( (cx - tmpX) , tmpY2, (cx + tmpX) , tmpY2);
-
-            let dy = dy - 1;
+        if ( (cx<0) | (cy<0) ){
+            Sys.error(12);
         }
-        do Screen.drawLine( (cx - r) , cy, (cx + r) , cy);
+        else{
+            if ( r > 0){
+                while ( ~(dy = 0) ){
+                    let tmpX = Math.sqrt((r*r) - (dy*dy));
+                    do Output.println();
+                    let tmpY = cy + dy;
+                    let tmpY2 = cy - dy;
+                    do Screen.drawLine( (cx - tmpX) , tmpY, (cx + tmpX) , tmpY);
+                    do Screen.drawLine( (cx - tmpX) , tmpY2, (cx + tmpX) , tmpY2);
+
+                    let dy = dy - 1;
+                }
+                do Screen.drawLine( (cx - r) , cy, (cx + r) , cy);
+            }
+            else{
+                Sys.error(13);
+            }
+        }
 
         return;
     }
