@@ -176,6 +176,13 @@ class Output {
     /** Prints c at the cursor location and advances the cursor one
      *  column forward. */
     function void printChar(char c) {
+        var Array map;
+        var int i;
+        let map = Output.getMap(c);
+        let i = 0;
+        while (i < 11){
+            Screen.drawPixel(map[i]);
+        }
     }
 
     /** Prints s starting at the cursor location, and advances the
