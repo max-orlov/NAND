@@ -9,10 +9,21 @@
 class Screen {
 
     static boolean color;
+    static Array twoToThe;
 
     /** Initializes the Screen. */
     function void init() {
+        var int index, val;
         do Screen.setColor(true);
+        let index = 0;
+        let val = 1;
+
+        let twoToThe = Array.new(15);
+        while (index < 15){
+            let twoToThe[index] = val;
+            let val = val + val;
+            let index = index + 1;
+        }
         // TODO : add clearScreen() ?
         return;
     }
@@ -36,26 +47,45 @@ class Screen {
 
     /** Draws the (x, y) pixel. */
     function void drawPixel(int x, int y) {
-        do Memory.poke((16384 + (y*32) + (x/16)), color);
+        var int entry;
+        let entry = 16384 + (y * 32) + (x/16);
+        if (color){
+            do Memory.poke( entry, Memory.peek(entry) | (color & twoToThe[x & 15]));
+        }
+        else{
+            do Memory.poke( entry, Memory.peek(entry) & (color & twoToThe[x & 15]));
+        }
         return;
     }
 
     /** Draws a line from (x1, y1) to (x2, y2). */
     function void drawLine(int x1, int y1, int x2, int y2) {
-        var int a,b, dx, dy, adyMinusbdx;
+        var int a, b, dx, dy, adyMinusbdx, xf, yf;
         let a = 0;
         let b = 0;
-        let dy = Math.abs(y2 - y1);
-        let dx = Math.abs(x2 - x1);
+        let xf = 1;
+        let yf = 1;
+
+        if ( x1 = x2 ){
+            let xf = 0;
+        }
+
+        if ( y1 = y2 ){
+            let yf = 0;
+        }
+
+        let dy = y2 - y1;
+        let dx = x2 - x1;
+
         let adyMinusbdx = 0;
         while ( (~(a>dx)) & (~(b>dy)) ){
             do Screen.drawPixel((x1+a),(y1+b));
             if ( ~(adyMinusbdx < 0) ){
-                let a = a+1;
+                let a = a + xf;
                 let adyMinusbdx = adyMinusbdx + dy;
             }
             else{
-                let b = b+1;
+                let b = b + yf;
                 let adyMinusbdx = adyMinusbdx - dx;
             }
         }

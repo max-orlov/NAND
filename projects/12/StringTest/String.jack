@@ -103,7 +103,7 @@ class String {
     method void int2String(int number){
         var int lastDigit;
         var char c;
-        let lastDigit = number - ((number/10)*10);
+        let lastDigit = number - (number&9);
         let c = String.getCharValue(lastDigit);
 
         if (number < 10){
