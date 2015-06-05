@@ -24,7 +24,7 @@ class Screen {
             let val = val + val;
             let index = index + 1;
         }
-        // TODO : add clearScreen() ?
+        let twoToThe[15] = (~32767);
         return;
     }
 
@@ -47,45 +47,57 @@ class Screen {
 
     /** Draws the (x, y) pixel. */
     function void drawPixel(int x, int y) {
-        var int entry;
-        let entry = 16384 + (y * 32) + (x/16);
+        var int cor, bit;
+        let cor = 16384 + (y * 32) + (x/16);
+        let bit = twoToThe[x & 15];
         if (color){
-            do Memory.poke( entry, Memory.peek(entry) | (color & twoToThe[x & 15]));
+            do Memory.poke( cor, Memory.peek(cor) | bit);
         }
         else{
-            do Memory.poke( entry, Memory.peek(entry) & (color & twoToThe[x & 15]));
+            do Memory.poke( cor, (Memory.peek(cor) & (~bit) ) );
         }
         return;
+    }
+
+    function int getDirection(int a,int b){
+        if (a=b){
+            return 0;
+        }
+        else{
+            if (a<b){
+                return 1;
+            }
+            else{
+                return -1;
+            }
+        }
     }
 
     /** Draws a line from (x1, y1) to (x2, y2). */
     function void drawLine(int x1, int y1, int x2, int y2) {
         var int a, b, dx, dy, adyMinusbdx, xf, yf;
+
+        if ( (x1=x2) & (y1=y2) ){
+            do Screen.drawPixel(x1,y1);
+            return;
+        }
+
         let a = 0;
         let b = 0;
-        let xf = 1;
-        let yf = 1;
-
-        if ( x1 = x2 ){
-            let xf = 0;
-        }
-
-        if ( y1 = y2 ){
-            let yf = 0;
-        }
-
-        let dy = y2 - y1;
-        let dx = x2 - x1;
-
+        let xf = Screen.getDirection(x1,x2);
+        let yf = Screen.getDirection(y1,y2);
+        let dy = Math.abs(y2 - y1);
+        let dx = Math.abs(x2 - x1);
         let adyMinusbdx = 0;
+
         while ( (~(a>dx)) & (~(b>dy)) ){
-            do Screen.drawPixel((x1+a),(y1+b));
+            do Screen.drawPixel((x1+(a*xf)),(y1+(b*yf)));
             if ( ~(adyMinusbdx < 0) ){
-                let a = a + xf;
+                let a = a + 1;
                 let adyMinusbdx = adyMinusbdx + dy;
             }
             else{
-                let b = b + yf;
+                let b = b + 1;
                 let adyMinusbdx = adyMinusbdx - dx;
             }
         }
@@ -107,15 +119,23 @@ class Screen {
 
     /** Draws a filled circle of radius r around (cx, cy). */
     function void drawCircle(int cx, int cy, int r) {
-        var int dy, tmpX, tmpY;
-        let dy = (-r);
+        var int dy, tmpX, tmpY, tmpY2;
+        let dy = r;
 
-        while ( dy < r){
+        while ( ~(dy = 0) ){
             let tmpX = Math.sqrt((r*r) - (dy*dy));
+            do Output.printInt(cx-tmpX);
+            do Output.printInt(cx+tmpX);
+            do Output.println();
             let tmpY = cy + dy;
+            let tmpY2 = cy - dy;
             do Screen.drawLine( (cx - tmpX) , tmpY, (cx + tmpX) , tmpY);
-            let dy = dy + 1;
+            do Screen.drawLine( (cx - tmpX) , tmpY2, (cx + tmpX) , tmpY2);
+
+            let dy = dy - 1;
         }
+        do Screen.drawLine( (cx - r) , cy, (cx + r) , cy);
+
         return;
     }
 }
