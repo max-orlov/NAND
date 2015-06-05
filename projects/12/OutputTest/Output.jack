@@ -178,20 +178,6 @@ class Output {
     /** Prints c at the cursor location and advances the cursor one
      *  column forward. */
     function void printChar(char c) {
-        var Array map;
-        var int i, j, pixel;
-        let map = Output.getMap(c);
-        let i = 0;
-        while (i < 11){
-            let j = 0;
-            do Screen.drawCircle(i, 50, 5);
-            while(j<16){
-                let pixel = ( map[i] );
-                do Screen.drawPixel(pixel, j);
-                let j = j + 1;
-            }
-            let i = i +1;
-        }
         return;
     }
 

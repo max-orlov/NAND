@@ -19,7 +19,7 @@ class String {
             let str = Array.new(size);
         }
         else{
-            Sys.error(14);
+            do Sys.error(14);
         }
         let index = 0;
         return this;
@@ -44,7 +44,7 @@ class String {
             return str[j];
         }
         else{
-            Sys.error(15);
+            do Sys.error(15);
         }
     }
 
@@ -54,7 +54,7 @@ class String {
             let str[j] = c;
         }
         else{
-            Sys.error(16);
+            do Sys.error(16);
         }
         return;
     }
@@ -67,7 +67,7 @@ class String {
             let index = index + 1;
         }
         else{
-            Sys.error(17);
+            do Sys.error(17);
         }
         return this;
     }
@@ -79,7 +79,7 @@ class String {
             let index = index - 1;
         }
         else{
-            Sys.error(18);
+            do Sys.error(18);
         }
         return;
     }
@@ -138,7 +138,7 @@ class String {
                 do appendChar(c);
             }
             else{
-                Sys.error(19):
+                do Sys.error(19):
             }
         }
         return;

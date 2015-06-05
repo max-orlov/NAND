@@ -14,7 +14,7 @@ class Array {
             return Memory.alloc(size);
         }
         else{
-            Sys.error(2);
+            do Sys.error(2);
         }
     }
 

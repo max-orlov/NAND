@@ -44,7 +44,7 @@ class Memory {
                 let segment = segment[1];
             }
             if ( segment[0] < size){
-                Sys.error(6);
+                do Sys.error(6);
             }
             else{
                 let block = segment + (segment[0] - size - 1);
@@ -57,7 +57,7 @@ class Memory {
             }
         }
         else{
-            Sys.error(5);
+            do Sys.error(5);
         }
         return;
     }

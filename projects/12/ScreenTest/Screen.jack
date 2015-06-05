@@ -49,7 +49,7 @@ class Screen {
     function void drawPixel(int x, int y) {
         var int cor, bit;
         if ( (x<0) | (y<0) ){
-            Sys.error(7);
+            do Sys.error(7);
         }
         else{
             let cor = 16384 + (y * 32) + (x/16);
@@ -82,7 +82,7 @@ class Screen {
     function void drawLine(int x1, int y1, int x2, int y2) {
         var int a, b, dx, dy, adyMinusbdx, xf, yf;
         if ( (x1<0) | (x2<0) | (y1<0) | (y2<0) ){
-            Sys.error(8);
+            do Sys.error(8);
         }
         else{
             if ( (x1=x2) & (y1=y2) ){
@@ -119,7 +119,7 @@ class Screen {
         var int i;
         let i = y1;
         if ( (x1<0) | (x2<0) | (y1<0) | (y2<0) ){
-            Sys.error(9);
+            do Sys.error(9);
         }
         else{
             while ( i < (y2 + 1)){
@@ -135,7 +135,7 @@ class Screen {
         var int dy, tmpX, tmpY, tmpY2;
         let dy = r;
         if ( (cx<0) | (cy<0) ){
-            Sys.error(12);
+            do Sys.error(12);
         }
         else{
             if ( r > 0){
@@ -152,7 +152,7 @@ class Screen {
                 do Screen.drawLine( (cx - r) , cy, (cx + r) , cy);
             }
             else{
-                Sys.error(13);
+                do Sys.error(13);
             }
         }
 

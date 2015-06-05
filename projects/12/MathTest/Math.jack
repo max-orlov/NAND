@@ -96,7 +96,7 @@ class Math {
             return Math.calcNeg(sum,x,y);
         }
         else{
-            Sys.error(2);
+            do Sys.error(2);
             return;
         }
     }
@@ -135,7 +135,7 @@ class Math {
             return y;
         }
         else{
-            Sys.error(4);
+            do Sys.error(4);
             return;
         }
     }
