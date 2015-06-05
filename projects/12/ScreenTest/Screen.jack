@@ -90,15 +90,15 @@ class Screen {
         let dx = Math.abs(x2 - x1);
         let adyMinusbdx = 0;
 
-        while ( (~(a>dx)) & (~(b>dy)) ){
+        while ( ((~(a>dx)) | (dx=0)) & ((~(b>dy)) | (dy=0)) ){
             do Screen.drawPixel((x1+(a*xf)),(y1+(b*yf)));
             if ( ~(adyMinusbdx < 0) ){
                 let a = a + 1;
-                let adyMinusbdx = adyMinusbdx + dy;
+                let adyMinusbdx = adyMinusbdx - dy;
             }
             else{
                 let b = b + 1;
-                let adyMinusbdx = adyMinusbdx - dx;
+                let adyMinusbdx = adyMinusbdx + dx;
             }
         }
         return;
@@ -124,8 +124,6 @@ class Screen {
 
         while ( ~(dy = 0) ){
             let tmpX = Math.sqrt((r*r) - (dy*dy));
-            do Output.printInt(cx-tmpX);
-            do Output.printInt(cx+tmpX);
             do Output.println();
             let tmpY = cy + dy;
             let tmpY2 = cy - dy;
