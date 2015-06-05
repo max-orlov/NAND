@@ -1,7 +1,8 @@
 from os import path, getcwd, listdir
 from os.path import isfile, isabs, abspath, normpath
 from Tokenizer import tokenize
-from Parser import parseTokens
+from Parser import Parser
+from Generator import Generator
 import sys
 
 if __name__ == '__main__':
@@ -32,9 +33,18 @@ if __name__ == '__main__':
 
             # print(tokens)
 
+            parser = Parser()
             out_file_name = path.splitext(file_name)[0]
             out_file_abs_name = path.join(dir_name, out_file_name + ".xml")
             out_stream = open(out_file_abs_name, "w")
-            out_stream.write(parseTokens(tokens))
+            xml = parser.parseTokens(tokens)
+            out_stream.write(xml)
+            out_stream.close()
+
+            #generate vm
+            generator = Generator()
+            out_file_abs_name = path.join(dir_name, out_file_name + "My.vm")
+            out_stream = open(out_file_abs_name, "w")
+            out_stream.write(generator.generate_vm(xml))
             out_stream.close()
     print("<~~~~~~~~~~~~~~~~~~~~~>\nYou're all done :)")
