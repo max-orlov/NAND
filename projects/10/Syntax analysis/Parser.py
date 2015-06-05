@@ -5,10 +5,7 @@ BASIC_INDENT = "  "
 
 class Parser():
     def __init__(self):
-        self.nextArgumentId = 0
-        self.nextFieldId = 0
-        self.nextStaticId = 0
-        self.nextVarId = 0
+        pass
 
     ###### Lexical Elements: ######
     
@@ -51,13 +48,12 @@ class Parser():
     
     def _parseClassVarDec(self, tList, startIndex, indent):
         keyOut, index = self._parseKeyword(tList, startIndex, indent + 1)
-        type = re.search("<.+> (.+) <.+>", keyOut).group(1)
         typeOut, index = self._parseType(tList, index, indent + 1)
-        varOut, index = self._parseVarName(tList, index, indent + 1, type)
+        varOut, index = self._parseVarName(tList, index, indent + 1)
         varOutA = []
         while "," in tList[index]:
             symOut, index = self._parseSymbol(tList, index, indent + 1)
-            out, index = self._parseVarName(tList, index, indent + 1, type)
+            out, index = self._parseVarName(tList, index, indent + 1)
             varOutA.extend([symOut, out])
         symOut, index = self._parseSymbol(tList, index, indent + 1)
         return BASIC_INDENT * indent + "<classVarDec>\n" + \
@@ -92,12 +88,12 @@ class Parser():
 
         self.nextArgumentId = 0
         typeOut, index = self._parseType(tList, startIndex, indent + 1)
-        varOut, index = self._parseVarName(tList, index, indent + 1, "arg")
+        varOut, index = self._parseVarName(tList, index, indent + 1)
         typeOutA = []
         while "," in tList[index]:
             symOut, index = self._parseSymbol(tList, index, indent + 1)
             tOut, index = self._parseType(tList, index, indent + 1)
-            vOut, index = self._parseVarName(tList, index, indent + 1, "arg")
+            vOut, index = self._parseVarName(tList, index, indent + 1)
             typeOutA.extend([symOut, tOut, vOut])
         return BASIC_INDENT * indent + "<parameterList>\n" + \
                typeOut + varOut + ''.join(typeOutA) +\
@@ -119,11 +115,11 @@ class Parser():
     def _parseVarDec(self, tList, startIndex, indent):
         keyOut, index = self._parseKeyword(tList, startIndex, indent + 1)
         typeOut, index = self._parseType(tList, index, indent + 1)
-        varOut, index = self._parseVarName(tList, index, indent + 1, "var")
+        varOut, index = self._parseVarName(tList, index, indent + 1)
         varOutA = []
         while "," in tList[index]:
             symOut, index = self._parseSymbol(tList, index, indent + 1)
-            out, index = self._parseVarName(tList, index, indent + 1, "var")
+            out, index = self._parseVarName(tList, index, indent + 1)
             varOutA.extend([symOut, out])
         symOut, index = self._parseSymbol(tList, index, indent + 1)
         return BASIC_INDENT * indent + "<varDec>\n" + \
@@ -136,26 +132,9 @@ class Parser():
     def _parseSubroutineName(self, tList, startIndex, indent):
         return self._parseIdentifier(tList, startIndex, indent)
     
-    def _parseVarName(self, tList, startIndex, indent, type):
-        id = 0
-        if type == "arg":
-            id = self.nextArgumentId
-            self.nextArgumentId += 1
-        elif type == "filed":
-            id = self.nextFieldId
-            self.nextFieldId += 1
-        elif type == "static":
-            id = self.nextStaticId
-            self.nextStaticId += 1
-        elif type == "var":
-            id = self.nextVarId
-            self.nextVarId += 1
-        else:
-            return self._parseIdentifier(tList, startIndex, indent)
+    def _parseVarName(self, tList, startIndex, indent):
+        return self._parseIdentifier(tList, startIndex, indent)
 
-        parts = re.search("(<.+> )(.+)( <.+>)", tList[startIndex])
-        return BASIC_INDENT * indent + parts.group(1) + parts.group(2) + " " + type + " " + str(id) + parts.group(3) + "\n", startIndex + 1
-    
     ###### Statements: ######
     
     def _parseStatements(self, tList, startIndex, indent):
@@ -182,7 +161,7 @@ class Parser():
     
     def _parseLetStatement(self, tList, startIndex, indent):
         keyOut, index = self._parseKeyword(tList, startIndex, indent + 1)
-        varOut, index = self._parseVarName(tList, index, indent + 1, None)
+        varOut, index = self._parseVarName(tList, index, indent + 1)
         exOut = ''
         if "[" in tList[index]:
             symOpenOut, index = self._parseSymbol(tList, index, indent + 1)

@@ -15,9 +15,9 @@
       <varDec>
         <keyword> var </keyword>
         <keyword> int </keyword>
-        <identifier> result var 0 </identifier>
+        <identifier> result </identifier>
         <symbol> , </symbol>
-        <identifier> value var 1 </identifier>
+        <identifier> value </identifier>
         <symbol> ; </symbol>
       </varDec>
       <statements>
@@ -105,7 +105,7 @@
     <symbol> ( </symbol>
     <parameterList>
       <keyword> int </keyword>
-      <identifier> value arg 0 </identifier>
+      <identifier> value </identifier>
     </parameterList>
     <symbol> ) </symbol>
     <subroutineBody>
@@ -113,15 +113,15 @@
       <varDec>
         <keyword> var </keyword>
         <keyword> int </keyword>
-        <identifier> mask var 0 </identifier>
+        <identifier> mask </identifier>
         <symbol> , </symbol>
-        <identifier> position var 1 </identifier>
+        <identifier> position </identifier>
         <symbol> ; </symbol>
       </varDec>
       <varDec>
         <keyword> var </keyword>
         <keyword> boolean </keyword>
-        <identifier> loop var 2 </identifier>
+        <identifier> loop </identifier>
         <symbol> ; </symbol>
       </varDec>
       <statements>
@@ -365,7 +365,7 @@
     <symbol> ( </symbol>
     <parameterList>
       <keyword> int </keyword>
-      <identifier> mask arg 0 </identifier>
+      <identifier> mask </identifier>
     </parameterList>
     <symbol> ) </symbol>
     <subroutineBody>
@@ -427,13 +427,13 @@
     <symbol> ( </symbol>
     <parameterList>
       <keyword> int </keyword>
-      <identifier> startAddress arg 0 </identifier>
+      <identifier> startAddress </identifier>
       <symbol> , </symbol>
       <keyword> int </keyword>
-      <identifier> length arg 1 </identifier>
+      <identifier> length </identifier>
       <symbol> , </symbol>
       <keyword> int </keyword>
-      <identifier> value arg 2 </identifier>
+      <identifier> value </identifier>
     </parameterList>
     <symbol> ) </symbol>
     <subroutineBody>
