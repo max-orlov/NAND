@@ -40,7 +40,7 @@ class Screen {
             do Sys.error(7);
         }
         else{
-            let cor = 16384 + (y * 32) + (x & (-32752));
+            let cor = 16384 + (y * 32) + (x/16);
             let bit = Math.getTwoToThe(x & 15);
             if (color){
                 do Memory.poke( cor, Memory.peek(cor) | bit);

@@ -32,16 +32,34 @@ class Sys {
 
     /** Waits approximately duration milliseconds and then returns. */
     function void wait(int duration) {
-        var int i, j, x, y;
+        var int i, j, x, y, val;
         let i = 1;
 
 
         while ( i < duration){
-            let j = Math.sqrt(duration);
-            let j = Math.sqrt(duration);
-            let j = Math.sqrt(duration);
+            let j = 0;
+            while ( j < duration){
+                let x = 0;
+                while (x < duration){
+                    while (y<duration){
+                        let val = 32767 / 32767;
+                        let val = 32767 / 32767;
+                        let val = 32767 / 32767;
+                        let val = 32767 / 32767;
+                        let val = 32767 / 32767;
+                        let val = 32767 / 32767;
+                        let val = 32767 / 32767;
+                        let val = 32767 / 32767;
+                        let val = 32767 / 32767;
+                        let val = 32767 / 32767;
+                        let val = 32767 / 32767;
 
-
+                        let y = y + 1;
+                    }
+                    let x = x + 1;
+                }
+                let j = j + 1;
+            }
             let i = i + 1;
         }
 
