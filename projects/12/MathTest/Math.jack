@@ -25,6 +25,7 @@ class Math {
             let val = val + val;
             let index = index + 1;
         }
+        let twoToThe[index] = (~32767);
         return;
     }
 
@@ -158,5 +159,9 @@ class Math {
         else{
             return b;
         }
+    }
+
+    function int getTwoToThe(int n){
+        return twoToThe[n];
     }
 }

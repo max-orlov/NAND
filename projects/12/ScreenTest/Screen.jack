@@ -9,7 +9,6 @@
 class Screen {
 
     static boolean color;
-    static Array twoToThe;
 
     /** Initializes the Screen. */
     function void init() {
@@ -18,13 +17,6 @@ class Screen {
         let index = 0;
         let val = 1;
 
-        let twoToThe = Array.new(15);
-        while (index < 15){
-            let twoToThe[index] = val;
-            let val = val + val;
-            let index = index + 1;
-        }
-        let twoToThe[15] = (~32767);
         return;
     }
 
@@ -53,7 +45,7 @@ class Screen {
         }
         else{
             let cor = 16384 + (y * 32) + (x/16);
-            let bit = twoToThe[x & 15];
+            let bit = Math.getTwoToThe(x & 15);
             if (color){
                 do Memory.poke( cor, Memory.peek(cor) | bit);
             }

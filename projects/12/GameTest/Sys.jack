@@ -7,7 +7,7 @@
  * A library of basic system services.
  */
 class Sys {
-    field Math math;
+
 
     /** Performs all the initializations required by the OS. */
     function void init() {
@@ -17,6 +17,7 @@ class Sys {
         do Screen.init();
 
         do Main.main();
+        do Sys.halt();
         return;
     }
 
@@ -30,11 +31,19 @@ class Sys {
 
     /** Waits approximately duration milliseconds and then returns. */
     function void wait(int duration) {
-        var int i;
+        var int i, j, x, y;
         let i = 1;
+
+
         while ( i < duration){
-            let i = i + i;
+            let j = Math.sqrt(duration);
+            let j = Math.sqrt(duration);
+            let j = Math.sqrt(duration);
+
+
+            let i = i + 1;
         }
+
         return;
     }
 

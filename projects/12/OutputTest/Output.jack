@@ -15,21 +15,13 @@ class Output {
     // Character map for printing on the left of a screen word
     static Array charMaps;
 
-    static Array twoToThe, rows, cols;
+    static Array rows, cols;
     static int col, row;
 
     /** Initializes the screen and locates the cursor at the screen's top-left. */
     function void init() {
         var int i,val;
         do Output.initMap();
-        let twoToThe = Array.new(16);
-        let i = 0;
-        let val = 1;
-        while (i < 8){
-            let twoToThe[i] = val;
-            let val = val + val;
-            let i = i + 1;
-        }
         let i = 0;
         let val = 0;
         let rows = Array.new(23);
@@ -224,7 +216,7 @@ class Output {
         while (i<11){
             let j = 0;
             while (j<8){
-                if (map[i] & twoToThe[j]){
+                if (map[i] & Math.getTwoToThe(j)){
                     do Screen.drawPixel(cols[col] + j,rows[row] + i);
                 }
                 let j = j + 1;
