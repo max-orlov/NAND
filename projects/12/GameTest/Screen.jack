@@ -18,11 +18,12 @@ class Screen {
 
     /** Erases the whole screen. */
     function void clearScreen() {
-        var boolean bool;
-        let bool = color;
-        do Screen.setColor(false);
-        do Screen.drawRectangle(0,0,511,255);
-        do Screen.setColor(bool);
+        var int i;
+        let i = 16384;
+        while (i < 8192){
+            do Memory.poke(i,-1);
+            let i = i + 16;
+        }
         return;
     }
 
