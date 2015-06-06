@@ -1,0 +1,265 @@
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====YArray.vm===='  
+'====YArray.vm====' 
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w YArray.vm YArrayA.vm 
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====YGameMain.vm===='  
+'====YGameMain.vm====' 
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w YGameMain.vm YGameMainA.vm 
+Comparing files YGameMain.vm and YGAMEMAINA.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====Array.vm====' 
+'====Array.vm===='
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w ArrayA.vm Array.vm 
+Comparing files ArrayA.vm and ARRAY.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====CaveShooterMain.vm===='  
+'====CaveShooterMain.vm====' 
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w CaveShooterMain.vm CaveShooterMainA.vm 
+Comparing files CaveShooterMain.vm and CAVESHOOTERMAINA.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====PlatformsGenerator.vm===='  
+'====PlatformsGenerator.vm====' 
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w PlatformsGenerator.vm PlatformsGeneratorA.vm 
+Comparing files PlatformsGenerator.vm and PLATFORMSGENERATORA.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====SlowAppender.vm==== ' 
+'====SlowAppender.vm==== '
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w SlowAppender.vm SlowAppenderA.vm 
+Comparing files SlowAppender.vm and SLOWAPPENDERA.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====Random.vm====' 
+'====Random.vm===='
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w Random.vm RandomA.vm 
+Comparing files Random.vm and RANDOMA.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====Ball.vm===='  
+'====Ball.vm====' 
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w Ball.vm BallA.vm 
+Comparing files Ball.vm and BALLA.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====Cannon.vm====' 
+'====Cannon.vm===='
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w Cannon.vm CannonA.vm 
+Comparing files Cannon.vm and CANNONA.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====CaveShooterBall.vm===='  
+'====CaveShooterBall.vm====' 
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w CaveShooterBall.vm CaveShooterBallA.vm 
+Comparing files CaveShooterBall.vm and CAVESHOOTERBALLA.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====Fly.vm===='  
+'====Fly.vm====' 
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w Fly.vm FlyA.vm 
+Comparing files Fly.vm and FLYA.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====Frog.vm===='  
+'====Frog.vm====' 
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w Frog.vm FrogA.vm 
+Comparing files Frog.vm and FROGA.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====Fruit.vm===='  
+'====Fruit.vm====' 
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w Fruit.vm FruitA.vm 
+Comparing files Fruit.vm and FRUITA.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====Keyboard.vm===='  
+'====Keyboard.vm====' 
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w Keyboard.vm KeyboardA.vm 
+Comparing files Keyboard.vm and KEYBOARDA.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====Log.vm===='  
+'====Log.vm====' 
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w Log.vm LogA.vm 
+Comparing files Log.vm and LOGA.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====Main.vm===='  
+'====Main.vm====' 
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w Main.vm MainA.vm 
+Comparing files Main.vm and MAINA.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====MainFruit.vm===='  
+'====MainFruit.vm====' 
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w MainFruit.vm MainFruitA.vm 
+Comparing files MainFruit.vm and MAINFRUITA.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====Math.vm===='  
+'====Math.vm====' 
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w Math.vm MathA.vm 
+Comparing files Math.vm and MATHA.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====Memory.vm====' 
+'====Memory.vm===='
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w Memory.vm MemoryA.vm 
+Comparing files Memory.vm and MEMORYA.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====Platform.vm==== ' 
+'====Platform.vm==== '
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w Platform.vm PlatformA.vm 
+Comparing files Platform.vm and PLATFORMA.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====PlatformsList.vm===='  
+'====PlatformsList.vm====' 
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w PlatformsList.vm PlatformsListA.vm 
+Comparing files PlatformsList.vm and PLATFORMSLISTA.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====Problem.vm===='  
+'====Problem.vm====' 
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w Problem.vm ProblemA.vm 
+Comparing files Problem.vm and PROBLEMA.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====RandomNumbersGenerator.vm==== ' 
+'====RandomNumbersGenerator.vm==== '
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w RandomNumbersGenerator.vm RandomNumbersGeneratorA.vm 
+Comparing files RandomNumbersGenerator.vm and RANDOMNUMBERSGENERATORA.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====RapidRollGame.vm==== ' 
+'====RapidRollGame.vm==== '
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w RapidRollGame.vm RapidRollGameA.vm 
+Comparing files RapidRollGame.vm and RAPIDROLLGAMEA.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====Screen.vm==== ' 
+'====Screen.vm==== '
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w Screen.vm ScreenA.vm 
+Comparing files Screen.vm and SCREENA.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====Square.vm==== ' 
+'====Square.vm==== '
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w Square.vm SquareA.vm 
+Comparing files Square.vm and SQUAREA.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====SquareGame.vm===='  
+'====SquareGame.vm====' 
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w SquareGame.vm SquareGameA.vm 
+Comparing files SquareGame.vm and SQUAREGAMEA.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====Sys.vm===='  
+'====Sys.vm====' 
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w Sys.vm SysA.vm 
+Comparing files Sys.vm and SYSA.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====try1.vm===='  
+'====try1.vm====' 
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w try1.vm try1A.vm 
+Comparing files try1.vm and TRY1A.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====Utils.vm===='  
+'====Utils.vm====' 
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w Utils.vm UtilsA.vm 
+Comparing files Utils.vm and UTILSA.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====YKeyboard.vm====' 
+'====YKeyboard.vm===='
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w YKeyboard.vm YKeyboardA.vm 
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====YMain.vm===='  
+'====YMain.vm====' 
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w YMain.vm YMainA.vm 
+Comparing files YMain.vm and YMAINA.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====YMath.vm===='  
+'====YMath.vm====' 
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w YMath.vm YMathA.vm 
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====YMemory.vm===='  
+'====YMemory.vm====' 
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w YMemory.vm YMemoryA.vm 
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====YSys.vm====' 
+'====YSys.vm===='
+
+G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w YSys.vm YSysA.vm 

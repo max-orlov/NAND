@@ -54,12 +54,17 @@ class Generator():
                 self.classFieldsNum += 1
                 if isClass:
                     self.classes[identifier.text.strip()] = className
-                    isClass = False
             elif root[0].text.strip() == 'static':
                 self.classStatics[identifier.text.strip()] = self.classStaticsNum
                 self.classStaticsNum += 1
+                if isClass:
+                    self.classes[identifier.text.strip()] = className
 
     def _generate_function(self, root):
+        self.nextIfNum = 0
+        self.nextWhileNum = 0
+        self.currentArgsTable.clear()
+        self.currentLocalsTable.clear()
         functionType = root[0].text.strip()
         functionName = root[2].text.strip()
         paramList = root.find('parameterList')
@@ -74,8 +79,8 @@ class Generator():
         # fill locals table.
         localId = 0
         className = ''
-        isClass = False
         for varDec in body.findall('varDec'):
+            isClass = False
             for identifier in varDec.findall('identifier'):
                 if ',' in identifier.text:
                     # class identifier
@@ -86,7 +91,6 @@ class Generator():
                     localId += 1
                     if isClass:
                         self.classes[identifier.text.strip()] = className
-                        isClass = False
 
         out = 'function ' + '.'.join([self.className, functionName]) + ' ' + str(localId) + '\n'
         if functionType == "method":
@@ -138,19 +142,20 @@ class Generator():
     def _generate_if_statement(self, root):
         ifNum = self.nextIfNum
         self.nextIfNum += 1
+        self.isInIf = True
         out = self._generate_expression(root.find('expression'))
         out += 'if-goto IF_TRUE' + str(ifNum) + '\n'
         out += "goto IF_FALSE" + str(ifNum) + '\n'
         out += "label IF_TRUE" + str(ifNum) + '\n'
         for statement in root.findall('statements')[0]:
             out += self._generate_statement(statement)
-        out += "goto IF_END" + str(ifNum) + '\n'
-        out += "label IF_FALSE" + str(ifNum) + '\n'
         hasElse = len(root.findall('keyword')) > 1
+        out += "goto IF_END" + str(ifNum) + '\n' if hasElse else ''
+        out += "label IF_FALSE" + str(ifNum) + '\n'
         if hasElse:
             for statement in root.findall('statements')[1]:
                 out += self._generate_statement(statement)
-        out += 'label IF_END' + str(ifNum) + '\n'
+            out += 'label IF_END' + str(ifNum) + '\n'
         return out
 
     def _generate_while_statement(self, root):
@@ -217,10 +222,17 @@ class Generator():
 
     def _generate_expression(self, root):
         out = ''
-        for term in root.findall('term'):
-            out += self._generate_term(term)
-        if root.find('symbol') is not None:
-            out += OPERATORS[root.find('symbol').text.strip()] + '\n'
+        elementsLen = len(root)
+        if elementsLen > 3:
+            out += self._generate_term(root[0])
+            for i in range(1, elementsLen, 2):
+                out += self._generate_term(root[i + 1])
+                out += OPERATORS[root[i].text.strip()] + '\n'
+        else:
+            for term in root.findall('term'):
+                out += self._generate_term(term)
+            if root.find('symbol') is not None:
+                out += OPERATORS[root.find('symbol').text.strip()] + '\n'
         return out
 
     def _generate_term(self, root):
@@ -286,14 +298,14 @@ class Generator():
                 argNum += 1
             out += 'call ' + functionName + ' ' + str(argNum) + '\n'
         elif root[0].tag == 'identifier':
-            if root[0].text.strip() in self.classFields:
-                out = 'push this ' + str(self.classFields[root[0].text.strip()]) + '\n'
-            elif root[0].text.strip() in self.classStatics:
-                out = 'push static ' + str(self.classStatics[root[0].text.strip()]) + '\n'
-            elif root[0].text.strip() in self.currentArgsTable:
+            if root[0].text.strip() in self.currentArgsTable:
                 out = 'push argument ' + str(self.currentArgsTable[root[0].text.strip()]) + '\n'
             elif root[0].text.strip() in self.currentLocalsTable:
                 out = 'push local ' + str(self.currentLocalsTable[root[0].text.strip()]) + '\n'
+            elif root[0].text.strip() in self.classFields:
+                out = 'push this ' + str(self.classFields[root[0].text.strip()]) + '\n'
+            elif root[0].text.strip() in self.classStatics:
+                out = 'push static ' + str(self.classStatics[root[0].text.strip()]) + '\n'
         elif root[0].tag == 'keyword':
             out += KEYWORDS[root[0].text.strip()]
         else:

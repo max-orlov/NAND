@@ -43,7 +43,7 @@ if __name__ == '__main__':
 
             #generate vm
             generator = Generator()
-            out_file_abs_name = path.join(dir_name, out_file_name + "My.vm")
+            out_file_abs_name = path.join(dir_name, out_file_name + "A.vm")
             out_stream = open(out_file_abs_name, "w")
             out_stream.write(generator.generate_vm(xml))
             out_stream.close()
