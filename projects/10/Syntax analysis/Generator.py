@@ -16,7 +16,8 @@ UNARY_OPERATORS = {'-': 'neg', '~': 'not'}
 
 KEYWORDS = {'true':  'push constant 0\n' + 'not\n',
             'false': 'push constant 0\n',
-            'this':  'push pointer 0\n'}
+            'this':  'push pointer 0\n',
+            'null':  'push constant 0\n'}
 
 class Generator():
     def __init__(self):
@@ -63,7 +64,7 @@ class Generator():
         functionName = root[2].text.strip()
         paramList = root.find('parameterList')
         # fill args table.
-        argId = 0
+        argId = 1 if functionType == "method" else 0
         for param in paramList:
             if param.tag == 'identifier' and ',' not in param.text:
                 self.currentArgsTable[param.text.strip()] = argId
@@ -123,11 +124,13 @@ class Generator():
             type = 'this ' + str(self.classFields[varName])
         elif varName in self.classStatics:
             type = 'static ' + str(self.classStatics[varName])
+        else:
+            type = ''
 
-        if '[' in [element.text for element in root]:
+        if '[' in [element.text.strip() for element in root]:
             # this is an array call.
-            out += self._generate_expression(root.findall('expression')[0])
-            out += '\n'.join('push ' + type, 'add', 'pointer 1', 'pop that 0') + '\n'
+            out = self._generate_expression(root.findall('expression')[0]) + '\n'.join(['push ' + type, 'add']) + '\n' + out
+            out += '\n'.join(['pop temp 0', 'pop pointer 1', 'push temp 0', 'pop that 0']) + '\n'
         else:
             out += 'pop ' + type + '\n'
         return out
@@ -165,19 +168,35 @@ class Generator():
 
     def _generate_do_statement(self, root):
         out = ''
+        isSelfNeeded = False
         if len([identifier.text.strip() for identifier in root.findall('identifier')]) > 1:
             if ',' in root.find('identifier').text:
                 if root.find('identifier').text.strip()[:-1] in self.classes.keys():
-                    className = self.classes[root.find('identifier').text.strip()[:-1]]
-                    out += 'push this 0\n'
+                    varName = root.find('identifier').text.strip()[:-1]
+                    className = self.classes[varName]
+                    isSelfNeeded = True
+                    if varName in self.currentArgsTable:
+                        type = 'argument ' + str(self.currentArgsTable[varName])
+                    elif varName in self.currentLocalsTable:
+                        type = 'local ' + str(self.currentLocalsTable[varName])
+                    elif varName in self.classFields:
+                        type = 'this ' + str(self.classFields[varName])
+                    elif varName in self.classStatics:
+                        type = 'static ' + str(self.classStatics[varName])
+                    else:
+                        type = ''
+                    out += 'push ' + type + '\n'
                 else:
                     className = root.find('identifier').text.strip()[:-1]
             functionName = className + '.'+ root.findall('identifier')[1].text.strip()
         else:
             functionName = self.className + '.' + root.find('identifier').text.strip()
+            isSelfNeeded = True
             out = 'push pointer 0\n'
         out += self._generate_expression_list(root.find('expressionList'))
-        argNum = len(root.find('expressionList').findall('symbol')) + 1
+        argNum = len(root.find('expressionList').findall('expression'))
+        if isSelfNeeded:
+            argNum += 1
         out += 'call ' + functionName + ' ' + str(argNum) + '\n'
         out += 'pop temp 0\n'
         return out
@@ -205,28 +224,66 @@ class Generator():
         return out
 
     def _generate_term(self, root):
-        if root.find('expression') is not None:
-            out = self._generate_expression(root.find('expression'))
+        out = ''
+        elementsText = [element.text.strip() for element in root]
+        if '[' in elementsText:
+            varName = root[0].text.strip()
+            if varName in self.currentArgsTable:
+                type = 'argument ' + str(self.currentArgsTable[varName])
+            elif varName in self.currentLocalsTable:
+                type = 'local ' + str(self.currentLocalsTable[varName])
+            elif varName in self.classFields:
+                type = 'this ' + str(self.classFields[varName])
+            elif varName in self.classStatics:
+                type = 'static ' + str(self.classStatics[varName])
+            else:
+                type = ''
+
+            # this is an array call.
+            out += self._generate_expression(root.findall('expression')[0])
+            out += '\n'.join(['push ' + type, 'add', 'pop pointer 1', 'push that 0']) + '\n'
+        elif root.find('expression') is not None:
+            out += self._generate_expression(root.find('expression'))
         elif root[0].tag == 'symbol' and root[0].text.strip() in UNARY_OPERATORS.keys():
-            out = self._generate_term(root[1])
+            out += self._generate_term(root[1])
             out += UNARY_OPERATORS[root[0].text.strip()] + '\n'
         elif root[0].tag == 'integerConstant':
             out = 'push constant ' + root[0].text.strip() + '\n'
+        elif root[0].tag == 'stringConstant':
+            text = root[0].text[1:-1]
+            out += 'push constant ' + str(len(text)) + '\n'
+            out += 'call String.new 1\n'
+            for c in text:
+                out += 'push constant ' + str(ord(c)) + '\n'
+                out += 'call String.appendChar 2\n'
         elif root.find('symbol') is not None and root.find('symbol').text.strip() in ['.', '(']:
-            out = ''
+            isSelfNeeded = False
             if len([identifier.text.strip() for identifier in root.findall('identifier')]) > 1:
                 if ',' in root.find('identifier').text:
-                    if root.find('identifier').text.strip()[:-1] in self.classes.keys():
-                        className = self.classes[root.find('identifier').text.strip()[:-1]]
-                        out += 'push this 0\n'
+                    name = root.find('identifier').text.strip()[:-1]
+                    if name in self.classes.keys():
+                        className = self.classes[name]
+                        isSelfNeeded = True
+                        if name in self.currentArgsTable:
+                            type = 'argument ' + str(self.currentArgsTable[name])
+                        elif name in self.currentLocalsTable:
+                            type = 'local ' + str(self.currentLocalsTable[name])
+                        elif name in self.classFields:
+                            type = 'this ' + str(self.classFields[name])
+                        elif name in self.classStatics:
+                            type = 'static ' + str(self.classStatics[name])
+                        out += 'push ' + type + '\n'
                     else:
                         className = root.find('identifier').text.strip()[:-1]
                 functionName = className + '.'+ root.findall('identifier')[1].text.strip()
             else:
                 functionName = self.className + '.' + root.find('identifier').text.strip()
+                isSelfNeeded = True
                 out = 'push pointer 0\n'
             out += self._generate_expression_list(root.find('expressionList'))
             argNum = len(root.find('expressionList').findall('expression'))
+            if isSelfNeeded:
+                argNum += 1
             out += 'call ' + functionName + ' ' + str(argNum) + '\n'
         elif root[0].tag == 'identifier':
             if root[0].text.strip() in self.classFields:
@@ -237,10 +294,8 @@ class Generator():
                 out = 'push argument ' + str(self.currentArgsTable[root[0].text.strip()]) + '\n'
             elif root[0].text.strip() in self.currentLocalsTable:
                 out = 'push local ' + str(self.currentLocalsTable[root[0].text.strip()]) + '\n'
-            else:
-                out = ''
         elif root[0].tag == 'keyword':
-            out = KEYWORDS[root[0].text.strip()]
+            out += KEYWORDS[root[0].text.strip()]
         else:
             out = root[0].text
 
