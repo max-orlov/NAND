@@ -1,7 +1,0 @@
-
-class A {
-
-    function int modulu(int x ,int y){
-	return (x - Math.multiply(y,Math.divide(x,y)));
-    }
-}

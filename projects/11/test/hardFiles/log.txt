@@ -1,0 +1,104 @@
+
+G:\workspace\NAND\projects\11\test\hardFiles>echo '====FrogGame.vm===='  
+'====FrogGame.vm====' 
+
+G:\workspace\NAND\projects\11\test\hardFiles>fc /w FrogGame.vm FrogGameA.vm 
+Comparing files FrogGame.vm and FROGGAMEA.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\hardFiles>echo '====GameControl.vm===='  
+'====GameControl.vm====' 
+
+G:\workspace\NAND\projects\11\test\hardFiles>fc /w GameControl.vm GameControlA.vm 
+Comparing files GameControl.vm and GAMECONTROLA.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\hardFiles>echo '====in3.vm===='  
+'====in3.vm====' 
+
+G:\workspace\NAND\projects\11\test\hardFiles>fc /w in3.vm in3A.vm 
+Comparing files in3.vm and IN3A.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\hardFiles>echo '====simpleCommentTest.vm===='  
+'====simpleCommentTest.vm====' 
+
+G:\workspace\NAND\projects\11\test\hardFiles>fc /w simpleCommentTest.vm simpleCommentTestA.vm 
+Comparing files simpleCommentTest.vm and SIMPLECOMMENTTESTA.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\hardFiles>echo '====Surface.vm===='  
+'====Surface.vm====' 
+
+G:\workspace\NAND\projects\11\test\hardFiles>fc /w Surface.vm SurfaceA.vm 
+Comparing files Surface.vm and SURFACEA.VM
+FC: no differences encountered
+
+
+G:\workspace\NAND\projects\11\test\hardFiles>echo '====try2.vm====' 
+'====try2.vm===='
+
+G:\workspace\NAND\projects\11\test\hardFiles>fc /w try2.vm try2A.vm 
+Comparing files try2.vm and TRY2A.VM
+***** try2.vm
+pop local 6
+push constant 20
+call String.new 1
+***** TRY2A.VM
+pop local 6
+push constant 24
+call String.new 1
+*****
+
+***** try2.vm
+call String.appendChar 2
+push constant 9
+call String.appendChar 2
+***** TRY2A.VM
+call String.appendChar 2
+push constant 92
+call String.appendChar 2
+push constant 116
+call String.appendChar 2
+*****
+
+***** try2.vm
+call String.appendChar 2
+push constant 9
+call String.appendChar 2
+***** TRY2A.VM
+call String.appendChar 2
+push constant 92
+call String.appendChar 2
+push constant 116
+call String.appendChar 2
+*****
+
+***** try2.vm
+call String.appendChar 2
+push constant 9
+call String.appendChar 2
+***** TRY2A.VM
+call String.appendChar 2
+push constant 92
+call String.appendChar 2
+push constant 116
+call String.appendChar 2
+*****
+
+***** try2.vm
+call String.appendChar 2
+push constant 9
+call String.appendChar 2
+***** TRY2A.VM
+call String.appendChar 2
+push constant 92
+call String.appendChar 2
+push constant 116
+call String.appendChar 2
+*****
+
