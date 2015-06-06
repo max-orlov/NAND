@@ -1,5 +1,4 @@
 import re
-from textwrap import indent
 
 BASIC_INDENT = "  "
 
@@ -127,7 +126,8 @@ class Parser():
                BASIC_INDENT * indent + "</varDec>\n", index
     
     def _parseClassName(self, tList, startIndex, indent):
-        return self._parseIdentifier(tList, startIndex, indent)
+        parts = re.search("(<.+> )(.+)( <.+>)", tList[startIndex])
+        return BASIC_INDENT * indent + parts.group(1) + parts.group(2) + ',' + parts.group(3) + "\n", startIndex + 1
     
     def _parseSubroutineName(self, tList, startIndex, indent):
         return self._parseIdentifier(tList, startIndex, indent)
