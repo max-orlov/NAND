@@ -44,7 +44,7 @@ class Screen {
             do Sys.error(7);
         }
         else{
-            let cor = 16384 + (y * 32) + (x/16);
+            let cor = 16384 + (y * 32) + (x & (-32752));
             let bit = Math.getTwoToThe(x & 15);
             if (color){
                 do Memory.poke( cor, Memory.peek(cor) | bit);
@@ -133,7 +133,6 @@ class Screen {
             if ( r > 0){
                 while ( ~(dy = 0) ){
                     let tmpX = Math.sqrt((r*r) - (dy*dy));
-                    do Output.println();
                     let tmpY = cy + dy;
                     let tmpY2 = cy - dy;
                     do Screen.drawLine( (cx - tmpX) , tmpY, (cx + tmpX) , tmpY);
