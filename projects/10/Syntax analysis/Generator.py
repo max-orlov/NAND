@@ -220,10 +220,37 @@ class Generator():
             out += self._generate_expression(exp)
         return out
 
+    def _create_operators_tree(self, root):
+        visited = []
+        tree = ET.Element('expression')
+        opOrder = [['*', '/'], ['+', '-'], ['=', '>', '<', '&', '|']]
+        cur_op = 0
+        while len(visited) < len(root):
+            for i in range(len(root)):
+                if root[i].text.strip() in opOrder[cur_op]:
+                    if i - 1 not in visited:
+                        tree.append(root[i - 1])
+                        visited.append(i - 1)
+                    if i + 1 not in visited:
+                        tree.append(root[i + 1])
+                        visited.append(i + 1)
+                    if i not in visited:
+                        tree.append(root[i])
+                        visited.append(i)
+            cur_op += 1
+        return tree
+
+
     def _generate_expression(self, root):
         out = ''
         elementsLen = len(root)
         if elementsLen > 3:
+            #tree = self._create_operators_tree(root)
+            #for element in tree:
+            #    if element.tag == "term":
+            #        out += self._generate_term(element)
+            #    else:
+            #        out += OPERATORS[element.text.strip()] + '\n'
             out += self._generate_term(root[0])
             for i in range(1, elementsLen, 2):
                 out += self._generate_term(root[i + 1])

@@ -1,0 +1,8 @@
+class Operators {
+	function void main() {
+		var int a, b, c;
+		var int d;
+		let d = a + b * c + a;
+		return;
+	}
+}

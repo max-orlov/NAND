@@ -1,0 +1,11 @@
+function Operators.main 4
+push local 1
+push local 2
+call Math.multiply 2
+push local 0
+add
+push local 0
+add
+pop local 3
+push constant 0
+return

@@ -113,7 +113,81 @@ G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====Log.vm===='
 
 G:\workspace\NAND\projects\11\test\mustPassFiles>fc /w Log.vm LogA.vm 
 Comparing files Log.vm and LOGA.VM
-FC: no differences encountered
+***** Log.vm
+pop local 3
+push this 0
+push argument 1
+lt
+push constant 10
+***** LOGA.VM
+pop local 3
+push argument 1
+push constant 10
+*****
+
+***** Log.vm
+push this 0
+push this 2
+add
+push argument 1
+gt
+push constant 10
+***** LOGA.VM
+push this 0
+lt
+push argument 1
+push constant 10
+*****
+
+***** Log.vm
+add
+and
+***** LOGA.VM
+add
+push this 0
+push this 2
+add
+gt
+and
+*****
+
+***** Log.vm
+pop local 0
+push this 1
+push argument 2
+lt
+push constant 10
+***** LOGA.VM
+pop local 0
+push argument 2
+push constant 10
+*****
+
+***** Log.vm
+push this 1
+push this 3
+add
+push argument 2
+gt
+push constant 10
+***** LOGA.VM
+push this 1
+lt
+push argument 2
+push constant 10
+*****
+
+***** Log.vm
+add
+and
+***** LOGA.VM
+add
+push this 1
+push this 3
+add
+gt
+and
+*****
 
 
 G:\workspace\NAND\projects\11\test\mustPassFiles>echo '====Main.vm===='  
