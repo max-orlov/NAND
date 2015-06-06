@@ -1,0 +1,155 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/09/Square/Square.jack
+
+/**
+ * Implements a graphic ball. A graphic ball has a screen location
+ * and a radius. It also has methods for drawing, erasing, moving on the 
+ * screen.
+ */
+class Ball {
+
+    // Location on the screen
+    field int x, y;
+
+    // The radius of the ball
+    field int radius;
+
+    // The speed of the ball
+    field int speed;
+
+    /** Constructs a new ball with a given location and size. */
+    constructor Ball new(int Ax, int Ay, int Aradius, int Aspeed) {
+        let x = Ax;
+        let y = Ay;
+        let radius = Aradius;
+        let speed = Aspeed;
+
+        do draw();
+
+        return this;
+    }
+
+    /** Deallocates the object's memory. */
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    /** Draws the ball on the screen. */
+    method void draw() {
+        do Screen.setColor(true);
+        do Screen.drawCircle(x, y, radius);
+        return;
+    }
+
+    /** Erases the ball from the screen. */
+    method void erase() {
+        do Screen.setColor(false);
+        do Screen.drawCircle(x, y, radius);
+        return;
+    }
+	
+	/** Gets the direction the ball should go next. */
+	method int getDirection(int curDirection, Rectangle base) {
+		var int direction;        // 1: up-right, 2: up-left, 3: down-right, 4: down-left
+		var boolean isUp, isRight;
+		
+		if (curDirection = 1) {
+			let isUp = true;
+			let isRight = true;
+		}
+		if (curDirection = 2) {
+			let isUp = true;
+			let isRight = false;
+		}
+		if (curDirection = 3) {
+			let isUp = false;
+			let isRight = true;
+		}
+		if (curDirection = 4) {
+			let isUp = false;
+			let isRight = false;
+		}
+		
+		if ((y - radius) < 3) {
+			let isUp = false;
+		}
+		if ( (~isUp) & (235 < y ) ) {
+		    if ( ( x > (base.getX() - 2)) & ( x < (base.getX() + base.getWidth() + 2)) ){
+			    let isUp = true;
+			}
+		}
+		if ((x - radius) < 3) {
+			let isRight = true;
+		}
+		if ((x + radius) > 509) {
+			let isRight = false;
+		}
+		// set the direction.
+		if ((isRight) & (isUp)) {
+			let direction = 1;   // up-right
+		}
+		if ((~isRight) & (isUp)) {
+			let direction = 2;   // up-left
+		}
+		if ((isRight) & (~isUp)) {
+			let direction = 3;   // down-right
+		}
+		if ((~isRight) & (~isUp)) {
+			let direction = 4;   // down-left
+		}
+		return direction;
+	}
+
+    /** Moves up-right In Ball.jack (line 146): In subroutine checkBallBase: Expected (
+by 2 pixels each direction. */
+    method void moveUpRight() {
+        if (((y - radius) > 1) & ((x + radius) < 510)) {
+            do erase();
+            let y = y - speed;
+			let x = x + speed;
+            do draw();
+        }
+        return;
+    }
+
+    /** Moves up-left by 2 pixels each direction. */
+    method void moveUpLeft() {
+        if (((y - radius) > 1) & ((x - radius) > 1)) {
+            do erase();
+            let y = y - speed;
+			let x = x - speed;
+            do draw();
+        }
+        return;
+    }
+
+    /** Moves down-right by 2 pixels each direction. */
+    method boolean moveDownRight(Rectangle base) {
+        if ( ((y + radius)  < base.getY()) & ((x + radius) < 510)) {
+            do erase();
+            let y = y + speed;
+			let x = x + speed;
+            do draw();
+        }
+        return checkGameOver(base);
+    }
+
+    /** Moves down-left by 2 pixels each direction. */
+    method boolean moveDownLeft(Rectangle base) {
+        if ( ((y + radius)  < base.getY()) & ((x - radius) > 1)) {
+            do erase();
+            let y = y + speed;
+			let x = x - speed;
+            do draw();
+        }
+        return checkGameOver(base);
+    }
+
+    method boolean checkGameOver(Rectangle base){
+        return (y+radius) > base.getY();
+    }
+
+}

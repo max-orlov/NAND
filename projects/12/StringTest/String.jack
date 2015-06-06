@@ -19,7 +19,9 @@ class String {
             let str = Array.new(size);
         }
         else{
-            do Sys.error(14);
+            if (~(size = 0)){
+                do Sys.error(14);
+            }
         }
         let index = 0;
         return this;
@@ -40,17 +42,18 @@ class String {
 
     /** Returns the character at location j. */
     method char charAt(int j) {
-        if (j < length ){
+        if (j < size ){
             return str[j];
         }
         else{
             do Sys.error(15);
+            return 32;
         }
     }
 
     /** Sets the j'th character of this string to be c. */
     method void setCharAt(int j, char c) {
-        if (j<length){
+        if (j<size){
             let str[j] = c;
         }
         else{
@@ -62,7 +65,7 @@ class String {
     /** Appends the character c to the end of this String.
      *  Returns this string as the return value. */
     method String appendChar(char c) {
-        if (index < length - 1){
+        if (index < size - 1){
             let str[index] = c;
             let index = index + 1;
         }
@@ -99,16 +102,17 @@ class String {
         var int v, i, d;
         let v = 0;
         let i = 0;
-        let d = 48;
-        while ( (i < index) & (d>47) & (d<58) ){
+        while ( i < index){
             if (~(str[i]=45)){
                 let d = String.getDigitValue(str[i]);
-                let v = Math.multiply(v, 10) + d;
+                if ((d>0) & (d<10)){
+                    let v = Math.multiply(v, 10) + d;
+                }
             }
             let i = i + 1;
         }
         if (str[0] = 45){
-         let v = (-v);
+            let v = (-v);
         }
         return v;
     }
@@ -126,7 +130,7 @@ class String {
     method void int2String(int number){
         var int lastDigit;
         var char c;
-        let lastDigit = number - (number&9);
+        let lastDigit = number - ((number/10)*10);
         let c = String.getCharValue(lastDigit);
 
         if (number < 10){
@@ -138,7 +142,7 @@ class String {
                 do appendChar(c);
             }
             else{
-                do Sys.error(19):
+                do Sys.error(19);
             }
         }
         return;
