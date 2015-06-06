@@ -216,7 +216,7 @@ class Output {
         while (i<11){
             let j = 0;
             while (j<8){
-                if (map[i] & Math.getTwoToThe(j)){
+                if (map[i] & Sys.getTwoToThe(j)){
                     do Screen.drawPixel(cols[col] + j,rows[row] + i);
                 }
                 let j = j + 1;
