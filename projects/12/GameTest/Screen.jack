@@ -1,0 +1,153 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/12/Screen.jack
+
+/**
+ * Graphic screen library.
+ */
+class Screen {
+
+    static boolean color;
+
+    /** Initializes the Screen. */
+    function void init() {
+        var int index, val;
+        do Screen.setColor(true);
+        let index = 0;
+        let val = 1;
+
+        return;
+    }
+
+    /** Erases the whole screen. */
+    function void clearScreen() {
+        var boolean bool;
+        let bool = color;
+        do Screen.setColor(false);
+        do Screen.drawRectangle(0,0,511,255);
+        do Screen.setColor(bool);
+        return;
+    }
+
+    /** Sets the color to be used in further draw commands
+     *  where white = false, black = true. */
+    function void setColor(boolean b) {
+        let color = b;
+        return;
+    }
+
+    /** Draws the (x, y) pixel. */
+    function void drawPixel(int x, int y) {
+        var int cor, bit;
+        if ( (x<0) | (y<0) ){
+            do Sys.error(7);
+        }
+        else{
+            let cor = 16384 + (y * 32) + (x & (-32752));
+            let bit = Math.getTwoToThe(x & 15);
+            if (color){
+                do Memory.poke( cor, Memory.peek(cor) | bit);
+            }
+            else{
+                do Memory.poke( cor, (Memory.peek(cor) & (~bit) ) );
+            }
+        }
+        return;
+    }
+
+    function int getDirection(int a,int b){
+        if (a=b){
+            return 0;
+        }
+        else{
+            if (a<b){
+                return 1;
+            }
+            else{
+                return -1;
+            }
+        }
+    }
+
+    /** Draws a line from (x1, y1) to (x2, y2). */
+    function void drawLine(int x1, int y1, int x2, int y2) {
+        var int a, b, dx, dy, adyMinusbdx, xf, yf;
+        if ( (x1<0) | (x2<0) | (y1<0) | (y2<0) ){
+            do Sys.error(8);
+        }
+        else{
+            if ( (x1=x2) & (y1=y2) ){
+                do Screen.drawPixel(x1,y1);
+                return;
+            }
+
+            let a = 0;
+            let b = 0;
+            let xf = Screen.getDirection(x1,x2);
+            let yf = Screen.getDirection(y1,y2);
+            let dy = Math.abs(y2 - y1);
+            let dx = Math.abs(x2 - x1);
+            let adyMinusbdx = 0;
+
+            while ( ((~(a>dx)) | (dx=0)) & ((~(b>dy)) | (dy=0)) ){
+                do Screen.drawPixel((x1+(a*xf)),(y1+(b*yf)));
+                if ( ~(adyMinusbdx < 0) ){
+                    let a = a + 1;
+                    let adyMinusbdx = adyMinusbdx - dy;
+                }
+                else{
+                    let b = b + 1;
+                    let adyMinusbdx = adyMinusbdx + dx;
+                }
+            }
+        }
+        return;
+    }
+
+    /** Draws a filled rectangle where the top left corner
+     *  is (x1, y1) and the bottom right corner is (x2, y2). */
+    function void drawRectangle(int x1, int y1, int x2, int y2) {
+        var int i;
+        let i = y1;
+        if ( (x1<0) | (x2<0) | (y1<0) | (y2<0) ){
+            do Sys.error(9);
+        }
+        else{
+            while ( i < (y2 + 1)){
+                do Screen.drawLine(x1, i, x2, i);
+                let i = i + 1;
+            }
+        }
+        return;
+    }
+
+    /** Draws a filled circle of radius r around (cx, cy). */
+    function void drawCircle(int cx, int cy, int r) {
+        var int dy, tmpX, tmpY, tmpY2;
+        let dy = r;
+        if ( (cx<0) | (cy<0) ){
+            do Sys.error(12);
+        }
+        else{
+            if ( r > 0){
+                while ( ~(dy = 0) ){
+                    let tmpX = Math.sqrt((r*r) - (dy*dy));
+                    do Output.println();
+                    let tmpY = cy + dy;
+                    let tmpY2 = cy - dy;
+                    do Screen.drawLine( (cx - tmpX) , tmpY, (cx + tmpX) , tmpY);
+                    do Screen.drawLine( (cx - tmpX) , tmpY2, (cx + tmpX) , tmpY2);
+
+                    let dy = dy - 1;
+                }
+                do Screen.drawLine( (cx - r) , cy, (cx + r) , cy);
+            }
+            else{
+                do Sys.error(13);
+            }
+        }
+
+        return;
+    }
+}
