@@ -15,8 +15,41 @@ class Output {
     // Character map for printing on the left of a screen word
     static Array charMaps;
 
+    static Array twoToThe, rows, cols;
+    static int col, row;
+
     /** Initializes the screen and locates the cursor at the screen's top-left. */
     function void init() {
+        var int i,val;
+        do Output.initMap();
+        let twoToThe = Array.new(16);
+        let i = 0;
+        let val = 1;
+        while (i < 8){
+            let twoToThe[i] = val;
+            let val = val + val;
+            let i = i + 1;
+        }
+        let i = 0;
+        let val = 0;
+        let rows = Array.new(23);
+        while (i < 23){
+            let rows[i] = val;
+            let val = val + 11;
+            let i = i + 1;
+        }
+
+        let i = 0;
+        let val = 0;
+        let cols = Array.new(64);
+        while (i < 64){
+            let cols[i] = val;
+            let val = val + 8;
+            let i = i + 1;
+        }
+
+        let col = 0;
+        let row = 0;
         return;
     }
 
@@ -66,7 +99,7 @@ class Output {
         do Output.create(64,30,51,51,59,59,59,27,3,30,0,0);  // @
         do Output.create(63,30,51,51,24,12,12,0,12,12,0,0);  // ?
 
-        do Output.create(65,0,0,0,0,0,0,0,0,0,0,0);          // A ** TO BE FILLED **
+        do Output.create(65,12,30,51,51,63,51,51,51,51,0,0);          // A ** TO BE FILLED **
         do Output.create(66,31,51,51,51,31,51,51,51,31,0,0); // B
         do Output.create(67,28,54,35,3,3,3,35,54,28,0,0);    // C
         do Output.create(68,15,27,51,51,51,51,51,27,15,0,0); // D
@@ -172,29 +205,70 @@ class Output {
     /** Moves the cursor to the j’th column of the i’th row,
      *  and erases the character that was there. */
     function void moveCursor(int i, int j) {
+        let row = i;
+        let col = j;
+        do Screen.setColor(false);
+        do Screen.drawRectangle(cols[col], rows[row], cols[col] + 7, rows[row] + 10);
+        do Screen.setColor(true);
         return;
     }
 
     /** Prints c at the cursor location and advances the cursor one
      *  column forward. */
     function void printChar(char c) {
+        var int i, j;
+        var Array map;
+        let map = Output.getMap(c);
+        let i = 0;
+
+        while (i<11){
+            let j = 0;
+            while (j<8){
+                if (map[i] & twoToThe[j]){
+                    do Screen.drawPixel(cols[col] + j,rows[row] + i);
+                }
+                let j = j + 1;
+            }
+            let i = i + 1;
+        }
+        if (col < 63){
+            do Output.moveCursor(row, col+1);
+        }
+        else{
+            if (row < 21){
+                do Output.moveCursor(row+1, 0);
+            }
+            else{
+                do Output.moveCursor(0,0);
+            }
+        }
         return;
     }
 
     /** Prints s starting at the cursor location, and advances the
      *  cursor appropriately. */
     function void printString(String s) {
+        var int i;
+        while ( i < s.length()){
+            do Output.printChar(s.charAt(i));
+            let i = i + 1;
+        }
         return;
     }
 
     /** Prints i starting at the cursor location, and advances the
      *  cursor appropriately. */
     function void printInt(int i) {
+        var String str;
+        let str = String.new(6);
+        do str.setInt(i);
+        do Output.printString(str);
         return;
     }
 
     /** Advances the cursor to the beginning of the next line. */
     function void println() {
+        do Output.moveCursor(row+1, 0);
         return;
     }
 
