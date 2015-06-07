@@ -27,7 +27,7 @@ class Screen {
         return;
     }
 
-    /** Sets the color to be used in further draw commands
+    /** Sets the color to be used in further draw commands*
      *  where white = false, black = true. */
     function void setColor(boolean b) {
         let color = b;
@@ -92,14 +92,14 @@ class Screen {
             let dx = Math.abs(x2 - x1);
             let adyMinusbdx = 0;
 
-            while ( ((~(a>dx)) | (dx=0)) & ((~(b>dy)) | (dy=0)) ){
-                do Screen.drawPixel((x1+(a*xf)),(y1+(b*yf)));
+            while ( ((~(Math.abs(a)>dx)) | (dx=0)) & ((~(Math.abs(b)>dy)) | (dy=0)) ){
+                do Screen.drawPixel((x1+a),(y1+b));
                 if ( ~(adyMinusbdx < 0) ){
-                    let a = a + 1;
+                    let a = a + xf;
                     let adyMinusbdx = adyMinusbdx - dy;
                 }
                 else{
-                    let b = b + 1;
+                    let b = b + yf;
                     let adyMinusbdx = adyMinusbdx + dx;
                 }
             }
