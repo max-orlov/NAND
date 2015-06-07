@@ -18,7 +18,6 @@ class Sys {
 
 
         do Main.main();
-        do Sys.halt();
         return;
     }
 
