@@ -29,9 +29,6 @@ class Math {
         return;
     }
 
-    function boolean bit(int x, int j){
-        return (twoToThe[j] & x);
-    }
 
     /** Returns the absolute value of x. */
     function int abs(int x) {
@@ -39,7 +36,7 @@ class Math {
             return x;
         }
         else{
-            return (-x);
+            return (~(x-1));
         }
     }
 
@@ -50,7 +47,7 @@ class Math {
         let shiftedX = Math.abs(x);
         let j = 0;
         while ( j < bits ){
-            if ( Math.bit(Math.abs(y), j) ){
+            if ( twoToThe[j] & Math.abs(y) ){
                 let sum = sum + shiftedX;
             }
             let shiftedX = shiftedX + shiftedX;
@@ -62,7 +59,7 @@ class Math {
 
     /** Returns the integer part of x/y. */
     function int divide(int x, int y) {
-        var int q, sum, absX, absY;
+        var int q, sum, absX, absY, twoY, tmp, i;
         if (~(y = 0)){
             let absX = Math.abs(x);
             let absY = Math.abs(y);
@@ -71,15 +68,20 @@ class Math {
                 return 0;
             }
 
-            let q = Math.divide(absX , (absY + absY));
+            let twoY = absY + absY;
+            let q = absX / twoY;
+            let sum = q + q;
 
-            if ( absX - (Math.multiply(q,absY) + Math.multiply(q,absY)) < absY ){
-                let sum = q + q;
-            }
-            else{
-                let sum = (q + q) + 1;
+            let tmp = 0;
+
+            while (q > 0){
+                let absX = absX - twoY;
+                let q = q - 1;
             }
 
+            if (~(absX < absY)){
+                let sum = sum + 1;
+            }
             return Math.calcNeg(sum,x,y);
         }
         else{
@@ -90,32 +92,21 @@ class Math {
 
     function int calcNeg(int sum, int x, int y){
         if ( ( (x<0) & (y>0) ) | ( (x>0) & (y<0) ) ){
-            let sum = (-sum);
-        }
-        return sum;
-    }
-
-    function int pow(int x, int y){
-        var int i, sum;
-        let i = y;
-        let sum = 1;
-        while (i > 0){
-            let sum = Math.multiply(sum, x);
-            let i = i - 1;
+            return (~(sum-1));
         }
         return sum;
     }
 
     /** Returns the integer part of the square root of x. */
     function int sqrt(int x) {
-        var int y,j;
+        var int y,j, tmp;
         if ( x > 0){
             let y = 0;
-            //TODO: address the bit calc.
-            let j = Math.divide(bits+1,2) - 1;
+            let j = 7;
             while (~(j < 0)){
-                if ( (~(Math.pow(y + Math.pow(2,j),2) > x)) & ( (Math.pow( y + Math.pow(2,j) , 2)) > 0 ) ) {
-                    let y = y + Math.pow(2,j);
+                let tmp = ( y + twoToThe[j] ) * ( y + twoToThe[j] );
+                if ( (~( tmp > x))  & ( tmp > 0 ) ) {
+                    let y = y + twoToThe[j];
                 }
                 let j = j -1 ;
             }
@@ -129,12 +120,12 @@ class Math {
 
     /** Returns the greater number. */
     function int max(int a, int b) {
-    if (a>b){
-        return a;
-    }
-    else{
-        return b;
-    }
+        if (a>b){
+            return a;
+        }
+        else{
+            return b;
+        }
     }
 
     /** Returns the smaller number. */

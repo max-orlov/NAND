@@ -59,7 +59,7 @@ class Math {
 
     /** Returns the integer part of x/y. */
     function int divide(int x, int y) {
-        var int q, sum, absX, absY, twoY, tmp;
+        var int q, sum, absX, absY, twoY, tmp, i;
         if (~(y = 0)){
             let absX = Math.abs(x);
             let absY = Math.abs(y);
@@ -68,23 +68,23 @@ class Math {
                 return 0;
             }
 
+            let tmp = 0;
+
             let twoY = absY + absY;
-            let q = Math.divide(absX , twoY);
-            if ( ~(q=0)){
-                let tmp = q * twoY;
-            }
-            else{
-                let tmp = 0;
+            let q = absX / twoY;
+            let i = q;
+            while (i > 0){
+                let tmp = tmp + twoY;
+                let i = i - 1;
             }
 
-            if ( (absX - tmp) < absY  ){
-                let sum = q + q;
-            }
-            else{
-                let sum = (q + q) + 1;
+
+            let sum = q + q;
+
+            if (~( (absX - tmp) < absY  )){
+                let sum = sum + 1;
             }
             return Math.calcNeg(sum,x,y);
-
         }
         else{
             do Sys.error(2);
