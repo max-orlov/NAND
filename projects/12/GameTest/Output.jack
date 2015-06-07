@@ -194,7 +194,7 @@ class Output {
         return charMaps[c];
     }
 
-    /** Moves the cursor to the j’th column of the i’th row,
+    /** Moves the cursor to the jï¿½th column of the iï¿½th row,
      *  and erases the character that was there. */
     function void moveCursor(int i, int j) {
         let row = i;
@@ -266,6 +266,12 @@ class Output {
 
     /** Moves the cursor one column back. */
     function void backSpace() {
+        if (col = 0){
+            do Output.moveCursor(row-1,63);
+        }
+        else{
+            do Output.moveCursor(row, col-1);
+        }
         return;
     }
 }
