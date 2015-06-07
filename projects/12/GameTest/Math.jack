@@ -58,33 +58,33 @@ class Math {
     }
 
     /** Returns the integer part of x/y. */
-    function int divide(int x, int y) {
-        var int q, sum, absX, absY, twoY, tmp, i;
+    function int divideHelper(int x, int y) {
+        var int q, sum, twoY, tmp;
+
+        if ( y > x ){
+            return 0;
+        }
+
+        let twoY = y + y;
+        let q = x / twoY;
+        let sum = q + q;
+
+        let tmp = 0;
+        while (q > 0){
+            let tmp = tmp + twoY;
+            let q = q - 1;
+        }
+
+        if (~( (x - tmp) < y  )){
+            let sum = sum + 1;
+        }
+
+        return sum;
+    }
+
+    function int divide(int x, int y){
         if (~(y = 0)){
-            let absX = Math.abs(x);
-            let absY = Math.abs(y);
-
-            if ( absY > absX ){
-                return 0;
-            }
-
-            let tmp = 0;
-
-            let twoY = absY + absY;
-            let q = absX / twoY;
-            let i = q;
-            while (i > 0){
-                let tmp = tmp + twoY;
-                let i = i - 1;
-            }
-
-
-            let sum = q + q;
-
-            if (~( (absX - tmp) < absY  )){
-                let sum = sum + 1;
-            }
-            return Math.calcNeg(sum,x,y);
+            return Math.calcNeg(Math.divideHelper(Math.abs(x),Math.abs(y)), x, y);
         }
         else{
             do Sys.error(2);
