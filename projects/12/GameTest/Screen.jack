@@ -46,7 +46,14 @@ class Screen {
                 let y = y + y;
                 let i = i + 1;
             }
-            let cor = 16384 + y + (x/16);
+            let i = 4;
+            while ( i < 16){
+                if (Math.getTwoToThe(i) & x){
+                    let tmp = tmp + Math.getTwoToThe(i-4);
+                }
+                let i = i + 1;
+            }
+            let cor = 16384 + y + tmp;
             let bit = Math.getTwoToThe(x & 15);
             if (color){
                 do Memory.poke( cor, Memory.peek(cor) | bit);
