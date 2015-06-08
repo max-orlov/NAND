@@ -142,7 +142,7 @@ class Screen {
         else{
             if (~( r < 0)){
                 while ( ~(dy = 0) ){
-                    let tmpX = Math.sqrt((r*r) - (dy*dy));
+                    let tmpX = Math.sqrt(rr - (dy*dy));
                     let tmpY = cy + dy;
                     let tmpY2 = cy - dy;
                     do Screen.drawLine( (cx - tmpX) , tmpY, (cx + tmpX) , tmpY);

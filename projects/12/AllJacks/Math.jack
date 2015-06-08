@@ -64,27 +64,30 @@ class Math {
 
     /** Returns the integer part of x/y. */
     function int divideHelper(int x, int y) {
-        var int q, twoY, tmp, i;
+    var int q, twoY, tmp, i;
 	if ( y = 0){
 		do Sys.halt();
 	}
-        if ( y > x ){
-            return 0;
-        }
+    if ( y > x ){
+        return 0;
+    }
 
-        let twoY = y + y;
-        let q = Math.divideHelper(x, twoY);
-	let i = q;
+    let twoY = y + y;
+    if (twoY < y){
+        let twoY = 32767;
+    }
+    let q = Math.divideHelper(x, twoY);
+    let i = q;
 
-        let tmp = 0;
-        while (i > 0){
-            let tmp = tmp + twoY;
-            let i = i - 1;
-        }
+    let tmp = 0;
+    while (i > 0){
+        let tmp = tmp + twoY;
+        let i = i - 1;
+    }
 
-        if (~( (x - tmp) < y  )){
-            return (q + q + 1);
-        }
+    if (~( (x - tmp) < y  )){
+        return (q + q + 1);
+    }
 	else{
 	    return (q + q);
 	}
@@ -94,13 +97,18 @@ class Math {
 
     function int divide(int x, int y){
         if (~(y = 0)){
-	    if (y = 1){
-	        return x;
+    	    if ( x = y ){
+                return 1;
             }
-	    else{
-            	return Math.calcNeg(Math.divideHelper(Math.abs(x),Math.abs(y)), x, y);
-	    }        
-	}
+            else{
+                if (y = 1){
+        	        return x;
+                }
+        	    else{
+                	return Math.calcNeg(Math.divideHelper(Math.abs(x),Math.abs(y)), x, y);
+        	    }    
+            }    
+    	}
         else{
             do Sys.error(2);
             return 0;
@@ -118,8 +126,8 @@ class Math {
     function int sqrt(int x) {
         var int y,j, tmp;
         if (~( x < 0)){
-	    if ( x = 0 ){
-		return 0;
+    	    if ( x = 0 ){
+    		  return 0;
             }
             let y = 0;
             let j = 7;
@@ -131,7 +139,7 @@ class Math {
                 let j = j -1 ;
             }
             return y;
-        }
+    }
         else{
             do Sys.error(4);
             return 0;
