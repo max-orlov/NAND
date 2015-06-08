@@ -52,7 +52,17 @@ class Keyboard {
         while (~(check = 0)){
             let check = Keyboard.keyPressed();
         }
-        do Output.printChar(key);
+        if (key = 129){
+            do Output.backSpace();
+        }
+        else{
+            if ( key = 128){
+                do Output.println();
+            }
+            else{
+                do Output.printChar(key);
+            }
+        }
         return key;
     }
 

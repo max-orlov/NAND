@@ -32,12 +32,17 @@ class Math {
 
     /** Returns the absolute value of x. */
     function int abs(int x) {
-        if (x > 0){
-            return x;
-        }
+	if (x=0){
+	    return 0;
+	}
         else{
-            return (~(x-1));
-        }
+	    if (x > 0){
+                return x;
+            }
+            else{
+                return (-x);
+            }
+	}
     }
 
     /** Returns the product of x and y. */
@@ -59,33 +64,43 @@ class Math {
 
     /** Returns the integer part of x/y. */
     function int divideHelper(int x, int y) {
-        var int q, sum, twoY, tmp;
-
+        var int q, twoY, tmp, i;
+	if ( y = 0){
+		do Sys.halt();
+	}
         if ( y > x ){
             return 0;
         }
 
         let twoY = y + y;
-        let q = x / twoY;
-        let sum = q + q;
+        let q = Math.divideHelper(x, twoY);
+	let i = q;
 
         let tmp = 0;
-        while (q > 0){
+        while (i > 0){
             let tmp = tmp + twoY;
-            let q = q - 1;
+            let i = i - 1;
         }
 
         if (~( (x - tmp) < y  )){
-            let sum = sum + 1;
+            return (q + q + 1);
         }
+	else{
+	    return (q + q);
+	}
+	
 
-        return sum;
     }
 
     function int divide(int x, int y){
         if (~(y = 0)){
-            return Math.calcNeg(Math.divideHelper(Math.abs(x),Math.abs(y)), x, y);
-        }
+	    if (y = 1){
+	        return x;
+            }
+	    else{
+            	return Math.calcNeg(Math.divideHelper(Math.abs(x),Math.abs(y)), x, y);
+	    }        
+	}
         else{
             do Sys.error(2);
             return 0;
@@ -102,7 +117,10 @@ class Math {
     /** Returns the integer part of the square root of x. */
     function int sqrt(int x) {
         var int y,j, tmp;
-        if ( x > 0){
+        if (~( x < 0)){
+	    if ( x = 0 ){
+		return 0;
+            }
             let y = 0;
             let j = 7;
             while (~(j < 0)){
