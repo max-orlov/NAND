@@ -1,0 +1,146 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/12/Math.jack
+
+/**
+ * A basic math library.
+ */
+class Math {
+
+    static Array twoToThe;
+    static int bits;
+
+
+    /** Initializes the library. */
+    function void init() {
+        var int index, val;
+        let index = 0;
+        let val = 1;
+
+        let bits = 16;
+        let twoToThe = Array.new(bits);
+        while (index < bits){
+            let twoToThe[index] = val;
+            let val = val + val;
+            let index = index + 1;
+        }
+        let twoToThe[index] = (~32767);
+        return;
+    }
+
+
+    /** Returns the absolute value of x. */
+    function int abs(int x) {
+        if (x > 0){
+            return x;
+        }
+        else{
+            return (~(x-1));
+        }
+    }
+
+    /** Returns the product of x and y. */
+    function int multiply(int x, int y) {
+        var int sum, shiftedX, j;
+        let sum = 0;
+        let shiftedX = Math.abs(x);
+        let j = 0;
+        while ( j < bits ){
+            if ( twoToThe[j] & Math.abs(y) ){
+                let sum = sum + shiftedX;
+            }
+            let shiftedX = shiftedX + shiftedX;
+            let j = j + 1;
+        }
+
+        return Math.calcNeg(sum,x,y);
+    }
+
+    /** Returns the integer part of x/y. */
+    function int divideHelper(int x, int y) {
+        var int q, sum, twoY, tmp;
+
+        if ( y > x ){
+            return 0;
+        }
+
+        let twoY = y + y;
+        let q = x / twoY;
+        let sum = q + q;
+
+        let tmp = 0;
+        while (q > 0){
+            let tmp = tmp + twoY;
+            let q = q - 1;
+        }
+
+        if (~( (x - tmp) < y  )){
+            let sum = sum + 1;
+        }
+
+        return sum;
+    }
+
+    function int divide(int x, int y){
+        if (~(y = 0)){
+            return Math.calcNeg(Math.divideHelper(Math.abs(x),Math.abs(y)), x, y);
+        }
+        else{
+            do Sys.error(2);
+            return 0;
+        }
+    }
+
+    function int calcNeg(int sum, int x, int y){
+        if ( ( (x<0) & (y>0) ) | ( (x>0) & (y<0) ) ){
+            return (~(sum-1));
+        }
+        return sum;
+    }
+
+    /** Returns the integer part of the square root of x. */
+    function int sqrt(int x) {
+        var int y,j, tmp;
+        if ( x > 0){
+            let y = 0;
+            let j = 7;
+            while (~(j < 0)){
+                let tmp = ( y + twoToThe[j] ) * ( y + twoToThe[j] );
+                if ( (~( tmp > x))  & ( tmp > 0 ) ) {
+                    let y = y + twoToThe[j];
+                }
+                let j = j -1 ;
+            }
+            return y;
+        }
+        else{
+            do Sys.error(4);
+            return 0;
+        }
+    }
+
+    /** Returns the greater number. */
+    function int max(int a, int b) {
+        if (a>b){
+            return a;
+        }
+        else{
+            return b;
+        }
+    }
+
+    /** Returns the smaller number. */
+    function int min(int a, int b) {
+        if (a<b){
+            return a;
+        }
+        else{
+            return b;
+        }
+    }
+
+    function int getTwoToThe(int n){
+        return twoToThe[n];
+    }
+}
