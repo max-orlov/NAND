@@ -140,7 +140,7 @@ class Screen {
             do Sys.error(12);
         }
         else{
-            if ( r > 0){
+            if (~( r < 0)){
                 while ( ~(dy = 0) ){
                     let tmpX = Math.sqrt(rr - (dy*dy));
                     let tmpY = cy + dy;

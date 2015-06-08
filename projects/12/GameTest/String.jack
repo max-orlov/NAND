@@ -42,7 +42,7 @@ class String {
 
     /** Returns the character at location j. */
     method char charAt(int j) {
-        if (j < size ){
+        if (j < index ){
             return str[j];
         }
         else{
@@ -53,7 +53,7 @@ class String {
 
     /** Sets the j'th character of this string to be c. */
     method void setCharAt(int j, char c) {
-        if (j<size){
+        if (j<index){
             let str[j] = c;
         }
         else{
@@ -77,7 +77,7 @@ class String {
 
     /** Erases the last character from this String. */
     method void eraseLastChar() {
-        if (index > 0){
+        if (index > 0 & index<size){
             let str[index] = 0;
             let index = index - 1;
         }
@@ -128,9 +128,10 @@ class String {
     }
 
     method void int2String(int number){
-        var int lastDigit;
+        var int lastDigit, tmp;
         var char c;
-        let lastDigit = number - ((number/10)*10);
+        let tmp = number/10;
+        let lastDigit = number - (tmp*10);
         let c = String.getCharValue(lastDigit);
 
         if (number < 10){
@@ -138,7 +139,7 @@ class String {
         }
         else{
             if (index < size){
-                do int2String(number/10);
+                do int2String(tmp);
                 do appendChar(c);
             }
             else{
