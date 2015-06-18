@@ -77,9 +77,9 @@ class String {
 
     /** Erases the last character from this String. */
     method void eraseLastChar() {
-        if (index > 0 & index<size){
-            let str[index] = 0;
+        if (index > 0){
             let index = index - 1;
+            let str[index] = 0;
         }
         else{
             do Sys.error(18);
@@ -102,12 +102,10 @@ class String {
         var int v, i, d;
         let v = 0;
         let i = 0;
-        while ( i < index){
-            if (~(str[i]=45)){
-                let d = String.getDigitValue(str[i]);
-                if ((d>0) & (d<10)){
-                    let v = Math.multiply(v, 10) + d;
-                }
+        while (i < index){
+            let d = String.getDigitValue(str[i]);
+            if ((~(d<0)) & (d<10)){
+                let v = (v * 10) + d;
             }
             let i = i + 1;
         }

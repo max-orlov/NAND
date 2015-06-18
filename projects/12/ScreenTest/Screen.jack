@@ -18,15 +18,16 @@ class Screen {
 
     /** Erases the whole screen. */
     function void clearScreen() {
-        var boolean bool;
-        let bool = color;
-        do Screen.setColor(false);
-        do Screen.drawRectangle(0,0,511,255);
-        do Screen.setColor(bool);
+        var int i;
+        let i = 16384;
+        while (i < 8192){
+            do Memory.poke(i,-1);
+            let i = i + 16;
+        }
         return;
     }
 
-    /** Sets the color to be used in further draw commands
+    /** Sets the color to be used in further draw commands*
      *  where white = false, black = true. */
     function void setColor(boolean b) {
         let color = b;
@@ -35,12 +36,24 @@ class Screen {
 
     /** Draws the (x, y) pixel. */
     function void drawPixel(int x, int y) {
-        var int cor, bit;
+        var int cor, bit, i, tmp;
         if ( (x<0) | (y<0) ){
             do Sys.error(7);
         }
         else{
-            let cor = 16384 + (y * 32) + (x & (-32752));
+            let i = 0;
+            while ( i < 5){
+                let y = y + y;
+                let i = i + 1;
+            }
+            let i = 4;
+            while ( i < 16){
+                if (Math.getTwoToThe(i) & x){
+                    let tmp = tmp + Math.getTwoToThe(i-4);
+                }
+                let i = i + 1;
+            }
+            let cor = 16384 + y + tmp;
             let bit = Math.getTwoToThe(x & 15);
             if (color){
                 do Memory.poke( cor, Memory.peek(cor) | bit);
@@ -86,14 +99,14 @@ class Screen {
             let dx = Math.abs(x2 - x1);
             let adyMinusbdx = 0;
 
-            while ( ((~(a>dx)) | (dx=0)) & ((~(b>dy)) | (dy=0)) ){
-                do Screen.drawPixel((x1+(a*xf)),(y1+(b*yf)));
+            while ( ((~(Math.abs(a)>dx)) | (dx=0)) & ((~(Math.abs(b)>dy)) | (dy=0)) ){
+                do Screen.drawPixel((x1+a),(y1+b));
                 if ( ~(adyMinusbdx < 0) ){
-                    let a = a + 1;
+                    let a = a + xf;
                     let adyMinusbdx = adyMinusbdx - dy;
                 }
                 else{
-                    let b = b + 1;
+                    let b = b + yf;
                     let adyMinusbdx = adyMinusbdx + dx;
                 }
             }
@@ -110,7 +123,7 @@ class Screen {
             do Sys.error(9);
         }
         else{
-            while ( i < (y2 + 1)){
+            while ( i < (y2+1)){
                 do Screen.drawLine(x1, i, x2, i);
                 let i = i + 1;
             }
@@ -120,15 +133,16 @@ class Screen {
 
     /** Draws a filled circle of radius r around (cx, cy). */
     function void drawCircle(int cx, int cy, int r) {
-        var int dy, tmpX, tmpY, tmpY2;
+        var int dy, tmpX, tmpY, tmpY2, rr;
         let dy = r;
+        let rr = r * r;
         if ( (cx<0) | (cy<0) ){
             do Sys.error(12);
         }
         else{
-            if ( r > 0){
+            if (~( r < 0)){
                 while ( ~(dy = 0) ){
-                    let tmpX = Math.sqrt((r*r) - (dy*dy));
+                    let tmpX = Math.sqrt(rr - (dy*dy));
                     let tmpY = cy + dy;
                     let tmpY2 = cy - dy;
                     do Screen.drawLine( (cx - tmpX) , tmpY, (cx + tmpX) , tmpY);

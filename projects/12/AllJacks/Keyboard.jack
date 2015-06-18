@@ -52,16 +52,8 @@ class Keyboard {
         while (~(check = 0)){
             let check = Keyboard.keyPressed();
         }
-        if (key = 129){
-            do Output.backSpace();
-        }
-        else{
-            if ( key = 128){
-                do Output.println();
-            }
-            else{
-                do Output.printChar(key);
-            }
+        if ((~(key = String.newLine())) & (~(key = String.backSpace()))){
+            do Output.printChar(key);
         }
         return key;
     }
@@ -73,7 +65,7 @@ class Keyboard {
     function String readLine(String message) {
         var String str;
         var char c;
-        let str = String.new(63);
+        let str = String.new(64);
 
         do Output.printString(message);
         let c = Keyboard.readChar();
@@ -82,6 +74,7 @@ class Keyboard {
                 if ( c = String.backSpace()){
                     if (str.length() > 0){
                         do str.eraseLastChar();
+                        do Output.backSpace();
                     }
                 }
                 else{
@@ -90,6 +83,7 @@ class Keyboard {
             }
             let c = Keyboard.readChar();
         }
+        do Output.println();
         return str;
     }
 

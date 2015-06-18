@@ -25,7 +25,6 @@ class Math {
             let val = val + val;
             let index = index + 1;
         }
-        let twoToThe[index] = (~32767);
         return;
     }
 
@@ -47,12 +46,13 @@ class Math {
 
     /** Returns the product of x and y. */
     function int multiply(int x, int y) {
-        var int sum, shiftedX, j;
+        var int sum, shiftedX, j, absY;
         let sum = 0;
+        let absY = Math.abs(y);
         let shiftedX = Math.abs(x);
         let j = 0;
-        while ( j < bits ){
-            if ( twoToThe[j] & Math.abs(y) ){
+        while ( j < bits){
+            if ( twoToThe[j] & absY ){
                 let sum = sum + shiftedX;
             }
             let shiftedX = shiftedX + shiftedX;
@@ -64,34 +64,34 @@ class Math {
 
     /** Returns the integer part of x/y. */
     function int divideHelper(int x, int y) {
-    var int q, twoY, tmp, i;
-	if ( y = 0){
-		do Sys.halt();
-	}
-    if ( y > x ){
-        return 0;
-    }
+        var int q, twoY, tmp, i;
+        if ( y = 0){
+            do Sys.halt();
+        }
+        if (~( y < x )){
+            return 0;
+        }
 
-    let twoY = y + y;
-    if (twoY < y){
-        let twoY = 32767;
-    }
-    let q = Math.divideHelper(x, twoY);
-    let i = q;
+        let twoY = y + y;
+        if (twoY < y){
+            let twoY = 32767;
+        }
+        let q = Math.divideHelper(x, twoY);
+        let i = q;
 
-    let tmp = 0;
-    while (i > 0){
-        let tmp = tmp + twoY;
-        let i = i - 1;
-    }
+        let tmp = 0;
+        while (i > 0){
+            let tmp = tmp + twoY;
+            let i = i - 1;
+        }
 
-    if (~( (x - tmp) < y  )){
-        return (q + q + 1);
-    }
-	else{
-	    return (q + q);
-	}
-	
+        if (~( (x - tmp) < y  )){
+            return (q + q + 1);
+        }
+        else{
+            return (q + q);
+        }
+
 
     }
 
@@ -105,8 +105,13 @@ class Math {
         	        return x;
                 }
         	    else{
-                	return Math.calcNeg(Math.divideHelper(Math.abs(x),Math.abs(y)), x, y);
-        	    }    
+        	        if ( x = (-y) ){
+        	            return -1;
+        	        }
+        	        else{
+                    	return Math.calcNeg(Math.divideHelper(Math.abs(x),Math.abs(y)), x, y);
+        	        }
+        	    }
             }    
     	}
         else{
@@ -117,7 +122,7 @@ class Math {
 
     function int calcNeg(int sum, int x, int y){
         if ( ( (x<0) & (y>0) ) | ( (x>0) & (y<0) ) ){
-            return (~(sum-1));
+            return (-sum);
         }
         return sum;
     }
@@ -130,7 +135,7 @@ class Math {
     		  return 0;
             }
             let y = 0;
-            let j = 7;
+            let j = 10;
             while (~(j < 0)){
                 let tmp = ( y + twoToThe[j] ) * ( y + twoToThe[j] );
                 if ( (~( tmp > x))  & ( tmp > 0 ) ) {
