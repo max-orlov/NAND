@@ -18,6 +18,11 @@ class String {
         if ( size > 0 ){
             let str = Array.new(size);
         }
+        else{
+            if (~(size = 0)){
+                do Sys.error(14);
+            }
+        }
         let index = 0;
         return this;
     }
@@ -37,27 +42,48 @@ class String {
 
     /** Returns the character at location j. */
     method char charAt(int j) {
-        return str[j];
+        if (j < index ){
+            return str[j];
+        }
+        else{
+            do Sys.error(15);
+            return 32;
+        }
     }
 
     /** Sets the j'th character of this string to be c. */
     method void setCharAt(int j, char c) {
-        let str[j] = c;
+        if (j<index){
+            let str[j] = c;
+        }
+        else{
+            do Sys.error(16);
+        }
         return;
     }
 
     /** Appends the character c to the end of this String.
      *  Returns this string as the return value. */
     method String appendChar(char c) {
-        let str[index] = c;
-        let index = index + 1;
+        if (index < size - 1){
+            let str[index] = c;
+            let index = index + 1;
+        }
+        else{
+            do Sys.error(17);
+        }
         return this;
     }
 
     /** Erases the last character from this String. */
     method void eraseLastChar() {
-        let str[index] = 0;
-        let index = index - 1;
+        if (index > 0){
+            let index = index - 1;
+            let str[index] = 0;
+        }
+        else{
+            do Sys.error(18);
+        }
         return;
     }
 
@@ -76,16 +102,15 @@ class String {
         var int v, i, d;
         let v = 0;
         let i = 0;
-        let d = 0;
-        while ( (i < index) & (d>-1) & (d<10) ){
-            if (~(str[i]=45)){
-                let d = String.getDigitValue(str[i]);
-                let v = Math.multiply(v, 10) + d;
+        while (i < index){
+            let d = String.getDigitValue(str[i]);
+            if ((~(d<0)) & (d<10)){
+                let v = (v * 10) + d;
             }
             let i = i + 1;
         }
         if (str[0] = 45){
-         let v = (-v);
+            let v = (-v);
         }
         return v;
     }
@@ -101,17 +126,23 @@ class String {
     }
 
     method void int2String(int number){
-        var int lastDigit;
+        var int lastDigit, tmp;
         var char c;
-        let lastDigit = number - ((number/10)*10);
+        let tmp = number/10;
+        let lastDigit = number - (tmp*10);
         let c = String.getCharValue(lastDigit);
 
         if (number < 10){
             do appendChar(c);
         }
         else{
-            do int2String(number/10);
-            do appendChar(c);
+            if (index < size){
+                do int2String(tmp);
+                do appendChar(c);
+            }
+            else{
+                do Sys.error(19);
+            }
         }
         return;
     }

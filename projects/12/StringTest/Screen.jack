@@ -121,9 +121,9 @@ class Screen {
             let adyMinusbdx = 0;
 
             while ( ((~(Math.abs(a)>dx)) | (dx=0)) & ((~(Math.abs(b)>dy)) | (dy=0)) ){
-                if ( (dy = 0) & (x1+a+16<x2) &  (((x1+a) & 15)=0)){
+                if ( (x1<x2) & (dy = 0) & ((Math.abs(x1+a) & 15)=0) & ((x1+a+15)<x2) ){
                     do Screen.drawLineRaw(x1+a,y1);
-                    let a = a + 16;
+                    let a = a + 15;
                     let adyMinusbdx = adyMinusbdx + dx;
                 }
                 else{
