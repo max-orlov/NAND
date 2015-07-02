@@ -8,59 +8,41 @@
 // i.e. writes "black" in every pixel. When no key is pressed, the
 // program clears the screen, i.e. writes "white" in every pixel.
 
-@i
-M=0
-@SWITCH
-M=0
-(LOOP)
-	@KBD		//Listen to keyboard
+(Reset)
+@SCREEN
+D=A
+@ptr
+M=D
+
+(loop)
+	@color
 	D=M
-	@WHITEN
+	@ptr
+	A=M
+	M=D
+	@ptr
+	M=M+1
+	@KBD
+	D=M
+	@SetWhite
 	D; JEQ
-	@BLACKEN
-	D; JGT
-	(BLACKEN)		//Blacken the screen
-		@SWITCH		// Check for swith from white to black
-		D=M
-		M=1
-		@CLEAR_COUNT
-		D; JEQ
+	@color
+	M=-1
+	@End
+	0; JMP
+	(SetWhite)
+	@color
+	M=0
+	
+(End)
+@ptr
+D=M
+@24576
+D=D-A
+@Reset
+D; JEQ
+@loop
+0; JMP
+	
 
-		@SCREEN		// Fill the screen with black dots
-		D=A
-		@i
-		A=D+M
-		M=-1
-		@CONTINUE
-		0; JMP
-	(WHITEN)		//Whiten the screen
-		@SWITCH		// Check for a switch from black to white
-		D=M-1
-		M=0
-		@CLEAR_COUNT
-		D; JEQ
 
-		@SCREEN		// Clear the screen
-		D=A
-		@i
-		A=D+M
-		M=0
-		@CONTINUE
-		0; JMP
-	(CONTINUE)
-		@i
-		D=M
-		@8192
-		D=D-A
-		@CLEAR_COUNT
-		D; JGE
-		@i
-		M=M+1
-		@LOOP
-		0; JMP
-	(CLEAR_COUNT)
-		@i
-		M=0
-		@LOOP
-		0; JMP
-(END)

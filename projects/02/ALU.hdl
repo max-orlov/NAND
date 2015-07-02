@@ -44,7 +44,7 @@ CHIP ALU {
     PARTS:
 		
 	//Calculating the new X.
-	Mux16(a=x, b[0..15]=false, sel=zx, out=tmpX);
+	Mux16(a=x, b=false, sel=zx, out=tmpX);
 	Not16(in=tmpX, out=notX);
 	Mux16(a=tmpX, b=notX, sel=nx, out=newX);
 	
@@ -59,12 +59,11 @@ CHIP ALU {
 	
 	Mux16(a=andOut,b=addOut,sel=f,out=fOut);
 	Not16(in=fOut,out=noFOut);
-	Mux16(a=fOut,b=noFOut,sel=no,out=out,out[0..7]=tmpOut1, out[8..15]=tmpOut2, out[15]=isNeg);
+	Mux16(a=fOut,b=noFOut,sel=no,out=out,out[0..7]=out1,out[8..15]=out2, out[15]=ng);
 	
 	//Determining the output flags.
-	Mux(a=false,b=true,sel=isNeg,out=ng);
-	Or8Way(in=tmpOut1, out=isZero1);
-	Or8Way(in=tmpOut2, out=isZero2);
-	Or(a=isZero1,b=isZero2,out=isZero);
-	Mux(a=true,b=false,sel=isZero,out=zr);
+	Or8Way(in=out1, out=isZero1);
+	Or8Way(in=out2, out=isZero2);
+	Or(a=isZero1,b=isZero2,out=isZr);
+	Not(in=isZr, out=zr);
 }

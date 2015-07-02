@@ -24,8 +24,7 @@ CHIP PC {
 	Mux16(a=muxOut1, b=false, sel=reset, out=regIn);
 
 	//check if load is needed
-	Or(a=inc, b=load, out=isPartLoad);
-	Or(a=isPartLoad, b=reset, out=isLoad);
+	Or8Way(in[0]=inc,in[1]=load,in[2]=reset,out=isLoad);
 	
 	Register(in=regIn, load=isLoad, out=out, out=out1);
 }
