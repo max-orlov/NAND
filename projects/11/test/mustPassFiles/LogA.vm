@@ -80,32 +80,32 @@ push local 6
 push constant 10
 lt
 pop local 3
+push this 0
 push argument 1
+lt
 push constant 10
 sub
-push this 0
-lt
-push argument 1
-push constant 10
-add
 push this 0
 push this 2
 add
+push argument 1
 gt
+push constant 10
+add
 and
 pop local 0
+push this 1
 push argument 2
+lt
 push constant 10
 sub
 push this 1
-lt
-push argument 2
-push constant 10
-add
-push this 1
 push this 3
 add
+push argument 2
 gt
+push constant 10
+add
 and
 pop local 1
 push local 0

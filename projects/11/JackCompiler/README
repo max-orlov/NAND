@@ -1,0 +1,19 @@
+jonnydman, maxorlov
+===============================================================================
+Jonny Gulayev, ID 304028749, georgy.gulayev@mail.huji.ac.il
+Maxim Orlov, ID 314363227, maxim.orlov@mail.huji.ac.il
+===============================================================================
+
+                           Project 11 - Jack Compiler
+                           -------------------------- 
+  
+Submitted Files
+---------------
+README 			- This file.
+Main.py         - The main class which orchestrates the input files and the outputs.
+Tokenizer       - Used to get a file and outputs it into tokens.
+Parser          - Used to parse the tokens file.
+Generator       - Used to parse the analysed XML into vm.
+
+Remarks
+-------
